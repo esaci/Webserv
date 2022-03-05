@@ -5,7 +5,8 @@ CXX_FLAGS = -Wextra -Wall -Werror -std=c++98
 
 
 SRCS_DIR = ./srcs/
-SRCS = main.cpp
+SRCS =	main.cpp \
+		server.cpp
 
 OBJS_DIR = ./objects/
 OBJ = $(SRCS:.cpp=.o)
