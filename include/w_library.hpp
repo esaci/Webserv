@@ -1,5 +1,5 @@
 #ifndef W_LIBRARY_HPP
-# define W_LIBRABRY_HPP
+# define W_LIBRARY_HPP
 
 #	include <sys/socket.h>
 #	include <sys/types.h>
