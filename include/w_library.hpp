@@ -15,7 +15,7 @@
 #	include <sys/time.h>
 #	include <sys/ioctl.h>
 #	include <netdb.h>
-
+#	include <poll.h>
 #	include <iostream>
 #	include <vector>
 // Ne PAS stocker de donne dans une string, peut poser soucis par la suite

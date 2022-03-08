@@ -26,6 +26,7 @@ std::string bin2hex(const unsigned char *input, size_t len){
 // int	main(int argc, char **argv)
 int	_server( void )
 {
+	struct pollfd var_poll;
 	int			listenfd, connfd, n;
 	SA_IN		servaddr;
 	std::vector<unsigned char>	buff;
@@ -33,6 +34,7 @@ int	_server( void )
 	std::string	tmp;
 	// SA_IN addr;
 	// socklen_t addr_len;
+
 
 	if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		print_return("Error: Socket", 1);
@@ -68,5 +70,6 @@ int	_server( void )
 		write(connfd, buff.begin().base(), buff.size());
 		close(connfd);
 	}
+	(void)var_poll;
 	return (0);
 }
