@@ -18,6 +18,10 @@ int main (int ac, char *av[]){
 		std::cout << "Echec lecture fichier config\n";
 		return (1);
 	}
+	// Necessite de parsing du fichier conf
+	// Gestion error si necessaire
+	//Creation du server
+	_server();
 	// while (std::getline(file, ptr))
 		// std::cout << ptr << std::endl;
 	file.close();

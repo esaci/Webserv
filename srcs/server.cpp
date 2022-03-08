@@ -14,7 +14,7 @@ std::string bin2hex(const unsigned char *input, size_t len){
 	if (input == NULL || len <= 0)
 		return NULL;
 
-	for (int i = 0; i < len; i++){
+	for (size_t i = 0; i < len; i++){
 		result[i * 3] = hexits[input[i] >> 4];
 		result[(i * 3) + 1] = hexits[input[i] >> 0x0F];
 		result[(1 * 3) + 2] = ' ';
@@ -23,12 +23,16 @@ std::string bin2hex(const unsigned char *input, size_t len){
 	return (result);
 }
 
-int	main(int argc, char **argv)
+// int	main(int argc, char **argv)
+int	_server( void )
 {
 	int			listenfd, connfd, n;
 	SA_IN		servaddr;
-	std::string	buff;
+	std::vector<unsigned char>	buff;
 	uint8_t		recvline[MAXLINE + 1];
+	std::string	tmp;
+	// SA_IN addr;
+	// socklen_t addr_len;
 
 	if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		print_return("Error: Socket", 1);
@@ -46,9 +50,6 @@ int	main(int argc, char **argv)
 	if ((listen(listenfd, 10)) < 0)
 		print_return("Error: Listen", 1);
 	while(1){
-		SA_IN addr;
-		socklen_t addr_len;
-
 		std::cout << "Waiting for a connection on Port " << SERVER_PORT << std::endl;
 		std::cout.flush();
 		// accept va attendre que quelquun se connect
@@ -62,8 +63,9 @@ int	main(int argc, char **argv)
 		}
 		if (n < 0)
 			print_return("Error: recv", 1);
-		buff = "HTTP/1.0 200 OK\r\n\r\nHello";
-		write(connfd, buff.c_str(), buff.size());
+		tmp = "HTTP/1.0 200 OK\r\n\r\nHello";
+		buff.assign(tmp.begin(), tmp.end());
+		write(connfd, buff.begin().base(), buff.size());
 		close(connfd);
 	}
 	return (0);

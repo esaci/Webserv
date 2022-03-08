@@ -17,6 +17,8 @@
 #	include <netdb.h>
 
 #	include <iostream>
+#	include <vector>
+// Ne PAS stocker de donne dans une string, peut poser soucis par la suite
 #	include <string>
 #	include <fstream>
 
@@ -24,6 +26,8 @@
 #	define MAXLINE 4096
 #	define SA struct sockaddr
 #	define SA_IN struct sockaddr_in
+
+int	_server( void );
 
 
 
