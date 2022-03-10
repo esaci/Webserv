@@ -25,7 +25,6 @@ int	_response(DATA tmp, DATA tmp2, int clientfd)
 		while (fs.gcount()){
 			buff.insert(buff.end(), recvline, recvline + fs.gcount());
 			fs.read(recvline, MAXLINE);
-			std::cout << fs.gcount() << " est le nbr de char lu\n";
 		}
 		// n = write(0, buff.begin().base(), buff.size());
 		n = write(clientfd, buff.begin().base(), buff.size());

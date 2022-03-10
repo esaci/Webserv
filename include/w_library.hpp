@@ -21,6 +21,7 @@
 // Ne PAS stocker de donne dans une string, peut poser soucis par la suite
 #	include <string>
 #	include <fstream>
+#	include <cstring>
 
 #	define SERVER_PORT 18000
 #	define MAXLINE 4096000
@@ -31,6 +32,8 @@
 #	define SA struct sockaddr
 #	define SA_IN struct sockaddr_in
 #	define	DATA std::vector<unsigned char>
+
+#	include "p_conf.hpp"
 
 int		_server( void );
 int		_response(DATA tmp, DATA tmp2, int connfd);

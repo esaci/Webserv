@@ -1,6 +1,8 @@
 #include "../include/w_library.hpp"
 
 int main (int ac, char *av[]){
+	p_conf *conf;
+
 	if (!ac || ac > 2)
 	{
 		std::cout << "Need 1 argument, the config file\n";
@@ -18,12 +20,13 @@ int main (int ac, char *av[]){
 		std::cout << "Echec lecture fichier config\n";
 		return (1);
 	}
+	conf = New p_conf(file);
 	// Necessite de parsing du fichier conf
 	// Gestion error si necessaire
 	//Creation du server
 	_server();
 	// while (std::getline(file, ptr))
 		// std::cout << ptr << std::endl;
-	file.close();
+	delete p_conf;
 	return (0);
 }
