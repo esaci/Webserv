@@ -28,7 +28,6 @@ int	_server( void )
 	struct pollfd var_poll;
 	int			serverfd, clientfd, n;
 	SA_IN		servaddr;
-	std::vector<unsigned char>	buff;
 	uint8_t		recvline[MAXLINE + 1];
 	int			tmp;
 	std::string	tmps;
@@ -68,7 +67,7 @@ int	_server( void )
 		client_poll.events = POLLIN;
 		client_poll.revents = 0;
 		tab_client.push_back(client_poll);
-		if ( !(tmp = poll(tab_client.begin().base(), tab_client.size(), 10)) )
+		if ( !(tmp = poll(tab_client.begin().base(), tab_client.size(), 10000)) )
 		{
 			print_return("TIMEOUT: poll", 1);
 			break;
@@ -86,13 +85,17 @@ int	_server( void )
 					if (recvline[n - 1] == '\n'){
 						break ;
 					}
-
 			}
 			if (n < 0)
 				print_return("Error: recv", 1);
-			tmps = "HTTP/1.0 200 OK\r\n\r\nHello";
-			buff.assign(tmps.begin(), tmps.end());
-			n = write(clientfd, buff.begin().base(), buff.size());
+			std::string tmp1;
+			std::string tmp2;
+
+			tmp1 = METHOD;
+			tmp2 = TARGET;
+			DATA asupr1(tmp1.begin(), tmp1.end());
+			DATA asupr2(tmp2.begin(), tmp2.end());
+			_response(asupr1, asupr2, clientfd);
 			close(clientfd);
 			tab_client.erase(it);
 		}

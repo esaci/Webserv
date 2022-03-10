@@ -25,11 +25,14 @@
 #	define SERVER_PORT 18000
 #	define MAXLINE 4096
 #	define ROOT "/var/www/webserv"
-#	define METHOD	GET
+#	define METHOD	"GET"
+#	define TARGET	"/"
 #	define SA struct sockaddr
 #	define SA_IN struct sockaddr_in
-int	_server( void );
+#	define	DATA std::vector<unsigned char>
 
+int		_server( void );
+int		_response(DATA tmp, DATA tmp2, int connfd);
 
 
 # endif
