@@ -86,6 +86,7 @@ int	_server( void )
 					if (recvline[n - 1] == '\n'){
 						break ;
 					}
+
 			}
 			if (n < 0)
 				print_return("Error: recv", 1);
