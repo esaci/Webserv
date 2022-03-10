@@ -27,16 +27,19 @@ std::string bin2hex(const unsigned char *input, size_t len){
 int	_server( void )
 {
 	struct pollfd var_poll;
-	int			listenfd, connfd, n;
+	int			serverfd, clientfd, n;
 	SA_IN		servaddr;
 	std::vector<unsigned char>	buff;
 	uint8_t		recvline[MAXLINE + 1];
-	std::string	tmp;
+	int			tmp;
+	std::string	tmps;
+	struct pollfd client_poll;
+	std::vector<struct pollfd> tab_client;
 	// SA_IN addr;
 	// socklen_t addr_len;
 
 
-	if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	if ((serverfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		print_return("Error: Socket", 1);
 
 	servaddr.sin_family = AF_INET;
@@ -46,29 +49,45 @@ int	_server( void )
 	servaddr.sin_port = htons(SERVER_PORT);
 	
 	// Bind la socket a l'adress 
-	if ((bind(listenfd, (SA *) &servaddr, sizeof(servaddr))) < 0)
+	if ((bind(serverfd, (SA *) &servaddr, sizeof(servaddr))) < 0)
 		print_return("Error: Bind", 1);
 	// On donne ensuite l'ordre qu'on le listen
-	if ((listen(listenfd, 10)) < 0)
+	if ((listen(serverfd, 10)) < 0)
 		print_return("Error: Listen", 1);
 	while(1){
 		std::cout << "Waiting for a connection on Port " << SERVER_PORT << std::endl;
-		std::cout.flush();
 		// accept va attendre que quelquun se connect
-		connfd = accept(listenfd, (SA *) NULL, NULL);
-		while ((n = recv(connfd, recvline, MAXLINE, 0)) > 0)
+		clientfd = accept(serverfd, (SA *) NULL, NULL);
+		client_poll.fd = clientfd;
+		client_poll.events = POLLIN;
+		client_poll.revents = 0;
+		tab_client.push_back(client_poll);
+		if ( !(tmp = poll(tab_client.begin().base(), tab_client.size(), 30000)) )
 		{
-				std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
-				if (recvline[n - 1] == '\n'){
-					break;
-				}
+			print_return("TIMEOUT: poll", 1);
+			break;
 		}
-		if (n < 0)
-			print_return("Error: recv", 1);
-		tmp = "HTTP/1.0 200 OK\r\n\r\nHello";
-		buff.assign(tmp.begin(), tmp.end());
-		write(connfd, buff.begin().base(), buff.size());
-		close(connfd);
+		if (tmp < 0)
+		{
+			print_return("ERROR: poll", 1);
+			break;
+		}
+		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
+		{
+			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
+			{
+					std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
+					if (recvline[n - 1] == '\n'){
+						break;
+					}
+			}
+			if (n < 0)
+				print_return("Error: recv", 1);
+		}
+		tmps = "HTTP/1.0 200 OK\r\n\r\nHello";
+		buff.assign(tmps.begin(), tmps.end());
+		write(clientfd, buff.begin().base(), buff.size());
+		close(clientfd);
 	}
 	(void)var_poll;
 	return (0);

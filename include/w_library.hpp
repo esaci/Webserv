@@ -26,7 +26,6 @@
 #	define MAXLINE 4096
 #	define SA struct sockaddr
 #	define SA_IN struct sockaddr_in
-
 int	_server( void );
 
 
