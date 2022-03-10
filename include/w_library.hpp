@@ -23,8 +23,9 @@
 #	include <fstream>
 
 #	define SERVER_PORT 18000
-#	define MAXLINE 4096
+#	define MAXLINE 4096000
 #	define ROOT "/var/www/webserv"
+#	define TMPINDEX "/var/www/webserv/index.html"
 #	define METHOD	"GET"
 #	define TARGET	"/"
 #	define SA struct sockaddr
@@ -34,5 +35,6 @@
 int		_server( void );
 int		_response(DATA tmp, DATA tmp2, int connfd);
 
+int		print_return(std::string ptr, int value);
 
 # endif

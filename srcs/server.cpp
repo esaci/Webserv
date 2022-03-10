@@ -81,7 +81,7 @@ int	_server( void )
 		{
 			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
 			{
-					std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
+					// std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
 					if (recvline[n - 1] == '\n'){
 						break ;
 					}
