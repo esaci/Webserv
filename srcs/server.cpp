@@ -35,12 +35,26 @@ int	_server( void )
 	std::string	tmps;
 	struct pollfd client_poll;
 	std::vector<struct pollfd> tab_client;
+	int			on = 1;
 	// SA_IN addr;
 	// socklen_t addr_len;
 
 
 	if ((serverfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		print_return("Error: Socket", 1);
+
+	// Permet au sd(socket descriptor) d'etre reutilisable
+	// SOL_SOCKET : La couche vise est celle qui ne depend pas du protocole
+	// SO_REUSADDR : Option a ajouter a ma socket, ici le fait qu'elle soit reutilisable
+	// 3e argument sert a acceder a l'option precise, 1 ici (Aucune idee de pk 1)
+	if (0)
+	{
+	if ( (setsockopt(serverfd, SOL_SOCKET,  SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
+		return (print_return("ERROR: Setsockopt", 1));
+	// Set la socket comme non-bloquant, ainsi toute les socket arrivantes seront elles aussi non bloquante
+	if ( fcntl(serverfd, F_SETFL, O_NONBLOCK) < 0 )
+		return (print_return("ERROR: fcntl", 1));
+	}
 
 	servaddr.sin_family = AF_INET;
 	//Prend n'importe quel adress
@@ -55,7 +69,8 @@ int	_server( void )
 	if ((listen(serverfd, 10)) < 0)
 		print_return("Error: Listen", 1);
 	while(1){
-		std::cout << "Waiting for a connection on Port " << SERVER_PORT << std::endl;
+		std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n Actuellement " << tab_client.size() << " clients" << std::endl;
+		
 		// accept va attendre que quelquun se connect
 		clientfd = accept(serverfd, (SA *) NULL, NULL);
 		client_poll.fd = clientfd;
@@ -74,21 +89,25 @@ int	_server( void )
 		}
 		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		{
+			// n = recv(clientfd, recvline, MAXLINE, 0);
+			// if (n > 0)
 			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
 			{
 					std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
 					if (recvline[n - 1] == '\n'){
-						break;
+						std::cout << "CA VEUT BREAK \n\n\n";
 					}
 			}
 			if (n < 0)
 				print_return("Error: recv", 1);
+			tmps = "HTTP/1.0 200 OK\r\n\r\nHello";
+			buff.assign(tmps.begin(), tmps.end());
+			n = write(clientfd, buff.begin().base(), buff.size());
+			std::cout << "Ca finit au moins la boucle et ca ecrit " << n << "\n";
 		}
-		tmps = "HTTP/1.0 200 OK\r\n\r\nHello";
-		buff.assign(tmps.begin(), tmps.end());
-		write(clientfd, buff.begin().base(), buff.size());
-		close(clientfd);
 	}
+	for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
+		close(clientfd);
 	(void)var_poll;
 	return (0);
 }
