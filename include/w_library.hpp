@@ -24,6 +24,8 @@
 
 #	define SERVER_PORT 18000
 #	define MAXLINE 4096
+#	define ROOT "/var/www/webserv"
+#	define METHOD	GET
 #	define SA struct sockaddr
 #	define SA_IN struct sockaddr_in
 int	_server( void );
