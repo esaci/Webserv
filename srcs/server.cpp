@@ -23,7 +23,6 @@ std::string bin2hex(const unsigned char *input, size_t len){
 	return (result);
 }
 
-// int	main(int argc, char **argv)
 int	_server( void )
 {
 	struct pollfd var_poll;
@@ -36,9 +35,7 @@ int	_server( void )
 	struct pollfd client_poll;
 	std::vector<struct pollfd> tab_client;
 	int			on = 1;
-	// SA_IN addr;
-	// socklen_t addr_len;
-
+	std::string	asupr;
 
 	if ((serverfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		print_return("Error: Socket", 1);
@@ -47,15 +44,8 @@ int	_server( void )
 	// SOL_SOCKET : La couche vise est celle qui ne depend pas du protocole
 	// SO_REUSADDR : Option a ajouter a ma socket, ici le fait qu'elle soit reutilisable
 	// 3e argument sert a acceder a l'option precise, 1 ici (Aucune idee de pk 1)
-	if (0)
-	{
 	if ( (setsockopt(serverfd, SOL_SOCKET,  SO_REUSEADDR, (char *)&on, sizeof(on))) < 0)
-		return (print_return("ERROR: Setsockopt", 1));
-	// Set la socket comme non-bloquant, ainsi toute les socket arrivantes seront elles aussi non bloquante
-	if ( fcntl(serverfd, F_SETFL, O_NONBLOCK) < 0 )
-		return (print_return("ERROR: fcntl", 1));
-	}
-
+			return (print_return("ERROR: Setsockopt", 1));
 	servaddr.sin_family = AF_INET;
 	//Prend n'importe quel adress
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -70,14 +60,15 @@ int	_server( void )
 		print_return("Error: Listen", 1);
 	while(1){
 		std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n Actuellement " << tab_client.size() << " clients" << std::endl;
-		
 		// accept va attendre que quelquun se connect
 		clientfd = accept(serverfd, (SA *) NULL, NULL);
+		if ( fcntl(clientfd, F_SETFL, O_NONBLOCK) < 0 )
+			return (print_return("ERROR: fcntl", 1));
 		client_poll.fd = clientfd;
 		client_poll.events = POLLIN;
 		client_poll.revents = 0;
 		tab_client.push_back(client_poll);
-		if ( !(tmp = poll(tab_client.begin().base(), tab_client.size(), 30000)) )
+		if ( !(tmp = poll(tab_client.begin().base(), tab_client.size(), 10)) )
 		{
 			print_return("TIMEOUT: poll", 1);
 			break;
@@ -89,13 +80,11 @@ int	_server( void )
 		}
 		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		{
-			// n = recv(clientfd, recvline, MAXLINE, 0);
-			// if (n > 0)
 			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
 			{
 					std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
 					if (recvline[n - 1] == '\n'){
-						std::cout << "CA VEUT BREAK \n\n\n";
+						break ;
 					}
 			}
 			if (n < 0)
@@ -103,11 +92,13 @@ int	_server( void )
 			tmps = "HTTP/1.0 200 OK\r\n\r\nHello";
 			buff.assign(tmps.begin(), tmps.end());
 			n = write(clientfd, buff.begin().base(), buff.size());
-			std::cout << "Ca finit au moins la boucle et ca ecrit " << n << "\n";
+			close(clientfd);
+			tab_client.erase(it);
 		}
 	}
 	for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		close(clientfd);
+	close(serverfd);
 	(void)var_poll;
 	return (0);
 }
