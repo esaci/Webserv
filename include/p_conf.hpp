@@ -3,7 +3,7 @@
 
 #	include <iostream>
 
-	class	p_conf{
+class	p_conf{
 		public:
 			DATA		port;
 			DATA		root;
@@ -11,13 +11,12 @@
 			DATA		server_name;
 			DATA		location;
 			bool		location_auto_index;
-			std::fstream fs;
 
 		private:
 			p_conf(){}
 			p_conf(const p_conf &){}
 		public:
-			p_conf(const std::fstream &file);
+			p_conf(std::fstream &file);
 			~p_conf( void );
 
 	};

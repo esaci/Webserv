@@ -20,13 +20,13 @@ int main (int ac, char *av[]){
 		std::cout << "Echec lecture fichier config\n";
 		return (1);
 	}
-	conf = New p_conf(file);
+	conf = new p_conf(file);
 	// Necessite de parsing du fichier conf
 	// Gestion error si necessaire
 	//Creation du server
 	_server();
 	// while (std::getline(file, ptr))
 		// std::cout << ptr << std::endl;
-	delete p_conf;
+	delete conf;
 	return (0);
 }
