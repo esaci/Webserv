@@ -50,10 +50,12 @@ C_DATA *_code_init( void ){
 }
 
 std::string display_code(int code, std::string &value)
-{
-	std::string tmp;
-	
-	tmp += code;
+{	
+	std::stringstream out;
+
+	out << code;
+	std::string tmp = out.str();
+	tmp += " ";
 	tmp += value;
 	return (tmp);
 }

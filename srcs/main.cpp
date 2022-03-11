@@ -23,7 +23,6 @@ int main (int ac, char *av[]){
 	}
 	conf = new p_conf(file);
 	codes = _code_init();
-	std::cout << display_code(300, (*codes)[300]) << std::endl;
 	// Necessite de parsing du fichier conf
 	// Gestion error si necessaire
 	//Creation du server

@@ -23,7 +23,8 @@
 #	include <string>
 #	include <fstream>
 #	include <cstring>
-
+#	include <cstdlib>
+#	include <sstream>
 #	define SERVER_PORT 18000
 #	define MAXLINE 4096000
 #	define ROOT "/var/www/webserv"
