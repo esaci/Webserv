@@ -26,7 +26,7 @@ int	_response(DATA tmp, DATA tmp2, int clientfd, C_DATA *codes)
 			buff.insert(buff.end(), recvline, recvline + fs.gcount());
 			fs.read(recvline, MAXLINE);
 		}
-		_entity(codes, buff, 300)
+		// _entity(codes, buff, 300);
 		n = write(clientfd, buff.begin().base(), buff.size());
 		return (n);
 	}
