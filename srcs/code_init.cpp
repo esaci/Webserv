@@ -49,13 +49,11 @@ C_DATA *_code_init( void ){
 	return (tmp);
 }
 
-std::string display_code(std::pair<int, std::string> &arg)
+std::string display_code(int code, std::string &value)
 {
 	std::string tmp;
 	
+	tmp += code;
+	tmp += value;
 	return (tmp);
-	(void)arg;
-	// tmp += arg.first;
-	// tmp += arg.second;
-	// return (tmp);
 }

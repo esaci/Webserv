@@ -41,5 +41,6 @@ int		_server(C_DATA *codes);
 int		_response(DATA tmp, DATA tmp2, int connfd, C_DATA *codes);
 C_DATA *_code_init( void );
 int		print_return(std::string ptr, int value);
+std::string display_code(int code, std::string &value);
 
 # endif
