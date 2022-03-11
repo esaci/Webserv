@@ -21,6 +21,8 @@ class ClassParsingClientRequest
         std::vector<unsigned char> sec_fetch_dest;
         std::vector<unsigned char> referer;
 
+        
+
     public:
         ClassParsingClientRequest(const std::vector<unsigned char> &);
         bool    compare(std::vector<unsigned char>::const_iterator , const std::string &)const;
