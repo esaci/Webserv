@@ -9,7 +9,8 @@ SRCS =	main.cpp \
 		server.cpp \
 		response.cpp \
 		p_conf.cpp \
-		ClassParsingClientRequest.cpp
+		ClassParsingClientRequest.cpp \
+		code_init.cpp
 
 OBJS_DIR = ./objects/
 OBJ = $(SRCS:.cpp=.o)

@@ -2,6 +2,7 @@
 
 int main (int ac, char *av[]){
 	p_conf *conf;
+	C_DATA *codes;
 
 	if (!ac || ac > 2)
 	{
@@ -21,12 +22,14 @@ int main (int ac, char *av[]){
 		return (1);
 	}
 	conf = new p_conf(file);
+	codes = _code_init();
 	// Necessite de parsing du fichier conf
 	// Gestion error si necessaire
 	//Creation du server
-	_server();
+	_server(codes);
 	// while (std::getline(file, ptr))
 		// std::cout << ptr << std::endl;
 	delete conf;
+	delete codes;
 	return (0);
 }

@@ -1,6 +1,6 @@
 #include "../include/w_library.hpp"
 
-int	_response(DATA tmp, DATA tmp2, int clientfd)
+int	_response(DATA tmp, DATA tmp2, int clientfd, C_DATA *codes)
 {
 	std::string tmps;
 	DATA	buff, tmpb;
@@ -26,7 +26,7 @@ int	_response(DATA tmp, DATA tmp2, int clientfd)
 			buff.insert(buff.end(), recvline, recvline + fs.gcount());
 			fs.read(recvline, MAXLINE);
 		}
-		// n = write(0, buff.begin().base(), buff.size());
+		// _entity(buff, "texte/html", 200)
 		n = write(clientfd, buff.begin().base(), buff.size());
 		return (n);
 	}
@@ -34,4 +34,5 @@ int	_response(DATA tmp, DATA tmp2, int clientfd)
 	buff.assign(tmps.begin(), tmps.end());
 	n = write(clientfd, buff.begin().base(), buff.size());
 	return (n);
+	(void)codes;
 }

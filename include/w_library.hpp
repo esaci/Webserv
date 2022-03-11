@@ -18,6 +18,7 @@
 #	include <poll.h>
 #	include <iostream>
 #	include <vector>
+#	include <map>
 // Ne PAS stocker de donne dans une string, peut poser soucis par la suite
 #	include <string>
 #	include <fstream>
@@ -32,12 +33,13 @@
 #	define SA struct sockaddr
 #	define SA_IN struct sockaddr_in
 #	define	DATA std::vector<unsigned char>
+#	define C_DATA std::map<int, std::string>
 
 #	include "p_conf.hpp"
 
-int		_server( void );
-int		_response(DATA tmp, DATA tmp2, int connfd);
-
+int		_server(C_DATA *codes);
+int		_response(DATA tmp, DATA tmp2, int connfd, C_DATA *codes);
+C_DATA *_code_init( void );
 int		print_return(std::string ptr, int value);
 
 # endif

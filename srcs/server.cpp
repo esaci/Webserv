@@ -24,7 +24,26 @@ std::string bin2hex(const unsigned char *input, size_t len){
 	return (result);
 }
 
-int	_server( void )
+void	display_cpcr(ClassParsingClientRequest &p)
+{
+	std::cout << "method: "<< p.method << std::endl;
+	std::cout << "ressource: " << p.ressource << std::endl;
+	std::cout << "protocol: "<< p.protocol << std::endl;
+	std::cout << "host: "<< p.host << std::endl;
+	std::cout << "connection: "<< p.connection << std::endl;
+	std::cout << "sec_ch_ua: "<< p.sec_ch_ua << std::endl;
+	std::cout << "sec_ch_ua_mobile: "<< p.sec_ch_ua_mobile << std::endl;
+	std::cout << "user_agent: "<< p.user_agent << std::endl;
+	std::cout << "sec_ch_ua_platform: "<< p.sec_ch_ua_platform << std::endl;
+	std::cout << "accept: "<< p.accept << std::endl;
+	std::cout << "sec_fetch_site: "<< p.sec_fetch_site << std::endl;
+	std::cout << "sec_fetch_mode: "<< p.sec_fetch_mode << std::endl;
+	std::cout << "sec_fetch_dest: "<< p.sec_fetch_dest << std::endl;
+	std::cout << "referer: "<< p.referer << std::endl;
+	std::cout << "-----------------------------------------------------------\n"; 
+}
+
+int	_server(C_DATA *codes)
 {
 	struct pollfd var_poll;
 	int			serverfd, clientfd, n;
@@ -80,11 +99,11 @@ int	_server( void )
 		}
 		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		{
-			DATA lala;
+			DATA parse_data;
 			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
 			{
-					std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
-					lala.insert(lala.end(), recvline, recvline + n);
+					// std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
+					parse_data.insert(parse_data.end(), recvline, recvline + n);
 					if (recvline[n - 1] == '\n'){
 						break ;
 					}
@@ -92,22 +111,9 @@ int	_server( void )
 			if (n < 0)
 				print_return("Error: recv", 1);
 			
-			ClassParsingClientRequest p(lala);
-			
-			std::cout << "ressource: " << p.ressource << std::endl;
-			std::cout << "method: "<< p.method << std::endl;
-			std::cout << "protocol: "<< p.protocol << std::endl;
-			std::cout << "host: "<< p.host << std::endl;
-			std::cout << "connection: "<< p.connection << std::endl;
-			std::cout << "sec_ch_ua: "<< p.sec_ch_ua << std::endl;
-			std::cout << "sec_ch_ua_mobile: "<< p.sec_ch_ua_mobile << std::endl;
-			std::cout << "user_agent: "<< p.user_agent << std::endl;
-			std::cout << "sec_ch_ua_platform: "<< p.sec_ch_ua_platform << std::endl;
-			std::cout << "accept: "<< p.accept << std::endl;
-			std::cout << "sec_fetch_site: "<< p.sec_fetch_site << std::endl;
-			std::cout << "sec_fetch_mode: "<< p.sec_fetch_mode << std::endl;
-			std::cout << "sec_fetch_dest: "<< p.sec_fetch_dest << std::endl;
-			std::cout << "referer: "<< p.referer << std::endl;
+			ClassParsingClientRequest p(parse_data);
+
+			display_cpcr(p);
 			std::string tmp1;
 			std::string tmp2;
 
@@ -115,7 +121,7 @@ int	_server( void )
 			tmp2 = TARGET;
 			DATA asupr1(tmp1.begin(), tmp1.end());
 			DATA asupr2(tmp2.begin(), tmp2.end());
-			_response(asupr1, asupr2, clientfd);
+			_response(asupr1, asupr2, clientfd, codes);
 			close(clientfd);
 			tab_client.erase(it);
 		}
