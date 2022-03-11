@@ -1,41 +1,41 @@
-tmp.insert(std::pair<int, DATA>(100, Continue));
-tmp.insert(std::pair<int, DATA>(101, Switching Protocols));
-tmp.insert(std::pair<int, DATA>(200, OK));
-tmp.insert(std::pair<int, DATA>(201, Created));
-tmp.insert(std::pair<int, DATA>(202, Accepted));
-tmp.insert(std::pair<int, DATA>(203, Non-Authoritative Information));
-tmp.insert(std::pair<int, DATA>(204, No Content));
-tmp.insert(std::pair<int, DATA>(205, Reset Content));
-tmp.insert(std::pair<int, DATA>(206, Partial Content));
-tmp.insert(std::pair<int, DATA>(300, Multiple Choices));
-tmp.insert(std::pair<int, DATA>(301, Moved Permanently));
-tmp.insert(std::pair<int, DATA>(302, Found));
-tmp.insert(std::pair<int, DATA>(303, See Other));
-tmp.insert(std::pair<int, DATA>(304, Not Modified));
-tmp.insert(std::pair<int, DATA>(305, Use Proxy));
-tmp.insert(std::pair<int, DATA>(306, (Unused)));
-tmp.insert(std::pair<int, DATA>(307, Temporary Redirect));
-tmp.insert(std::pair<int, DATA>(400, Bad Request));
-tmp.insert(std::pair<int, DATA>(401, Unauthorized));
-tmp.insert(std::pair<int, DATA>(402, Payment Required));
-tmp.insert(std::pair<int, DATA>(403, Forbidden));
-tmp.insert(std::pair<int, DATA>(404, Not Found));
-tmp.insert(std::pair<int, DATA>(405, Method Not Allowed));
-tmp.insert(std::pair<int, DATA>(406, Not Acceptable));
-tmp.insert(std::pair<int, DATA>(407, Proxy Authentication Required));
-tmp.insert(std::pair<int, DATA>(408, Request Timeout));
-tmp.insert(std::pair<int, DATA>(10,  409 Conflict));
-tmp.insert(std::pair<int, DATA>(1410, Gone));
-tmp.insert(std::pair<int, DATA>(1411, Length Required));
-tmp.insert(std::pair<int, DATA>(1412, Precondition Failed));
-tmp.insert(std::pair<int, DATA>(1413, Request Entity Too Large));
-tmp.insert(std::pair<int, DATA>(1414, Request-URI Too Long));
-tmp.insert(std::pair<int, DATA>(1415, Unsupported Media Type));
-tmp.insert(std::pair<int, DATA>(1416, Requested Range Not Satisfiable));
-tmp.insert(std::pair<int, DATA>(18,   417 Expectation Failed));
-tmp.insert(std::pair<int, DATA>(500, Internal Server Error));
-tmp.insert(std::pair<int, DATA>(501, Not Implemented));
-tmp.insert(std::pair<int, DATA>(502, Bad Gateway));
-tmp.insert(std::pair<int, DATA>(503, Service Unavailable));
-tmp.insert(std::pair<int, DATA>(504, Gateway Timeout));
-tmp.insert(std::pair<int, DATA>(505, HTTP Version Not Supported));
+100 Continue
+101 Switching Protocols
+200 OK
+201 Created
+202 Accepted
+203 Non-Authoritative Information
+204 No Content
+205 Reset Content
+206 Partial Content
+300 Multiple Choices
+301 Moved Permanently
+302 Found
+303 See Other
+304 Not Modified
+305 Use Proxy
+306 (Unused)
+307 Temporary Redirect
+400 Bad Request
+401 Unauthorized
+402 Payment Required
+403 Forbidden
+404 Not Found
+405 Method Not Allowed
+406 Not Acceptable
+407 Proxy Authentication Required
+408 Request Timeout
+10  409 Conflict
+1410 Gone
+1411 Length Required
+1412 Precondition Failed
+1413 Request Entity Too Large
+1414 Request-URI Too Long
+1415 Unsupported Media Type
+1416 Requested Range Not Satisfiable
+18   417 Expectation Failed
+500 Internal Server Error
+501 Not Implemented
+502 Bad Gateway
+503 Service Unavailable
+504 Gateway Timeout
+505 HTTP Version Not Supported
