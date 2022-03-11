@@ -1,4 +1,5 @@
 #include "../include/w_library.hpp"
+#include "../include/ClassParsingClientRequest.hpp"
 
 int	print_return(std::string ptr, int value)
 {
@@ -79,15 +80,34 @@ int	_server( void )
 		}
 		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		{
+			DATA lala;
 			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
 			{
-					// std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
+					std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
+					lala.insert(lala.end(), recvline, recvline + n);
 					if (recvline[n - 1] == '\n'){
 						break ;
 					}
 			}
 			if (n < 0)
 				print_return("Error: recv", 1);
+			
+			ClassParsingClientRequest p(lala);
+			
+			std::cout << "ressource: " << p.ressource << std::endl;
+			std::cout << "method: "<< p.method << std::endl;
+			std::cout << "protocol: "<< p.protocol << std::endl;
+			std::cout << "host: "<< p.host << std::endl;
+			std::cout << "connection: "<< p.connection << std::endl;
+			std::cout << "sec_ch_ua: "<< p.sec_ch_ua << std::endl;
+			std::cout << "sec_ch_ua_mobile: "<< p.sec_ch_ua_mobile << std::endl;
+			std::cout << "user_agent: "<< p.user_agent << std::endl;
+			std::cout << "sec_ch_ua_platform: "<< p.sec_ch_ua_platform << std::endl;
+			std::cout << "accept: "<< p.accept << std::endl;
+			std::cout << "sec_fetch_site: "<< p.sec_fetch_site << std::endl;
+			std::cout << "sec_fetch_mode: "<< p.sec_fetch_mode << std::endl;
+			std::cout << "sec_fetch_dest: "<< p.sec_fetch_dest << std::endl;
+			std::cout << "referer: "<< p.referer << std::endl;
 			std::string tmp1;
 			std::string tmp2;
 

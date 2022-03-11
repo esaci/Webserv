@@ -8,7 +8,8 @@ SRCS_DIR = ./srcs/
 SRCS =	main.cpp \
 		server.cpp \
 		response.cpp \
-		p_conf.cpp
+		p_conf.cpp \
+		ClassParsingClientRequest.cpp
 
 OBJS_DIR = ./objects/
 OBJ = $(SRCS:.cpp=.o)
