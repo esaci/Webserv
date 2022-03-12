@@ -49,13 +49,13 @@ C_DATA *_code_init( void ){
 	return (tmp);
 }
 
-std::string display_code(int code, std::string &value)
+std::string display_code(int n_code, C_DATA *code)
 {	
 	std::stringstream out;
 
-	out << code;
+	out << n_code;
 	std::string tmp = out.str();
 	tmp += " ";
-	tmp += value;
+	tmp += (*code)[n_code];
 	return (tmp);
 }

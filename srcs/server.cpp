@@ -1,5 +1,4 @@
 #include "../include/w_library.hpp"
-#include "../include/ClassParsingClientRequest.hpp"
 
 int	print_return(std::string ptr, int value)
 {
@@ -87,7 +86,7 @@ int	_server(C_DATA *codes)
 		client_poll.events = POLLIN;
 		client_poll.revents = 0;
 		tab_client.push_back(client_poll);
-		if ( !(tmp = poll(tab_client.begin().base(), tab_client.size(), 10000)) )
+		if ( !(tmp = poll(tab_client.begin().base(), tab_client.size(), 1000000)) )
 		{
 			print_return("TIMEOUT: poll", 1);
 			break;

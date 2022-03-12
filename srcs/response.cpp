@@ -2,21 +2,24 @@
 
 int	_response(R_DATA p, int clientfd, C_DATA *codes)
 {
-	DATA	buff, tmpb;
+	DATA	buff, tmpb, tmpb2;
 	int		n;
-	char		recvline[MAXLINE + 1];
 
 	tmpb = _data_init("GET");
-	buff = _data_init("HTTP/1.0 200 OK\r\n\r\n");
+	// buff = _data_init("HTTP/1.0 200 OK\r\n\r\n");
 	if (p.method == tmpb)
 	{
 		tmpb = _data_init("/");
+		tmpb2 = _data_init(TMPINDEX);
 		// Il faudra rajouter la condition si on prend en ressource lindex directement
-		if (tmpb == p.ressource)
-			return (_get_index());
+		// Faudra ameliorer ce if
+		if ((tmpb == p.ressource && tmpb.size() == p.ressource.size()) || tmpb2 == p.ressource)
+			return (_get_index(clientfd, codes));
 		tmpb = _data_init("/favicon.ico");
 		if (tmpb == p.ressource)
-			return (_get_favicon());
+			return (_get_favicon(clientfd, codes));
+		else
+			return(_get_error(clientfd, codes));
 	}
 	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
 	n = write(clientfd, buff.begin().base(), buff.size());
