@@ -1,37 +1,24 @@
 #include "../include/w_library.hpp"
 
-int	_response(DATA tmp, DATA tmp2, int clientfd, C_DATA *codes)
+int	_response(R_DATA p, int clientfd, C_DATA *codes)
 {
-	std::string tmps;
 	DATA	buff, tmpb;
 	int		n;
 	char		recvline[MAXLINE + 1];
 
-	// (void)tmp;
-	(void)tmp2;
-	tmps = "GET";
-	tmpb.assign(tmps.begin(), tmps.end());
-	tmps = "HTTP/1.0 200 OK\r\n\r\n";
-	buff.assign(tmps.begin(), tmps.end());
-	if (tmp == tmpb)
+	tmpb = _data_init("GET");
+	buff = _data_init("HTTP/1.0 200 OK\r\n\r\n");
+	if (p.method == tmpb)
 	{
-		// std::cout << "CA PASSE VERS LE IF\n\n";
-		std::fstream fs;
-		fs.open(TMPINDEX, std::fstream::in);
-		if (!fs)
-			print_return("ERROR READ DU FICHIER", 1);
-		// std::cout << TMPINDEX << " est l'endroit ou jvais chercher lindex\n";
-		fs.read(recvline, MAXLINE);
-		while (fs.gcount()){
-			buff.insert(buff.end(), recvline, recvline + fs.gcount());
-			fs.read(recvline, MAXLINE);
-		}
-		// _entity(codes, buff, 300);
-		n = write(clientfd, buff.begin().base(), buff.size());
-		return (n);
+		tmpb = _data_init("/");
+		// Il faudra rajouter la condition si on prend en ressource lindex directement
+		if (tmpb == p.ressource)
+			return (_get_index());
+		tmpb = _data_init("/favicon.ico");
+		if (tmpb == p.ressource)
+			return (_get_favicon());
 	}
-	tmps = "HTTP/1.0 200 OK\r\n\r\nHello";
-	buff.assign(tmps.begin(), tmps.end());
+	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
 	n = write(clientfd, buff.begin().base(), buff.size());
 	return (n);
 	(void)codes;

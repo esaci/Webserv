@@ -111,17 +111,10 @@ int	_server(C_DATA *codes)
 			if (n < 0)
 				print_return("Error: recv", 1);
 			
-			ClassParsingClientRequest p(parse_data);
-
+			R_DATA p(parse_data);
 			display_cpcr(p);
-			std::string tmp1;
-			std::string tmp2;
 
-			tmp1 = METHOD;
-			tmp2 = TARGET;
-			DATA asupr1(tmp1.begin(), tmp1.end());
-			DATA asupr2(tmp2.begin(), tmp2.end());
-			_response(asupr1, asupr2, clientfd, codes);
+			_response(p, clientfd, codes);
 			close(clientfd);
 			tab_client.erase(it);
 		}
