@@ -18,8 +18,9 @@ int	_response(R_DATA p, int clientfd, C_DATA *codes)
 		tmpb = _data_init("/favicon.ico");
 		if (tmpb == p.ressource)
 			return (_get_favicon(clientfd, codes));
-		else
-			return(_get_error(clientfd, codes));
+		if (AUTOINDEX)
+			return(_get_error_400(clientfd, codes));
+		return(_get_error_404(clientfd, codes));
 	}
 	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
 	n = write(clientfd, buff.begin().base(), buff.size());

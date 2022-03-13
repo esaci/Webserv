@@ -27,7 +27,7 @@ ClassParsingClientRequest::ClassParsingClientRequest(const std::vector<unsigned 
                 it++;
             }
         }
-        if(y == 0 && compare(it, "Host:"))
+        if (y == 0 && compare(it, "Host:"))
         {
             while (*it != ' ')
                 it++;
@@ -38,7 +38,7 @@ ClassParsingClientRequest::ClassParsingClientRequest(const std::vector<unsigned 
                 it++;
             }
         }
-        else if(y == 0 && compare(it, "Connection:"))
+        else if (y == 0 && compare(it, "Connection:"))
         {
            while (*it != ' ')
                 it++;
