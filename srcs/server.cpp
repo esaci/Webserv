@@ -99,17 +99,25 @@ int	_server(C_DATA *codes)
 		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		{
 			DATA parse_data;
-			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
-			{
+			bool a = 0;
+			int b = 0;
+			while (((n = recv(clientfd, recvline, MAXLINE, 0)) > 0) || a)
+			{		
 					// std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
-					parse_data.insert(parse_data.end(), recvline, recvline + n);
-					if (recvline[n - 1] == '\n'){
+					if (n == -1)
+						b = 1;
+					if (n != -1)
+						std::cout << n << std::endl;
+					if (b == 0)
+						parse_data.insert(parse_data.end(), recvline, recvline + n);
+					if (recvline[n -1] == '\n' && recvline[n -2] == '\r' && n == 2){
 						break ;
 					}
+					a = 1;
 			}
 			if (n < 0)
 				print_return("Error: recv", 1);
-			
+			// checker ici si une requete est bien formater pour eviter le segfault
 			R_DATA p(parse_data);
 			display_cpcr(p);
 
