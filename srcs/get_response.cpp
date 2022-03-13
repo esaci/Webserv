@@ -57,7 +57,7 @@ int	_get_error_400(int clientfd, C_DATA *codes){
 		buff.insert(buff.end(), recvline, recvline + fs.gcount());
 		fs.read(recvline, MAXLINE);
 	}
-	_entity_no_accept(codes, buff, 400, "texte/html");
+	_entity_no_accept(codes, buff, 400, "text/html");
 	return (write(clientfd, buff.begin().base(), buff.size()));
 }
 
@@ -77,6 +77,6 @@ int	_get_error_404(int clientfd, C_DATA *codes){
 		buff.insert(buff.end(), recvline, recvline + fs.gcount());
 		fs.read(recvline, MAXLINE);
 	}
-	_entity_no_accept(codes, buff, 404, "texte/html");
+	_entity_no_accept(codes, buff, 404, "text/html");
 	return (write(clientfd, buff.begin().base(), buff.size()));
 }
