@@ -103,20 +103,24 @@ int	_server(C_DATA *codes)
 			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
 			{
 				// std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
-				parse_data.insert(parse_data.end(), recvline, recvline + n);
+				if (n)
+					parse_data.insert(parse_data.end(), recvline, recvline + n);
 				if (recvline[n - 1] == '\n'){
 					break ;
 				}
 			}
 			if (n < 0)
-				print_return("Error: recv", 1);
+				return (print_return("Error: recv", 1));
 			
 			R_DATA p(parse_data);
-			display_cpcr(p);
+			if (parse_data.size())
+			{
+				display_cpcr(p);
 
-			_response(p, clientfd, codes);
-			close(clientfd);
-			tab_client.erase(it);
+				_response(p, clientfd, codes);
+				close(clientfd);
+				tab_client.erase(it);
+			}
 		}
 	}
 	for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
