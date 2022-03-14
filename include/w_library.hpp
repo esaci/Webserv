@@ -41,7 +41,7 @@
 #	define	DATA std::vector<unsigned char>
 #	define C_DATA std::map<int, std::string>
 #	define R_DATA ClassParsingClientRequest
-
+#	define CGI "/usr/lib/cgi-bin/php" 
 #	include "p_conf.hpp"
 #	include "ClassParsingClientRequest.hpp"
 
