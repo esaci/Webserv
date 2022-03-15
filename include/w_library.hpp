@@ -26,40 +26,13 @@
 #	include <cstdlib>
 #	include <sstream>
 
-#	define SERVER_PORT 18000
-#	define MAXLINE 4096000
-#	define ROOT "/var/www/webserv"
-#	define TMPINDEX "/var/www/webserv/index.html"
-#	define TMPFAVICO "/var/www/webserv/favicon.ico"
-#	define ERRORFILE_400 "./files_system/Bad_Request.html"
-#	define ERRORFILE_404 "./files_system/Not_Found.html"
-#	define METHOD	"GET"
-#	define TARGET	"/"
-#	define AUTOINDEX	0
-#	define SA struct sockaddr
-#	define SA_IN struct sockaddr_in
-#	define	DATA std::vector<unsigned char>
-#	define C_DATA std::map<int, std::string>
-#	define CT_DATA std::map<std::string, std::string>
-#	define R_DATA ClassParsingClientRequest
-#	define CGI "/usr/lib/cgi-bin/php" 
+#	include "w_defines.hpp"
 #	include "p_conf.hpp"
 #	include "ClassParsingClientRequest.hpp"
+#	include "server_data.hpp"
 
-int				_server(C_DATA *codes);
-int				_response(R_DATA p, int connfd, C_DATA *codes);
 // ces deux suivantes sont les constructor
-C_DATA			*_code_init( void );
-CT_DATA			*_content_type( void );
-int				_get_index(int clientfd, C_DATA *code);
-int				_get_favicon(int clientfd, C_DATA *codes);
-int				_get_error_400(int clientfd, C_DATA *codes);
-int				_get_error_404(int clientfd, C_DATA *codes);
-void			_entity(C_DATA *codes, DATA &buff, int code_n, std::string content_type);
-void			_entity_no_accept(C_DATA *codes, DATA &buff, int code_n, std::string content_type);
-
 int				print_return(std::string ptr, int value);
-std::string		display_code(int n_code, C_DATA *code);
 DATA			_data_init(std::string arg);
 void			_data_begin(DATA &buff, std::string arg);
 

@@ -26,6 +26,7 @@ class ClassParsingClientRequest
         ClassParsingClientRequest(const std::vector<unsigned char> &);
         bool    compare(std::vector<unsigned char>::const_iterator , const std::string &)const;
         ~ClassParsingClientRequest();
+		void	display_cpcr( void );
 };
 
 std::ostream & operator<<(std::ostream & ostream, std::vector<unsigned char> const &i);

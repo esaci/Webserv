@@ -1,59 +1,10 @@
 #include "../include/w_library.hpp"
 
-int	print_return(std::string ptr, int value)
-{
-	std::cerr << ptr << std::endl;
-	return (value);
-}
 
-std::string bin2hex(const unsigned char *input, size_t len){
-	std::string hexits = "0123456789ABCDEF";
-	int		resultlength = (len * 3) + 1;
-	std::string result(resultlength, '\0');
-
-	if (input == NULL || len <= 0)
-		return NULL;
-
-	for (size_t i = 0; i < len; i++){
-		result[i * 3] = hexits[input[i] >> 4];
-		result[(i * 3) + 1] = hexits[input[i] >> 0x0F];
-		result[(1 * 3) + 2] = ' ';
-	}
-
-	return (result);
-}
-
-void	display_cpcr(ClassParsingClientRequest &p)
-{
-	std::cout << "method: "<< p.method << std::endl;
-	std::cout << "ressource: " << p.ressource << std::endl;
-	std::cout << "protocol: "<< p.protocol << std::endl;
-	std::cout << "host: "<< p.host << std::endl;
-	std::cout << "connection: "<< p.connection << std::endl;
-	std::cout << "sec_ch_ua: "<< p.sec_ch_ua << std::endl;
-	std::cout << "sec_ch_ua_mobile: "<< p.sec_ch_ua_mobile << std::endl;
-	std::cout << "user_agent: "<< p.user_agent << std::endl;
-	std::cout << "sec_ch_ua_platform: "<< p.sec_ch_ua_platform << std::endl;
-	std::cout << "accept: "<< p.accept << std::endl;
-	std::cout << "sec_fetch_site: "<< p.sec_fetch_site << std::endl;
-	std::cout << "sec_fetch_mode: "<< p.sec_fetch_mode << std::endl;
-	std::cout << "sec_fetch_dest: "<< p.sec_fetch_dest << std::endl;
-	std::cout << "referer: "<< p.referer << std::endl;
-	std::cout << "-----------------------------------------------------------\n"; 
-}
-
-int	_server(C_DATA *codes)
-{
-	struct pollfd var_poll;
-	int			serverfd, clientfd, n;
+int	init_socket( void ){
 	SA_IN		servaddr;
-	uint8_t		recvline[MAXLINE + 1];
-	int			tmp;
-	std::string	tmps;
-	struct pollfd client_poll;
-	std::vector<struct pollfd> tab_client;
 	int			on = 1;
-	std::string	asupr;
+	int			serverfd;
 
 	if ((serverfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		print_return("Error: Socket", 1);
@@ -76,7 +27,18 @@ int	_server(C_DATA *codes)
 	// On donne ensuite l'ordre qu'on le listen
 	if ((listen(serverfd, 10)) < 0)
 		print_return("Error: Listen", 1);
-	while(1){
+	return (serverfd);
+}
+
+int	server_data::_server( void )
+{
+	int			serverfd, clientfd, n;
+	uint8_t		recvline[MAXLINE + 1];
+	struct pollfd client_poll;
+	std::vector<struct pollfd> tab_client;
+
+	serverfd = init_socket();
+	while (1){
 		std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n Actuellement " << tab_client.size() << " clients" << std::endl;
 		// accept va attendre que quelquun se connect
 		clientfd = accept(serverfd, (SA *) NULL, NULL);
@@ -86,12 +48,12 @@ int	_server(C_DATA *codes)
 		client_poll.events = POLLIN;
 		client_poll.revents = 0;
 		tab_client.push_back(client_poll);
-		if ( !(tmp = poll(tab_client.begin().base(), tab_client.size(), 1000000)) )
+		if ( !(n = poll(tab_client.begin().base(), tab_client.size(), 1000000)) )
 		{
 			print_return("TIMEOUT: poll", 1);
 			break;
 		}
-		if (tmp < 0)
+		if (n < 0)
 		{
 			print_return("ERROR: poll", 1);
 			break;
@@ -102,22 +64,18 @@ int	_server(C_DATA *codes)
 
 			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
 			{
-				// std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
-				if (n)
-					parse_data.insert(parse_data.end(), recvline, recvline + n);
+				parse_data.insert(parse_data.end(), recvline, recvline + n);
 				if (recvline[n - 1] == '\n'){
 					break ;
 				}
 			}
 			if (n < 0)
 				return (print_return("Error: recv", 1));
-			
-			R_DATA p(parse_data);
 			if (parse_data.size())
 			{
-				display_cpcr(p);
-
-				_response(p, clientfd, codes);
+				R_DATA p(parse_data);
+				p.display_cpcr();
+				_response(p, clientfd);
 				close(clientfd);
 				tab_client.erase(it);
 			}
@@ -126,6 +84,5 @@ int	_server(C_DATA *codes)
 	for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		close(clientfd);
 	close(serverfd);
-	(void)var_poll;
 	return (0);
 }

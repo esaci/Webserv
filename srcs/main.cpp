@@ -1,17 +1,13 @@
 #include "../include/w_library.hpp"
 
 int main (int ac, char *av[]){
-	p_conf *conf;
-	C_DATA *codes;
-	CT_DATA *ctype;
+	std::fstream	file;
+	
 	if (!ac || ac > 2)
 	{
 		std::cout << "Need 1 argument, the config file\n";
 		return (1);
 	}
-	std::string		ptr;
-	std::fstream	file;
-
 	if (ac == 1)
 		file.open("config_file/default.conf", std::fstream::in);
 	else
@@ -21,17 +17,8 @@ int main (int ac, char *av[]){
 		std::cout << "Echec lecture fichier config\n";
 		return (1);
 	}
-	conf = new p_conf(file);
-	codes = _code_init();
-	ctype = _content_type();
-	// Necessite de parsing du fichier conf
-	// Gestion error si necessaire
-	//Creation du server
-	_server(codes);
-	// while (std::getline(file, ptr))
-		// std::cout << ptr << std::endl;
-	delete conf;
-	delete codes;
+	server_data	serv(file);
+
+	serv._server();
 	return (0);
-	(void)ctype;
 }

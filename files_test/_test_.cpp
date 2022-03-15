@@ -1,103 +1,79 @@
-tmp.insert(std::string("html"),std::string("text/html"));
-tmp.insert(std::string("htm"),std::string("text/html"));
-tmp.insert(std::string("shtml"),std::string("text/html"));
-tmp.insert(std::string("css"),std::string("text/css"));
-tmp.insert(std::string("xml"),std::string("text/xml"));
-tmp.insert(std::string("gif"),std::string("image/gif"));
-tmp.insert(std::string("jpeg"),std::string("image/gif"));
-tmp.insert(std::string("jpg"),std::string("image/jpeg"));
-tmp.insert(std::string("js"),std::string("application/javascript"));
-tmp.insert(std::string("atom"),std::string("application/atom+xml"));
-tmp.insert(std::string("rss"),std::string("application/rss+xml"));
-tmp.insert(std::string("mml"),std::string("text/mathml"));
-tmp.insert(std::string("txt"),std::string("text/plain"));
-tmp.insert(std::string("jad"),std::string("text/vnd.sun.j2me.app-descriptor"));
-tmp.insert(std::string("wml"),std::string("text/vnd.wap.wml"));
-tmp.insert(std::string("htc"),std::string("text/x-component"));
-tmp.insert(std::string("png"),std::string("image/png"));
-tmp.insert(std::string("tif"),std::string("image/png"));
-tmp.insert(std::string("tiff"),std::string("image/tiff"));
-tmp.insert(std::string("wbmp"),std::string("image/vnd.wap.wbmp"));
-tmp.insert(std::string("ico"),std::string("image/x-icon"));
-tmp.insert(std::string("jng"),std::string("image/x-jng"));
-tmp.insert(std::string("bmp"),std::string("image/x-ms-bmp"));
-tmp.insert(std::string("svg"),std::string("image/x-ms-bmp"));
-tmp.insert(std::string("svgz"),std::string("image/svg+xml"));
-tmp.insert(std::string("webp"),std::string("image/webp"));
-tmp.insert(std::string("woff"),std::string("application/font-woff"));
-tmp.insert(std::string("jar"),std::string("application/font-woff"));
-tmp.insert(std::string("war"),std::string("application/font-woff"));
-tmp.insert(std::string("ear"),std::string("application/java-archive"));
-tmp.insert(std::string("json"),std::string("application/json"));
-tmp.insert(std::string("hqx"),std::string("application/mac-binhex40"));
-tmp.insert(std::string("doc"),std::string("application/msword"));
-tmp.insert(std::string("pdf"),std::string("application/pdf"));
-tmp.insert(std::string("ps"),std::string("application/pdf"));
-tmp.insert(std::string("eps"),std::string("application/pdf"));
-tmp.insert(std::string("ai"),std::string("application/postscript"));
-tmp.insert(std::string("rtf"),std::string("application/rtf"));
-tmp.insert(std::string("m3u8"),std::string("application/vnd.apple.mpegurl"));
-tmp.insert(std::string("xls"),std::string("application/vnd.ms-excel"));
-tmp.insert(std::string("eot"),std::string("application/vnd.ms-fontobject"));
-tmp.insert(std::string("ppt"),std::string("application/vnd.ms-powerpoint"));
-tmp.insert(std::string("wmlc"),std::string("application/vnd.wap.wmlc"));
-tmp.insert(std::string("kml"),std::string("application/vnd.google-earth.kml+xml"));
-tmp.insert(std::string("kmz"),std::string("application/vnd.google-earth.kmz"));
-tmp.insert(std::string("7z"),std::string("application/x-7z-compressed"));
-tmp.insert(std::string("cco"),std::string("application/x-cocoa"));
-tmp.insert(std::string("jardiff"),std::string("application/x-java-archive-diff"));
-tmp.insert(std::string("jnlp"),std::string("application/x-java-jnlp-file"));
-tmp.insert(std::string("run"),std::string("application/x-makeself"));
-tmp.insert(std::string("pl"),std::string("application/x-makeself"));
-tmp.insert(std::string("pm"),std::string("application/x-perl"));
-tmp.insert(std::string("prc"),std::string("application/x-perl"));
-tmp.insert(std::string("pdb"),std::string("application/x-pilot"));
-tmp.insert(std::string("rar"),std::string("application/x-rar-compressed"));
-tmp.insert(std::string("rpm"),std::string("application/x-redhat-package-manager"));
-tmp.insert(std::string("sea"),std::string("application/x-sea"));
-tmp.insert(std::string("swf"),std::string("application/x-shockwave-flash"));
-tmp.insert(std::string("sit"),std::string("application/x-stuffit"));
-tmp.insert(std::string("tcl"),std::string("application/x-stuffit"));
-tmp.insert(std::string("tk"),std::string("application/x-tcl"));
-tmp.insert(std::string("der"),std::string("application/x-tcl"));
-tmp.insert(std::string("pem"),std::string("application/x-tcl"));
-tmp.insert(std::string("crt"),std::string("application/x-x509-ca-cert"));
-tmp.insert(std::string("xpi"),std::string("application/x-xpinstall"));
-tmp.insert(std::string("xhtml"),std::string("application/xhtml+xml"));
-tmp.insert(std::string("xspf"),std::string("application/xspf+xml"));
-tmp.insert(std::string("zip"),std::string("application/zip"));
-tmp.insert(std::string("bin"),std::string("application/zip"));
-tmp.insert(std::string("exe"),std::string("application/zip"));
-tmp.insert(std::string("dll"),std::string("application/octet-stream"));
-tmp.insert(std::string("deb"),std::string("application/octet-stream"));
-tmp.insert(std::string("dmg"),std::string("application/octet-stream"));
-tmp.insert(std::string("iso"),std::string("application/octet-stream"));
-tmp.insert(std::string("img"),std::string("application/octet-stream"));
-tmp.insert(std::string("msi"),std::string("application/octet-stream"));
-tmp.insert(std::string("msp"),std::string("application/octet-stream"));
-tmp.insert(std::string("msm"),std::string("application/octet-stream"));
-tmp.insert(std::string("docx"),std::string("application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
-tmp.insert(std::string("xlsx"),std::string("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
-tmp.insert(std::string("pptx"),std::string("application/vnd.openxmlformats-officedocument.presentationml.presentation"));
-tmp.insert(std::string("mid"),std::string("application/vnd.openxmlformats-officedocument.presentationml.presentation"));
-tmp.insert(std::string("midi"),std::string("application/vnd.openxmlformats-officedocument.presentationml.presentation"));
-tmp.insert(std::string("kar"),std::string("audio/midi"));
-tmp.insert(std::string("mp3"),std::string("audio/mpeg"));
-tmp.insert(std::string("ogg"),std::string("audio/ogg"));
-tmp.insert(std::string("m4a"),std::string("audio/x-m4a"));
-tmp.insert(std::string("ra"),std::string("audio/x-realaudio"));
-tmp.insert(std::string("3gpp"),std::string("audio/x-realaudio"));
-tmp.insert(std::string("3gp"),std::string("video/3gpp"));
-tmp.insert(std::string("ts"),std::string("video/mp2t"));
-tmp.insert(std::string("mp4"),std::string("video/mp4"));
-tmp.insert(std::string("mpeg"),std::string("video/mp4"));
-tmp.insert(std::string("mpg"),std::string("video/mpeg"));
-tmp.insert(std::string("mov"),std::string("video/quicktime"));
-tmp.insert(std::string("webm"),std::string("video/webm"));
-tmp.insert(std::string("flv"),std::string("video/x-flv"));
-tmp.insert(std::string("m4v"),std::string("video/x-m4v"));
-tmp.insert(std::string("mng"),std::string("video/x-mng"));
-tmp.insert(std::string("asx"),std::string("video/x-mng"));
-tmp.insert(std::string("asf"),std::string("video/x-ms-asf"));
-tmp.insert(std::string("wmv"),std::string("video/x-ms-wmv"));
-tmp.insert(std::string("avi"),std::string("video/x-msvideo"));
+html htm shtml,text/html
+css,text/css
+xml,text/xml
+gif,image/gif
+jpeg jpg,image/jpeg
+js,application/javascript
+atom,application/atom+xml
+rss,application/rss+xml
+mml,text/mathml
+txt,text/plain
+jad,text/vnd.sun.j2me.app-descriptor
+wml,text/vnd.wap.wml
+htc,text/x-component
+png,image/png
+tif tiff,image/tiff
+wbmp,image/vnd.wap.wbmp
+ico,image/x-icon
+jng,image/x-jng
+bmp,image/x-ms-bmp
+svg svgz,image/svg+xml
+webp,image/webp
+woff,application/font-woff
+jar war ear,application/java-archive
+json,application/json
+hqx,application/mac-binhex40
+doc,application/msword
+pdf,application/pdf
+ps eps ai,application/postscript
+rtf,application/rtf
+m3u8,application/vnd.apple.mpegurl
+xls,application/vnd.ms-excel
+eot,application/vnd.ms-fontobject
+ppt,application/vnd.ms-powerpoint
+wmlc,application/vnd.wap.wmlc
+kml,application/vnd.google-earth.kml+xml kml;
+kmz,application/vnd.google-earth.kmz
+7z,application/x-7z-compressed
+cco,application/x-cocoa
+jardiff,application/x-java-archive-diff
+jnlp,application/x-java-jnlp-file
+run,application/x-makeself
+pl pm,application/x-perl
+prc pdb,application/x-pilot
+rar,application/x-rar-compressed
+rpm,application/x-redhat-package-manager rpm;
+sea,application/x-sea
+swf,application/x-shockwave-flash
+sit,application/x-stuffit
+tcl tk,application/x-tcl
+der pem crt,application/x-x509-ca-cert
+xpi,application/x-xpinstall
+xhtml,application/xhtml+xml
+xspf,application/xspf+xml
+zip,application/zip
+bin exe dll,application/octet-stream
+deb,application/octet-stream
+dmg,application/octet-stream
+iso img,application/octet-stream
+msi msp msm,application/octet-stream
+docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document
+xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation
+mid midi kar,audio/midi
+mp3,audio/mpeg
+ogg,audio/ogg
+m4a,audio/x-m4a
+ra,audio/x-realaudio
+3gpp 3gp,video/3gpp
+ts,video/mp2t
+mp4,video/mp4
+mpeg mpg,video/mpeg
+mov,video/quicktime
+webm,video/webm
+flv,video/x-flv
+m4v,video/x-m4v
+mng,video/x-mng
+asx asf,video/x-ms-asf
+wmv,video/x-ms-wmv
+avi,video/x-msvideo

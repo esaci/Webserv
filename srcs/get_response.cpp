@@ -1,6 +1,6 @@
 #include "../include/w_library.hpp"
 
-int	_get_index(int clientfd, C_DATA *codes){
+int	server_data::_get_index(int clientfd){
 	char			recvline[MAXLINE + 1];
 	std::fstream	fs;
 	DATA			buff;
@@ -10,18 +10,18 @@ int	_get_index(int clientfd, C_DATA *codes){
 	// prend un index par default pour linstant mal
 	fs.open(TMPINDEX, std::fstream::in);
 	if (!fs)
-		return (_get_error_404(clientfd, codes));
+		return (_get_error_404(clientfd));
 	// std::cout << TMPINDEX << " est l'endroit ou jvais chercher lindex\n";
 	fs.read(recvline, MAXLINE);
 	while (fs.gcount()){
 		buff.insert(buff.end(), recvline, recvline + fs.gcount());
 		fs.read(recvline, MAXLINE);
 	}
-	_entity(codes, buff, 200, "text/html");
+	_entity(buff, 200, "text/html");
 	return (write(clientfd, buff.begin().base(), buff.size()));
 }
 
-int	_get_favicon(int clientfd, C_DATA *codes){
+int	server_data::_get_favicon(int clientfd){
 	char			recvline[MAXLINE + 1];
 	std::fstream	fs;
 	DATA			buff;
@@ -30,18 +30,18 @@ int	_get_favicon(int clientfd, C_DATA *codes){
 	// prend un index par default pour linstant mal
 	fs.open(TMPFAVICO, std::fstream::in);
 	if (!fs)
-		return (_get_error_404(clientfd, codes));
+		return (_get_error_404(clientfd));
 	// std::cout << TMPFAVICO << " est l'endroit ou jvais chercher lindex\n";
 	fs.read(recvline, MAXLINE);
 	while (fs.gcount()){
 		buff.insert(buff.end(), recvline, recvline + fs.gcount());
 		fs.read(recvline, MAXLINE);
 	}
-	_entity(codes, buff, 200, "image/x-icon");
+	_entity(buff, 200, "image/x-icon");
 	return (write(clientfd, buff.begin().base(), buff.size()));
 }
 
-int	_get_error_400(int clientfd, C_DATA *codes){
+int	server_data::_get_error_400(int clientfd){
 	char			recvline[MAXLINE + 1];
 	std::fstream	fs;
 	DATA			buff;
@@ -57,11 +57,11 @@ int	_get_error_400(int clientfd, C_DATA *codes){
 		buff.insert(buff.end(), recvline, recvline + fs.gcount());
 		fs.read(recvline, MAXLINE);
 	}
-	_entity_no_accept(codes, buff, 400, "text/html");
+	_entity_no_accept(buff, 400, "text/html");
 	return (write(clientfd, buff.begin().base(), buff.size()));
 }
 
-int	_get_error_404(int clientfd, C_DATA *codes){
+int	server_data::_get_error_404(int clientfd){
 	char			recvline[MAXLINE + 1];
 	std::fstream	fs;
 	DATA			buff;
@@ -77,6 +77,6 @@ int	_get_error_404(int clientfd, C_DATA *codes){
 		buff.insert(buff.end(), recvline, recvline + fs.gcount());
 		fs.read(recvline, MAXLINE);
 	}
-	_entity_no_accept(codes, buff, 404, "text/html");
+	_entity_no_accept(buff, 404, "text/html");
 	return (write(clientfd, buff.begin().base(), buff.size()));
 }

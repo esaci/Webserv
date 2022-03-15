@@ -180,3 +180,22 @@ std::ostream & operator<<(std::ostream & ostream, std::vector<unsigned char> con
 		ostream << *it;
 	return (ostream);
 }
+
+void	ClassParsingClientRequest::display_cpcr( void )
+{
+	std::cout << "method: "<< method << std::endl;
+	std::cout << "ressource: " << ressource << std::endl;
+	std::cout << "protocol: "<< protocol << std::endl;
+	std::cout << "host: "<< host << std::endl;
+	std::cout << "connection: "<< connection << std::endl;
+	std::cout << "sec_ch_ua: "<< sec_ch_ua << std::endl;
+	std::cout << "sec_ch_ua_mobile: "<< sec_ch_ua_mobile << std::endl;
+	std::cout << "user_agent: "<< user_agent << std::endl;
+	std::cout << "sec_ch_ua_platform: "<< sec_ch_ua_platform << std::endl;
+	std::cout << "accept: "<< accept << std::endl;
+	std::cout << "sec_fetch_site: "<< sec_fetch_site << std::endl;
+	std::cout << "sec_fetch_mode: "<< sec_fetch_mode << std::endl;
+	std::cout << "sec_fetch_dest: "<< sec_fetch_dest << std::endl;
+	std::cout << "referer: "<< referer << std::endl;
+	std::cout << "-----------------------------------------------------------\n"; 
+}
