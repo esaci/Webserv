@@ -44,17 +44,16 @@ int	server_data::_server( void )
 		rp15 = 1;
 		while (rp15)
 		{
-			clientfd = accept(serverfd, (SA *) NULL, NULL);
-			if ( fcntl(clientfd, F_SETFL, O_NONBLOCK) < 0 )
-				return (print_return("ERROR: fcntl", 1));
-			client_poll.fd = clientfd;
-			client_poll.events = POLLIN;
-			client_poll.revents = 0;
-			tab_client.push_back(client_poll);
-			if ( !(n = poll(tab_client.begin().base(), tab_client.size(), 1000000)) )
+			while(!(n = poll(tab_client.begin().base(), tab_client.size(), 100)))
 			{
+				clientfd = accept(serverfd, (SA *) NULL, NULL);
+				if ( fcntl(clientfd, F_SETFL, O_NONBLOCK) < 0 )
+					return (print_return("ERROR: fcntl", 1));
+				client_poll.fd = clientfd;
+				client_poll.events = POLLIN;
+				client_poll.revents = 0;
+				tab_client.push_back(client_poll);
 				print_return("TIMEOUT: poll", 1);
-				break;
 			}
 			if (n < 0)
 			{
@@ -63,30 +62,34 @@ int	server_data::_server( void )
 			}
 			for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 			{
+				std::cout << "Ca passe ici au moins " << clientfd << std::endl;
 				if (it->revents == POLLIN)
 					rp15 = 0;
 			}
 		}
 		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		{
-			DATA parse_data;
+			if (it->revents == POLLIN)
+			{
+				DATA parse_data;
 
-			while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
-			{
-				parse_data.insert(parse_data.end(), recvline, recvline + n);
-				if (recvline[n - 1] == '\n'){
-					break ;
+				while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
+				{
+					parse_data.insert(parse_data.end(), recvline, recvline + n);
+					if (recvline[n - 1] == '\n'){
+						break ;
+					}
 				}
-			}
-			if (n < 0)
-				return (print_return("Error: recv", 1));
-			if (parse_data.size())
-			{
-				R_DATA p(parse_data);
-				p.display_cpcr();
-				_response(p, clientfd);
-				close(clientfd);
-				tab_client.erase(it);
+				if (n < 0)
+					return (print_return("Error: recv", 1));
+				if (parse_data.size())
+				{
+					R_DATA p(parse_data);
+					p.display_cpcr();
+					_response(p, clientfd);
+					close(clientfd);
+					tab_client.erase(it);
+				}
 			}
 		}
 	}
