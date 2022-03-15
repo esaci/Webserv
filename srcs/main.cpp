@@ -3,7 +3,7 @@
 int main (int ac, char *av[]){
 	p_conf *conf;
 	C_DATA *codes;
-
+	CT_DATA *ctype;
 	if (!ac || ac > 2)
 	{
 		std::cout << "Need 1 argument, the config file\n";
@@ -23,6 +23,7 @@ int main (int ac, char *av[]){
 	}
 	conf = new p_conf(file);
 	codes = _code_init();
+	ctype = _content_type();
 	// Necessite de parsing du fichier conf
 	// Gestion error si necessaire
 	//Creation du server
@@ -32,4 +33,5 @@ int main (int ac, char *av[]){
 	delete conf;
 	delete codes;
 	return (0);
+	(void)ctype;
 }

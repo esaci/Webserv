@@ -1,22 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>RAPHIFOU15</title>
-</head>
-<body>
+  <head>
+    <meta charset="utf-8">
+    <title>PHP form submission example</title>
+    <style>
+      form {
+        width: 420px;
+      }
 
-<h1>WEBSERV Elias</h1> 
+      div {
+        margin-bottom: 20px;
+      }
 
-<ul>
-	<li><a href="/phpmyadmin">phpmyadmin</a></li>
-	<li><a href="/wordpress">wordpress</a></li>
-	<li><a href="/fichiers">Fichiers</a></li>
-</ul>
-<form action = "/cgi-bin/php" method = "get">
-	First Name: <input type = "text" name = "first_name">  <br />
-  
-	Last Name: <input type = "text" name = "last_name" />
-	<input type = "submit" value = "Submit" />
- </form>
-</body>
+      label {
+        display: inline-block;
+        width: 240px;
+        text-align: right;
+        padding-right: 10px;
+      }
+
+      button, input {
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <form method="post" action="php-example.php">
+      <div>
+        <label for="rp15">Qui est Raphifou15 Oo?</label>
+        <input name="rp15" id="rp15" value="rkhelif">
+      </div>
+      <div>
+        <label for="brp15">Es-tu sur ??</label>
+        <input name="brp15" value="Non">
+      </div>
+      <div>
+        <button>Send my greetings</button>
+      </div>
+    </form>
+  </body>
 </html>

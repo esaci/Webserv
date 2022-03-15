@@ -13,7 +13,8 @@ SRCS =	main.cpp \
 		code_init.cpp \
 		entity.cpp	\
 		get_response.cpp \
-		utils.cpp
+		utils.cpp	\
+		content_type.cpp
 
 OBJS_DIR = ./objects/
 OBJ = $(SRCS:.cpp=.o)

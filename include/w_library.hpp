@@ -40,6 +40,7 @@
 #	define SA_IN struct sockaddr_in
 #	define	DATA std::vector<unsigned char>
 #	define C_DATA std::map<int, std::string>
+#	define CT_DATA std::map<std::string, std::string>
 #	define R_DATA ClassParsingClientRequest
 #	define CGI "/usr/lib/cgi-bin/php" 
 #	include "p_conf.hpp"
@@ -47,7 +48,9 @@
 
 int				_server(C_DATA *codes);
 int				_response(R_DATA p, int connfd, C_DATA *codes);
+// ces deux suivantes sont les constructor
 C_DATA			*_code_init( void );
+CT_DATA			*_content_type( void );
 int				_get_index(int clientfd, C_DATA *code);
 int				_get_favicon(int clientfd, C_DATA *codes);
 int				_get_error_400(int clientfd, C_DATA *codes);
