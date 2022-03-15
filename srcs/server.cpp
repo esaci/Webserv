@@ -36,27 +36,36 @@ int	server_data::_server( void )
 	uint8_t		recvline[MAXLINE + 1];
 	struct pollfd client_poll;
 	std::vector<struct pollfd> tab_client;
-
+	int		rp15;
 	serverfd = init_socket();
 	while (1){
 		std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n Actuellement " << tab_client.size() << " clients" << std::endl;
 		// accept va attendre que quelquun se connect
-		clientfd = accept(serverfd, (SA *) NULL, NULL);
-		if ( fcntl(clientfd, F_SETFL, O_NONBLOCK) < 0 )
-			return (print_return("ERROR: fcntl", 1));
-		client_poll.fd = clientfd;
-		client_poll.events = POLLIN;
-		client_poll.revents = 0;
-		tab_client.push_back(client_poll);
-		if ( !(n = poll(tab_client.begin().base(), tab_client.size(), 1000000)) )
+		rp15 = 1;
+		while (rp15)
 		{
-			print_return("TIMEOUT: poll", 1);
-			break;
-		}
-		if (n < 0)
-		{
-			print_return("ERROR: poll", 1);
-			break;
+			clientfd = accept(serverfd, (SA *) NULL, NULL);
+			if ( fcntl(clientfd, F_SETFL, O_NONBLOCK) < 0 )
+				return (print_return("ERROR: fcntl", 1));
+			client_poll.fd = clientfd;
+			client_poll.events = POLLIN;
+			client_poll.revents = 0;
+			tab_client.push_back(client_poll);
+			if ( !(n = poll(tab_client.begin().base(), tab_client.size(), 1000000)) )
+			{
+				print_return("TIMEOUT: poll", 1);
+				break;
+			}
+			if (n < 0)
+			{
+				print_return("ERROR: poll", 1);
+				break;
+			}
+			for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
+			{
+				if (it->revents == POLLIN)
+					rp15 = 0;
+			}
 		}
 		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		{
