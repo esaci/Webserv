@@ -1,34 +1,41 @@
 #ifndef CLASSPARSINGCLIENTREQUEST_HPP
 # define CLASSPARSINGCLIENTREQUEST_HPP
 
-# include "w_library.hpp"
+# include "w_defines.hpp"
 
-class ClassParsingClientRequest
+class RP15
 {
-    public:
-        std::vector<unsigned char> method;
-        std::vector<unsigned char> ressource;
-        std::vector<unsigned char> protocol;
-        std::vector<unsigned char> host;
-        std::vector<unsigned char> connection;
-        std::vector<unsigned char> sec_ch_ua;
-        std::vector<unsigned char> sec_ch_ua_mobile;
-        std::vector<unsigned char> user_agent;
-        std::vector<unsigned char> sec_ch_ua_platform;
-        std::vector<unsigned char> accept;
-        std::vector<unsigned char> sec_fetch_site;
-        std::vector<unsigned char> sec_fetch_mode;
-        std::vector<unsigned char> sec_fetch_dest;
-        std::vector<unsigned char> referer;
+	public:
+		DATA	parse_data;
+		DATA	method;
+		DATA	ressource;
+		DATA	protocol;
+		DATA	host;
+		DATA	connection;
+		DATA	sec_ch_ua;
+		DATA	sec_ch_ua_mobile;
+		DATA	user_agent;
+		DATA	sec_ch_ua_platform;
+		DATA	accept;
+		DATA	sec_fetch_site;
+		DATA	sec_fetch_mode;
+		DATA	sec_fetch_dest;
+		DATA	referer;
 
-
-    public:
-        ClassParsingClientRequest(const std::vector<unsigned char> &);
-        bool    compare(std::vector<unsigned char>::const_iterator , const std::string &)const;
-        ~ClassParsingClientRequest();
+	public:
+		RP15( void );
+		~RP15();
+		bool	compare(DATA::const_iterator , const std::string &)const;
+		void	request_ready( void );
+		bool	is_ready( void );
 		void	display_cpcr( void );
+		void	insert(const DATA &arg);
+		RP15	(const RP15&);
+		RP15	operator=(const RP15 &);
+	private:
+		ClassParsingClientRequest(const DATA &arg);
 };
 
-std::ostream & operator<<(std::ostream & ostream, std::vector<unsigned char> const &i);
+std::ostream & operator<<(std::ostream & ostream, DATA const &i);
 
 #endif

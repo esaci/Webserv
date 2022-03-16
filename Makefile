@@ -7,6 +7,7 @@ CXX_FLAGS = -Wextra -Wall -Werror -std=c++98
 SRCS_DIR = ./srcs/
 SRCS =	main.cpp \
 		server.cpp \
+		server_read.cpp \
 		response.cpp \
 		p_conf.cpp \
 		ClassParsingClientRequest.cpp \

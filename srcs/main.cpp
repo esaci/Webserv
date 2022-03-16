@@ -17,8 +17,9 @@ int main (int ac, char *av[]){
 		std::cout << "Echec lecture fichier config\n";
 		return (1);
 	}
-	server_data	serv(file);
+	server_data	*serv = new server_data(file);
 
-	serv._server();
+	serv->_server();
+	delete serv;
 	return (0);
 }

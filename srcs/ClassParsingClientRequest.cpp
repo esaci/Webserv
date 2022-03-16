@@ -1,14 +1,48 @@
 #include "../include/w_library.hpp"
 #include "../include/ClassParsingClientRequest.hpp"
 
-ClassParsingClientRequest::ClassParsingClientRequest(const std::vector<unsigned char> &arg)
+RP15::ClassParsingClientRequest( void ){}
+
+void RP15::insert(const DATA &arg){
+	parse_data.insert(parse_data.end(), arg.begin(), arg.end());
+}
+
+bool	RP15::is_ready( void ){
+	if (*(--(parse_data.end())) == '\n')
+		return (1);
+	return (0);
+}
+RP15::ClassParsingClientRequest(const RP15 &arg){
+	operator=(arg);
+}
+RP15	RP15::operator=(const RP15 &arg){
+	parse_data = arg.parse_data;
+	method = arg.method;
+	ressource = arg.ressource;
+	protocol = arg.protocol;
+	host = arg.host;
+	connection = arg.connection;
+	sec_ch_ua = arg.sec_ch_ua;
+	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
+	user_agent = arg.sec_ch_ua_mobile;
+	sec_ch_ua_platform = arg.sec_ch_ua_platform;
+	accept = arg.accept;
+	sec_fetch_site = arg.sec_fetch_site;
+	sec_fetch_mode = arg.sec_fetch_mode;
+	sec_fetch_dest = arg.sec_fetch_dest;
+	referer = arg.referer;
+	return (*this);
+}
+
+
+void	ClassParsingClientRequest::request_ready( void )
 {
 	unsigned int i = 0;
 	unsigned int y = 0;
 
-	if  (!arg.size())
+	if  (!parse_data.size())
 		return ;
-	for (std::vector<unsigned char>::const_iterator it = arg.begin(); it != arg.end(); it++)
+	for (std::vector<unsigned char>::const_iterator it = parse_data.begin(); it != parse_data.end(); it++)
 	{
 		if (i == 0)
 		{

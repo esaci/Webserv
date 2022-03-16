@@ -1,17 +1,17 @@
 #include "../include/w_library.hpp"
 
-int	server_data::_response(R_DATA p, int clientfd)
+int	server_data::_response(int clientfd)
 {
 	DATA	buff;
 	int		n;
 
-	if (p.method == _data_init("GET"))
+	if (tab_request[clientfd].method == _data_init("GET"))
 	{
 		// Il faudra rajouter la condition si on prend en ressource lindex directement
 		// Faudra ameliorer ce if
-		if ((_data_init("/") == p.ressource) || (_data_init(TMPINDEX) == p.ressource))
+		if ((_data_init("/") == tab_request[clientfd].ressource) || (_data_init(TMPINDEX) == tab_request[clientfd].ressource))
 			return (_get_index(clientfd));
-		if (_data_init("/favicon.ico") == p.ressource)
+		if (_data_init("/favicon.ico") == tab_request[clientfd].ressource)
 			return (_get_favicon(clientfd));
 		if (AUTOINDEX)
 			return(_get_error_400(clientfd));
