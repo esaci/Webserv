@@ -32,47 +32,53 @@ int	init_socket( void ){
 
 int	server_data::_server( void )
 {
-	int			serverfd, clientfd, n;
-	uint8_t		recvline[MAXLINE + 1];
-	struct pollfd client_poll;
-	std::vector<struct pollfd> tab_client;
-	int		rp15;
+	int							serverfd, clientfd, n;
+	uint8_t						recvline[MAXLINE + 1];
+	struct pollfd				client_poll;
+	std::vector<struct pollfd>	tab_client;
+	std::vector<SA_IN>			tmp;
+	socklen_t					tmplen;
+	
 	serverfd = init_socket();
 	while (1){
 		std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n Actuellement " << tab_client.size() << " clients" << std::endl;
 		// accept va attendre que quelquun se connect
-		rp15 = 1;
-		while (rp15)
+		
+		tmplen = sizeof(tmp.begin().base());
+		SA_IN test;
+		tmp.push_back(test);
+		clientfd = accept(serverfd, (SA*)&tmp.begin().base(), &(tmplen));
+		std::cout << "On a " << tmp.size() << " connections actuellement\n";
+		for(std::vector<SA_IN>::iterator it = tmp.begin(); it < tmp.end(); it++)
 		{
-			while(!(n = poll(tab_client.begin().base(), tab_client.size(), 100)))
-			{
-				clientfd = accept(serverfd, (SA *) NULL, NULL);
-				if ( fcntl(clientfd, F_SETFL, O_NONBLOCK) < 0 )
-					return (print_return("ERROR: fcntl", 1));
-				client_poll.fd = clientfd;
-				client_poll.events = POLLIN;
-				client_poll.revents = 0;
-				tab_client.push_back(client_poll);
-				print_return("TIMEOUT: poll", 1);
-			}
-			if (n < 0)
-			{
-				print_return("ERROR: poll", 1);
-				break;
-			}
-			for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
-			{
-				std::cout << "Ca passe ici au moins " << clientfd << std::endl;
-				if (it->revents == POLLIN)
-					rp15 = 0;
-			}
+			std::cout << "Info sur la connection :\n";
+			std::cout << it->sin_family << " est la sa_family\n";
+			std::cout << it->sin_addr.s_addr << " est la data\n";
+			std::cout << it->sin_port << " est le port\n";
 		}
+		if ( fcntl(clientfd, F_SETFL, O_NONBLOCK) < 0 )
+			return (print_return("ERROR: fcntl", 1));
+		client_poll.fd = clientfd;
+		client_poll.events = POLLIN;
+		client_poll.revents = 0;
+		tab_client.push_back(client_poll);
+		std::cout << "ca bloque la\n";
+		if ( !(n = poll(tab_client.begin().base(), tab_client.size(), 10)) )
+		{
+			print_return("TIMEOUT: poll", 1);
+		}
+		if (n < 0)
+		{
+			print_return("ERROR: poll", 1);
+			break;
+		}
+		std::cout << "pk\n";
 		for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		{
 			if (it->revents == POLLIN)
 			{
 				DATA parse_data;
-
+				std::cout << "ca bloque ici\n";
 				while ((n = recv(clientfd, recvline, MAXLINE, 0)) > 0)
 				{
 					parse_data.insert(parse_data.end(), recvline, recvline + n);
@@ -87,11 +93,12 @@ int	server_data::_server( void )
 					R_DATA p(parse_data);
 					p.display_cpcr();
 					_response(p, clientfd);
-					close(clientfd);
 					tab_client.erase(it);
+					close(clientfd);
 				}
 			}
 		}
+		std::cout << "sheesh\n";
 	}
 	for (std::vector<struct pollfd>::iterator it = tab_client.begin(); it < tab_client.end(); it++, clientfd = it->fd)
 		close(clientfd);
