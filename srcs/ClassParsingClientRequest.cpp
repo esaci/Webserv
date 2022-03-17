@@ -76,7 +76,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 	size_t	pos_method;
 	size_t	pos_ressource;
 	// size_t	pos_protocol;
-	
+	arg.push_back('\0');
 	pos_method = until_space(arg.begin());
 
 	// pos_ressource += pos_method;
@@ -87,6 +87,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 	ressource.assign(arg.begin() + pos_method, arg.begin() + pos_ressource + pos_method);
 	// pos_protocol = until_space(arg.begin() + pos_ressource + until_no_space(arg.begin() + pos_ressource));
 	// protocol.assign(arg.begin() + pos_ressource + until_no_space(arg.begin() + pos_ressource), arg.begin() + pos_protocol);
+	arg.pop_back();
 }
 
 void	ClassParsingClientRequest::request_ready( void )
