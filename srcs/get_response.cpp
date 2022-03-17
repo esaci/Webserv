@@ -45,6 +45,7 @@ int	server_data::_get_favicon(int clientfd){
 	}
 	tab_request[clientfd].ressource = _data_init(TMPFAVICO);
 	_entity(200, _entity_ctype(clientfd));
+	std::cout << "Ca a bien ecrit donc wtf\n";
 	return (write(clientfd, parse_temp.begin().base(), parse_temp.size()));
 }
 

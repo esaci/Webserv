@@ -3,6 +3,7 @@
 CT_DATA *_content_type( void ){
 	CT_DATA *tmp = new CT_DATA();
 
+	tmp->insert(std::pair<std::string, std::string>(std::string(""),std::string("")));
 	tmp->insert(std::pair<std::string, std::string>(std::string("html"),std::string("text/html")));
 	tmp->insert(std::pair<std::string, std::string>(std::string("htm"),std::string("text/html")));
 	tmp->insert(std::pair<std::string, std::string>(std::string("shtml"),std::string("text/html")));

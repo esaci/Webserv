@@ -50,20 +50,61 @@ RP15	RP15::operator=(const RP15 &arg){
 	return (*this);
 }
 
+size_t	until_space(DATA::iterator	it){
+	size_t			res;
+	unsigned char	*tmp_c = it.base();
+
+	if (!tmp_c)
+		return (0);
+	for (res = 0; tmp_c && tmp_c[res] && tmp_c[res] != ' '; res++)
+		;
+	return (res);
+}
+
+size_t	until_no_space(DATA::iterator it){
+	size_t			res;
+	unsigned char	*tmp_c = it.base();
+
+	if (!tmp_c)
+		return (0);
+	for (res = 0; tmp_c && tmp_c[res] && tmp_c[res] == ' '; res++)
+		;
+	return (res);
+}
+
+void	ClassParsingClientRequest::parse_request_line(DATA &arg){
+	size_t	pos_method;
+	size_t	pos_ressource;
+	// size_t	pos_protocol;
+	
+	pos_method = until_space(arg.begin());
+
+	// pos_ressource += pos_method;
+	// pos_protocol += pos_ressource;
+	method.assign(arg.begin(), arg.begin() + pos_method);
+	pos_method += until_no_space(arg.begin() + pos_method);
+	pos_ressource = until_space(arg.begin() + pos_method);
+	ressource.assign(arg.begin() + pos_method, arg.begin() + pos_ressource + pos_method);
+	// pos_protocol = until_space(arg.begin() + pos_ressource + until_no_space(arg.begin() + pos_ressource));
+	// protocol.assign(arg.begin() + pos_ressource + until_no_space(arg.begin() + pos_ressource), arg.begin() + pos_protocol);
+}
 
 void	ClassParsingClientRequest::request_ready( void )
 {
 	DATA	tmp_data;
 	size_t	line = 0;
 
-	for(DATA::iterator it = parse_data.begin(); it != parse_data.end(); it++)
+	for(DATA::iterator it = parse_data.begin(); it != parse_data.end(); it++, line++)
 	{
 		tmp_data.clear();
 		for(; *it != '\n' && it != parse_data.end();it++)
 			tmp_data.push_back(*it);
-		if (!std::strncmp((char*)tmp_data.begin().base(), " ", 2))
-			method.assign(tmp_data.begin(), tmp_data.end());
+		if (!line)
+			parse_request_line(tmp_data);
+		// if (!std::strncmp((char*)tmp_data.begin().base(), " ", 2))
+			// method.assign(tmp_data.begin(), tmp_data.end());
 	}
+	display_cpcr();	
 }
 
 bool	ClassParsingClientRequest::compare(std::vector<unsigned char>::const_iterator pos, const std::string &str)const
@@ -88,19 +129,19 @@ std::ostream & operator<<(std::ostream & ostream, std::vector<unsigned char> con
 
 void	ClassParsingClientRequest::display_cpcr( void )
 {
-	std::cout << "method: "<< method << std::endl;
-	std::cout << "ressource: " << ressource << std::endl;
-	std::cout << "protocol: "<< protocol << std::endl;
-	std::cout << "host: "<< host << std::endl;
-	std::cout << "connection: "<< connection << std::endl;
-	std::cout << "sec_ch_ua: "<< sec_ch_ua << std::endl;
-	std::cout << "sec_ch_ua_mobile: "<< sec_ch_ua_mobile << std::endl;
-	std::cout << "user_agent: "<< user_agent << std::endl;
-	std::cout << "sec_ch_ua_platform: "<< sec_ch_ua_platform << std::endl;
-	std::cout << "accept: "<< accept << std::endl;
-	std::cout << "sec_fetch_site: "<< sec_fetch_site << std::endl;
-	std::cout << "sec_fetch_mode: "<< sec_fetch_mode << std::endl;
-	std::cout << "sec_fetch_dest: "<< sec_fetch_dest << std::endl;
-	std::cout << "referer: "<< referer << std::endl;
+	std::cout << "method: |"<< method << "|" << std::endl;
+	std::cout << "ressource: |" << ressource << "|" << std::endl;
+	std::cout << "protocol: |"<< protocol << "|" << std::endl;
+	std::cout << "host: |"<< host << "|" << std::endl;
+	std::cout << "connection: |"<< connection << "|" << std::endl;
+	std::cout << "sec_ch_ua: |"<< sec_ch_ua << "|" << std::endl;
+	std::cout << "sec_ch_ua_mobile: |"<< sec_ch_ua_mobile << "|" << std::endl;
+	std::cout << "user_agent: |"<< user_agent << "|" << std::endl;
+	std::cout << "sec_ch_ua_platform: |"<< sec_ch_ua_platform << "|" << std::endl;
+	std::cout << "accept: |"<< accept << "|" << std::endl;
+	std::cout << "sec_fetch_site: |"<< sec_fetch_site << "|" << std::endl;
+	std::cout << "sec_fetch_mode: |"<< sec_fetch_mode << "|" << std::endl;
+	std::cout << "sec_fetch_dest: |"<< sec_fetch_dest << "|" << std::endl;
+	std::cout << "referer: |"<< referer << "|" << std::endl;
 	std::cout << "-----------------------------------------------------------\n"; 
 }

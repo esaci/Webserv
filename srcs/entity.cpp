@@ -32,7 +32,7 @@ std::string	server_data::_entity_ctype(int clientfd){
 	if (!tab_request[clientfd].ressource.begin().base())
 		return (tmp_ctype);
 	const char*tmp_char = (char*)(tab_request[clientfd].ressource.begin().base());
-	tmp_ctype.assign(tmp_char);
+	tmp_ctype.assign(tmp_char, tab_request[clientfd].ressource.size());
 	while (i < tmp_ctype.size()){
 		for (i = 0; i < tmp_ctype.size() && tmp_ctype[i] != '.'; i++)
 			;

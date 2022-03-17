@@ -3,6 +3,8 @@
 
 # include "w_defines.hpp"
 
+// method ressource et protocole sont necessaire, le reste nexiste pas forcement
+
 class RP15
 {
 	public:
@@ -26,6 +28,7 @@ class RP15
 		RP15( void );
 		~RP15();
 		bool	compare(DATA::const_iterator , const std::string &)const;
+		void	parse_request_line(DATA &arg);
 		void	request_ready( void );
 		bool	is_ready( void );
 		void	display_cpcr( void );
