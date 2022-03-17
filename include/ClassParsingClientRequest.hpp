@@ -13,15 +13,19 @@ class RP15
 		DATA	ressource;
 		DATA	protocol;
 		DATA	host;
+		DATA	cache_control;
 		DATA	connection;
 		DATA	sec_ch_ua;
 		DATA	sec_ch_ua_mobile;
-		DATA	user_agent;
 		DATA	sec_ch_ua_platform;
+		DATA	upgrade_insecure_requests;
+		DATA	user_agent;
 		DATA	accept;
 		DATA	sec_fetch_site;
 		DATA	sec_fetch_mode;
 		DATA	sec_fetch_dest;
+		DATA	accept_encoding;
+		DATA	accept_language;
 		DATA	referer;
 
 	public:
