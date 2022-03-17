@@ -11,7 +11,7 @@ void RP15::insert(const DATA &arg){
 }
 
 bool	RP15::is_ready( void ){
-	if (*(--(parse_data.end())) == '\n')
+	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
 		return (1);
 	return (0);
 }

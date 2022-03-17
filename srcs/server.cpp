@@ -58,6 +58,7 @@ int	server_data::_server( void ){
 			std::cout << "n vaut " << n << std::endl;
 			if (n == -10)
 			{
+				close(it->fd);
 				tab_poll.erase(it);
 				pos--;
 			}
