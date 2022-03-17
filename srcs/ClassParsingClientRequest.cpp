@@ -53,162 +53,17 @@ RP15	RP15::operator=(const RP15 &arg){
 
 void	ClassParsingClientRequest::request_ready( void )
 {
-	unsigned int i = 0;
-	unsigned int y = 0;
+	DATA	tmp_data;
+	size_t	line = 0;
 
-	if  (!parse_data.size())
-		return ;
-	for (std::vector<unsigned char>::const_iterator it = parse_data.begin(); it != parse_data.end(); it++)
+	for(DATA::iterator it = parse_data.begin(); it != parse_data.end(); it++)
 	{
-		if (!i)
-		{
-			while (it != parse_data.end() && *it != ' ')
-			{
-				method.push_back(*(it));
-				it++;
-			}
-			it++;
-			while (it != parse_data.end() && *it != ' ')
-			{
-				ressource.push_back(*(it));
-				it++;
-			}
-			it++;
-			while (it != parse_data.end() && *it != ' ' && *it != '\n')
-			{
-				protocol.push_back(*(it));
-				it++;
-			}
-		}
-		if (!y && compare(it, "Host:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				host.push_back(*it);
-				it++;
-			}
-		}
-		else if (!y && compare(it, "Connection:"))
-		{
-		   while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				connection.push_back(*it);
-				it++;
-			}
-		}
-		else if (!y && compare(it, "sec-ch-ua:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				sec_ch_ua.push_back(*it);
-				it++;
-			}
-		}
-		else if (!y && compare(it, "sec-ch-ua-mobile:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				sec_ch_ua_mobile.push_back(*it);
-				it++;
-			}
-		}
-		else if (!y && compare(it, "User-Agent:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				user_agent.push_back(*it);
-				it++;
-			}
-		}
-		else if (!y && compare(it, "sec-ch-ua-platform:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				sec_ch_ua_platform.push_back(*it);
-				it++;
-			}
-		}
-		else if (y == 0 && compare(it, "Accept:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				accept.push_back(*it);
-				it++;
-			}
-		}
-		else if (y == 0 && compare(it, "Sec-Fetch-Site:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				sec_fetch_site.push_back(*it);
-				it++;
-			}
-		}
-		else if (y == 0 && compare(it, "Sec-Fetch-Mode:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				sec_fetch_mode.push_back(*it);
-				it++;
-			}
-		}
-		else if (y == 0 && compare(it, "Sec-Fetch-Dest:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				sec_fetch_dest.push_back(*it);
-				it++;
-			}
-		}
-		else if (y == 0 && compare(it, "Referer:"))
-		{
-			while (it != parse_data.end() && *it != ' ')
-				it++;
-			it++;
-			while (it != parse_data.end() && *it != '\n')
-			{
-				referer.push_back(*it);
-				it++;
-			}
-		}
-		y++;
-		if (it != parse_data.end() && *it == '\n')
-		{
-			y = 0;
-			i++;
-		}
+		tmp_data.clear();
+		for(; *it != '\n' && it != parse_data.end();it++)
+			tmp_data.push_back(*it);
+		if (!std::strncmp((char*)tmp_data.begin().base(), " ", 2))
+			method.assign(tmp_data.begin(), tmp_data.end());
 	}
-
 }
 
 bool	ClassParsingClientRequest::compare(std::vector<unsigned char>::const_iterator pos, const std::string &str)const
