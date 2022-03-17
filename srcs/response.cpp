@@ -17,6 +17,7 @@ int	server_data::_response(int clientfd)
 			return(_get_error_400(clientfd));
 		return(_get_error_404(clientfd));
 	}
+	std::cout << tab_request[clientfd].method << " : PARDON ???\n";
 	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
 	n = write(clientfd, buff.begin().base(), buff.size());
 	return (n);

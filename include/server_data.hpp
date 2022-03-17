@@ -9,9 +9,9 @@
 			CT_DATA						ctypes;
 			p_conf						conf;
 			std::vector<struct pollfd>	tab_poll;
-			std::vector<uint8_t>		recvline;
+			// std::vector<uint8_t>		recvline;
 			int							serverfd;
-			DATA						parse_data;
+			// DATA						parse_data;
 			R_DATA						tab_request;
 		public:
 			server_data(std::fstream &file);

@@ -2,7 +2,7 @@
 # define W_DEFINES_HPP
 
 #	define SERVER_PORT 18000
-#	define MAXLINE 4096000
+#	define MAXLINE 40960
 #	define TIMEOUT 60000
 #	define ROOT "/var/www/webserv"
 #	define TMPINDEX "/var/www/webserv/index.html"
@@ -14,7 +14,7 @@
 #	define AUTOINDEX	0
 #	define SA		struct sockaddr
 #	define SA_IN	struct sockaddr_in
-#	define DATA		std::vector<unsigned char>
+#	define DATA		std::vector<uint8_t>
 #	define C_DATA	std::map<int, std::string>
 #	define CT_DATA	std::map<std::string, std::string>
 #	define R_DATA	std::map<int, RP15>

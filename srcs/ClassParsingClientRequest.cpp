@@ -4,6 +4,9 @@
 RP15::ClassParsingClientRequest( void ){}
 
 void RP15::insert(const DATA &arg){
+	// std::cout << "Comprend pas\n\n\n";
+	// parse_data = _data_init("GET / HTTP/1.0\r\n");
+	// return ;
 	parse_data.insert(parse_data.end(), arg.begin(), arg.end());
 }
 
@@ -13,7 +16,21 @@ bool	RP15::is_ready( void ){
 	return (0);
 }
 RP15::ClassParsingClientRequest(const RP15 &arg){
-	operator=(arg);
+	parse_data = arg.parse_data;
+	method = arg.method;
+	ressource = arg.ressource;
+	protocol = arg.protocol;
+	host = arg.host;
+	connection = arg.connection;
+	sec_ch_ua = arg.sec_ch_ua;
+	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
+	user_agent = arg.sec_ch_ua_mobile;
+	sec_ch_ua_platform = arg.sec_ch_ua_platform;
+	accept = arg.accept;
+	sec_fetch_site = arg.sec_fetch_site;
+	sec_fetch_mode = arg.sec_fetch_mode;
+	sec_fetch_dest = arg.sec_fetch_dest;
+	referer = arg.referer;
 }
 RP15	RP15::operator=(const RP15 &arg){
 	parse_data = arg.parse_data;
