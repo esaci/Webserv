@@ -9,9 +9,10 @@
 			CT_DATA						ctypes;
 			p_conf						conf;
 			std::vector<struct pollfd>	tab_poll;
-			// std::vector<uint8_t>		recvline;
+			DATA						recvline;
+			std::vector<char>			char_buff;
 			int							serverfd;
-			// DATA						parse_data;
+			DATA						parse_temp;
 			R_DATA						tab_request;
 		public:
 			server_data(std::fstream &file);
@@ -29,8 +30,9 @@
 			int				_get_favicon(int clientfd);
 			int				_get_error_400(int clientfd);
 			int				_get_error_404(int clientfd);
-			void			_entity(DATA &buff, int code_n, std::string content_type);
-			void			_entity_no_accept(DATA &buff, int code_n, std::string content_type);
+			void			_entity(int code_n, std::string content_type);
+			void			_entity_no_accept(int code_n, std::string content_type);
+			std::string		_entity_ctype(int clientfd);
 		private:
 			server_data( void );
 			server_data(const server_data&);

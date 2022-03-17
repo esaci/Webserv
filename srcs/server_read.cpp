@@ -29,32 +29,24 @@ int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 {
 	int							n;
-	DATA						parse_data;
-	uint8_t						recvline[MAXLINE + 1];
-	// parse_data.clear();
-	std::cout << "Info sur la connection :\n";
-	std::cout << it - tab_poll.begin() << " client !\n";
-	std::cout << it->fd << " est le fd\n";
-	if ((n = recv(it->fd, recvline, MAXLINE, 0)) > 0)
-	{
-		parse_data.assign(recvline, recvline + n);
-		// std::cout << parse_data.begin().base() << " : est la ligne\n";
-	}
+	
+	parse_temp.clear();
+	recvline.clear();
+	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
+		parse_temp.assign(recvline.begin().base(), recvline.begin().base() + n);
 	if (n < 0)
 		return (print_return("Error: recv", 1));
-	if (parse_data.size())
+	if (parse_temp.size())
 	{
-		tab_request[it->fd].insert(parse_data);
+		tab_request[it->fd].insert(parse_temp);
 		// tab_request[it->fd].display_cpcr();
 		if (tab_request[it->fd].is_ready())
 		{
 			tab_request[it->fd].request_ready();
-			std::cout << "Considere la lecture est suffisante\n";
 			_response(it->fd);
 			tab_request.erase(it->fd);
 			return (-10);
 		}
-		std::cout << "Considere la lecture n'est pas suffisante\n";
 	}
 	return(0);
 }

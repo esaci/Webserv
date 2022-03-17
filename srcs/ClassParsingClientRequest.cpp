@@ -4,13 +4,12 @@
 RP15::ClassParsingClientRequest( void ){}
 
 void RP15::insert(const DATA &arg){
-	// std::cout << "Comprend pas\n\n\n";
-	// parse_data = _data_init("GET / HTTP/1.0\r\n");
-	// return ;
 	parse_data.insert(parse_data.end(), arg.begin(), arg.end());
 }
 
 bool	RP15::is_ready( void ){
+	if (parse_data.size() < 4)
+		return (0);
 	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
 		return (1);
 	return (0);
@@ -61,87 +60,87 @@ void	ClassParsingClientRequest::request_ready( void )
 		return ;
 	for (std::vector<unsigned char>::const_iterator it = parse_data.begin(); it != parse_data.end(); it++)
 	{
-		if (i == 0)
+		if (!i)
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 			{
 				method.push_back(*(it));
 				it++;
 			}
 			it++;
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 			{
 				ressource.push_back(*(it));
 				it++;
 			}
 			it++;
-			while (*it != ' ' && *it != '\n')
+			while (it != parse_data.end() && *it != ' ' && *it != '\n')
 			{
 				protocol.push_back(*(it));
 				it++;
 			}
 		}
-		if (y == 0 && compare(it, "Host:"))
+		if (!y && compare(it, "Host:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				host.push_back(*it);
 				it++;
 			}
 		}
-		else if (y == 0 && compare(it, "Connection:"))
+		else if (!y && compare(it, "Connection:"))
 		{
-		   while (*it != ' ')
+		   while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				connection.push_back(*it);
 				it++;
 			}
 		}
-		else if (y == 0 && compare(it, "sec-ch-ua:"))
+		else if (!y && compare(it, "sec-ch-ua:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				sec_ch_ua.push_back(*it);
 				it++;
 			}
 		}
-		else if (y == 0 && compare(it, "sec-ch-ua-mobile:"))
+		else if (!y && compare(it, "sec-ch-ua-mobile:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				sec_ch_ua_mobile.push_back(*it);
 				it++;
 			}
 		}
-		else if (y == 0 && compare(it, "User-Agent:"))
+		else if (!y && compare(it, "User-Agent:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				user_agent.push_back(*it);
 				it++;
 			}
 		}
-		else if (y == 0 && compare(it, "sec-ch-ua-platform:"))
+		else if (!y && compare(it, "sec-ch-ua-platform:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				sec_ch_ua_platform.push_back(*it);
 				it++;
@@ -149,10 +148,10 @@ void	ClassParsingClientRequest::request_ready( void )
 		}
 		else if (y == 0 && compare(it, "Accept:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				accept.push_back(*it);
 				it++;
@@ -160,10 +159,10 @@ void	ClassParsingClientRequest::request_ready( void )
 		}
 		else if (y == 0 && compare(it, "Sec-Fetch-Site:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				sec_fetch_site.push_back(*it);
 				it++;
@@ -171,10 +170,10 @@ void	ClassParsingClientRequest::request_ready( void )
 		}
 		else if (y == 0 && compare(it, "Sec-Fetch-Mode:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				sec_fetch_mode.push_back(*it);
 				it++;
@@ -182,10 +181,10 @@ void	ClassParsingClientRequest::request_ready( void )
 		}
 		else if (y == 0 && compare(it, "Sec-Fetch-Dest:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				sec_fetch_dest.push_back(*it);
 				it++;
@@ -193,17 +192,17 @@ void	ClassParsingClientRequest::request_ready( void )
 		}
 		else if (y == 0 && compare(it, "Referer:"))
 		{
-			while (*it != ' ')
+			while (it != parse_data.end() && *it != ' ')
 				it++;
 			it++;
-			while (*it != '\n')
+			while (it != parse_data.end() && *it != '\n')
 			{
 				referer.push_back(*it);
 				it++;
 			}
 		}
 		y++;
-		if (*it == '\n')
+		if (it != parse_data.end() && *it == '\n')
 		{
 			y = 0;
 			i++;

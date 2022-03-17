@@ -4,7 +4,8 @@ server_data::server_data(std::fstream &file): conf(file){
 	_code_init();
 	_content_type();
 	serverfd = -1;
-	// recvline.resize(MAXLINE + 1);
+	recvline.resize(MAXLINE + 1);
+	char_buff.resize(MAXLINE + 1);
 }
 server_data::~server_data( void ){
 	if (serverfd >= 0 || serverfd == -2)
