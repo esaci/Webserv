@@ -15,7 +15,6 @@ int	server_data::_response(int clientfd)
 			return (_get_favicon(clientfd));
 		if (AUTOINDEX)
 			return(_get_error_400(clientfd));
-		std::cout << "Ca va sur 404\n";
 		return(_get_error_404(clientfd));
 	}
 	// std::cout << tab_request[clientfd].method << " : PARDON ???\n";
