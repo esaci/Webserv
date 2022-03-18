@@ -50,10 +50,10 @@ int	server_data::_server( void ){
 		pos = 0;
 		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos)
 		{
-			if (it->revents && it->revents != POLLIN)
+			if (it->revents && !(it->revents & POLLIN) && !(it->revents & POLLOUT))
 				return (print_return("Revents chelou\n\n\n", 1));
 			n = 0;
-			if (it->revents == POLLIN)
+			if (it->revents & POLLIN)
 				n = _server_read(it);
 			if (n == -10)
 			{
@@ -63,6 +63,8 @@ int	server_data::_server( void ){
 			}
 			else if (n)
 				break ;
+			if (it->revents & POLLOUT)
+				std::cout << "OMG CA POLLOUT\n\n\n\n";
 		}
 	}
 	return (0);

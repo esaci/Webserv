@@ -17,7 +17,7 @@ int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 	struct pollfd	client_poll;
 	
 	client_poll.fd = clientfd;
-	client_poll.events = POLLIN;
+	client_poll.events = POLLIN | POLLOUT;
 	client_poll.revents = 0;
 	tab_poll.insert(tab_poll.end() , client_poll);
 	return (0);
