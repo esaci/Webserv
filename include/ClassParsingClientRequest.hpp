@@ -3,7 +3,7 @@
 
 # include "w_defines.hpp"
 
-// method ressource et protocole sont necessaire, le reste nexiste pas forcement
+// method ressource et protocole sont necessaire, le reste ne le sont pas forcement
 
 class RP15
 {
@@ -29,18 +29,17 @@ class RP15
 		DATA	referer;
 
 	public:
-		RP15( void );
-		~RP15();
-		bool	compare(DATA::const_iterator , const std::string &)const;
+		RP15	( void );
+		~RP15	( void ){}
+		RP15	(const RP15&);
+		RP15	operator=(const RP15 &);
 		void	parse_request_line(DATA &arg);
 		void	request_ready( void );
 		bool	is_ready( void );
 		void	display_cpcr( void );
 		void	insert(const DATA &arg);
-		RP15	(const RP15&);
-		RP15	operator=(const RP15 &);
 	private:
-		ClassParsingClientRequest(const DATA &arg);
+		RP15	(const DATA &arg);
 };
 
 std::ostream & operator<<(std::ostream & ostream, DATA const &i);

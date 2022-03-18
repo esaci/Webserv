@@ -8,12 +8,13 @@
 			C_DATA						codes;
 			CT_DATA						ctypes;
 			p_conf						conf;
+			R_DATA						tab_request;
+			int							serverfd;
+//			VARIABLES MODIFIES REGULIEREMENT
 			std::vector<struct pollfd>	tab_poll;
 			DATA						recvline;
 			std::vector<char>			char_buff;
-			int							serverfd;
 			DATA						parse_temp;
-			R_DATA						tab_request;
 		public:
 			server_data(std::fstream &file);
 			~server_data( void );

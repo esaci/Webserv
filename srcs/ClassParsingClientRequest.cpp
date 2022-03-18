@@ -94,11 +94,11 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 
 void	ClassParsingClientRequest::request_ready( void )
 {
-	std::cout << "-----------------------------------||--------------------------------\n";
 	std::cout << parse_data;
 	DATA	tmp_data, tmp_compare;
 	size_t	line = 0, i = 0;
 	std::vector<DATA>	tab;
+
 	tab.push_back(_data_init("Host: "));
 	tab.push_back(_data_init("Connection: "));
 	tab.push_back(_data_init("Cache-Control: "));
@@ -187,24 +187,8 @@ void	ClassParsingClientRequest::request_ready( void )
 			}
 		}
 	}
-	std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n";
 	display_cpcr();
-	(void)tab;	
 }
-
-bool	ClassParsingClientRequest::compare(std::vector<unsigned char>::const_iterator pos, const std::string &str)const
-{
-	for (unsigned int i = 0; str[i] != '\0'; i++)
-	{
-		if (*pos != str[i])
-			return (0);
-		pos++;
-	}
-	return (1);
-}
-
-ClassParsingClientRequest::~ClassParsingClientRequest(){};
-
 std::ostream & operator<<(std::ostream & ostream, std::vector<unsigned char> const &i)
 {
 	for (std::vector<unsigned char>::const_iterator it = i.begin(); it != i.end(); it++)
