@@ -75,25 +75,27 @@ size_t	until_no_space(DATA::iterator it){
 void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 	size_t	pos_method;
 	size_t	pos_ressource;
-	// size_t	pos_protocol;
+	size_t	pos_protocol;
+
 	arg.push_back('\0');
 	pos_method = until_space(arg.begin());
-
-	// pos_ressource += pos_method;
-	// pos_protocol += pos_ressource;
 	method.assign(arg.begin(), arg.begin() + pos_method);
+	
 	pos_method += until_no_space(arg.begin() + pos_method);
 	pos_ressource = until_space(arg.begin() + pos_method);
 	ressource.assign(arg.begin() + pos_method, arg.begin() + pos_ressource + pos_method);
-	// pos_protocol = until_space(arg.begin() + pos_ressource + until_no_space(arg.begin() + pos_ressource));
-	// protocol.assign(arg.begin() + pos_ressource + until_no_space(arg.begin() + pos_ressource), arg.begin() + pos_protocol);
+	// pos_ressource += pos_method;
+	pos_ressource += pos_method;
+	pos_ressource += until_no_space(arg.begin() + pos_ressource);
+	pos_protocol = until_space(arg.begin() + pos_ressource);
+	protocol.assign(arg.begin() + pos_ressource, arg.begin() + pos_protocol + pos_ressource);
 	arg.pop_back();
 }
 
 void	ClassParsingClientRequest::request_ready( void )
 {
+	std::cout << "-----------------------------------||--------------------------------\n";
 	std::cout << parse_data;
-	std::cout << "-------------------------------------------------------------------\n";
 	DATA	tmp_data, tmp_compare;
 	size_t	line = 0, i = 0;
 	std::vector<DATA>	tab;
@@ -108,7 +110,7 @@ void	ClassParsingClientRequest::request_ready( void )
 	tab.push_back(_data_init("Accept: "));
 	tab.push_back(_data_init("Sec-Fetch-Site: "));
 	tab.push_back(_data_init("Sec-Fetch-Mode: "));
-	tab.push_back(_data_init("Sec-Fetch-User: "));
+	// tab.push_back(_data_init("Sec-Fetch-User: "));
 	tab.push_back(_data_init("Sec-Fetch-Dest: "));
 	tab.push_back(_data_init("Accept-Encoding: "));
 	tab.push_back(_data_init("Accept-Language: "));
@@ -185,6 +187,7 @@ void	ClassParsingClientRequest::request_ready( void )
 			}
 		}
 	}
+	std::cout << "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||\n";
 	display_cpcr();
 	(void)tab;	
 }
