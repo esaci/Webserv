@@ -1,7 +1,12 @@
 #include "../include/w_library.hpp"
 #include "../include/ClassParsingClientRequest.hpp"
 
-RP15::ClassParsingClientRequest( void ){}
+RP15::ClassParsingClientRequest( void ): responding(0){}
+
+RP15::~RP15	( void ){
+	if (responding > 1)
+		fs.close();
+}
 
 void RP15::insert(const DATA &arg){
 	parse_data.insert(parse_data.end(), arg.begin(), arg.end());
@@ -13,41 +18,6 @@ bool	RP15::is_ready( void ){
 	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
 		return (1);
 	return (0);
-}
-RP15::ClassParsingClientRequest(const RP15 &arg){
-	parse_data = arg.parse_data;
-	method = arg.method;
-	ressource = arg.ressource;
-	protocol = arg.protocol;
-	host = arg.host;
-	connection = arg.connection;
-	sec_ch_ua = arg.sec_ch_ua;
-	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
-	user_agent = arg.sec_ch_ua_mobile;
-	sec_ch_ua_platform = arg.sec_ch_ua_platform;
-	accept = arg.accept;
-	sec_fetch_site = arg.sec_fetch_site;
-	sec_fetch_mode = arg.sec_fetch_mode;
-	sec_fetch_dest = arg.sec_fetch_dest;
-	referer = arg.referer;
-}
-RP15	RP15::operator=(const RP15 &arg){
-	parse_data = arg.parse_data;
-	method = arg.method;
-	ressource = arg.ressource;
-	protocol = arg.protocol;
-	host = arg.host;
-	connection = arg.connection;
-	sec_ch_ua = arg.sec_ch_ua;
-	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
-	user_agent = arg.sec_ch_ua_mobile;
-	sec_ch_ua_platform = arg.sec_ch_ua_platform;
-	accept = arg.accept;
-	sec_fetch_site = arg.sec_fetch_site;
-	sec_fetch_mode = arg.sec_fetch_mode;
-	sec_fetch_dest = arg.sec_fetch_dest;
-	referer = arg.referer;
-	return (*this);
 }
 
 size_t	until_space(DATA::iterator	it){
@@ -84,7 +54,6 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 	pos_method += until_no_space(arg.begin() + pos_method);
 	pos_ressource = until_space(arg.begin() + pos_method);
 	ressource.assign(arg.begin() + pos_method, arg.begin() + pos_ressource + pos_method);
-	// pos_ressource += pos_method;
 	pos_ressource += pos_method;
 	pos_ressource += until_no_space(arg.begin() + pos_ressource);
 	pos_protocol = until_space(arg.begin() + pos_ressource);
@@ -187,8 +156,48 @@ void	ClassParsingClientRequest::request_ready( void )
 			}
 		}
 	}
+	responding = 1;
 	display_cpcr();
 }
+
+RP15::ClassParsingClientRequest(const RP15 &arg){
+	responding = arg.responding;
+	parse_data = arg.parse_data;
+	method = arg.method;
+	ressource = arg.ressource;
+	protocol = arg.protocol;
+	host = arg.host;
+	connection = arg.connection;
+	sec_ch_ua = arg.sec_ch_ua;
+	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
+	user_agent = arg.sec_ch_ua_mobile;
+	sec_ch_ua_platform = arg.sec_ch_ua_platform;
+	accept = arg.accept;
+	sec_fetch_site = arg.sec_fetch_site;
+	sec_fetch_mode = arg.sec_fetch_mode;
+	sec_fetch_dest = arg.sec_fetch_dest;
+	referer = arg.referer;
+}
+RP15	RP15::operator=(const RP15 &arg){
+	responding = arg.responding;
+	parse_data = arg.parse_data;
+	method = arg.method;
+	ressource = arg.ressource;
+	protocol = arg.protocol;
+	host = arg.host;
+	connection = arg.connection;
+	sec_ch_ua = arg.sec_ch_ua;
+	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
+	user_agent = arg.sec_ch_ua_mobile;
+	sec_ch_ua_platform = arg.sec_ch_ua_platform;
+	accept = arg.accept;
+	sec_fetch_site = arg.sec_fetch_site;
+	sec_fetch_mode = arg.sec_fetch_mode;
+	sec_fetch_dest = arg.sec_fetch_dest;
+	referer = arg.referer;
+	return (*this);
+}
+
 std::ostream & operator<<(std::ostream & ostream, std::vector<unsigned char> const &i)
 {
 	for (std::vector<unsigned char>::const_iterator it = i.begin(); it != i.end(); it++)

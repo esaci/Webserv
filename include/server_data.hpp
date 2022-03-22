@@ -14,7 +14,7 @@
 			std::vector<struct pollfd>	tab_poll;
 			DATA						recvline;
 			std::vector<char>			char_buff;
-			DATA						parse_temp;
+			DATA						read_temp;
 		public:
 			server_data(std::fstream &file);
 			~server_data( void );
@@ -31,9 +31,10 @@
 			int				_get_favicon(int clientfd);
 			int				_get_error_400(int clientfd);
 			int				_get_error_404(int clientfd);
-			void			_entity(int code_n, std::string content_type);
-			void			_entity_no_accept(int code_n, std::string content_type);
+			void			_entity(int code_n, int clientfd);
+			void			_entity_no_accept(int code_n, int clientfd);
 			std::string		_entity_ctype(int clientfd);
+			int				_send(int client, int code);
 		private:
 			server_data( void );
 			server_data(const server_data&);

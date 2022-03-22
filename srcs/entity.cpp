@@ -1,28 +1,30 @@
 #include "../include/w_library.hpp"
 
-void	server_data::_entity(int code_n, std::string content_type){
+void	server_data::_entity(int code_n, int clientfd){
+	std::string content_type = _entity_ctype(clientfd); 
 	std::stringstream out;
 
 	out << "HTTP/1.1 "<< display_code(code_n) << "\r\n";
 	out << "Server: webserv/1.0\n";
 	if (content_type[0])
 		out << "Content-Type: " << content_type << "\n";
-	out << "Content-Length: " << parse_temp.size() << "\n";
+	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\n";
 	out << "Connection: close\n";
 	out << "Accept-Ranges: bytes\r\n\r\n";
-	_data_begin(parse_temp, out.str());
+	_data_begin(tab_request[clientfd].r_buffer, out.str());
 }
 
-void	server_data::_entity_no_accept(int code_n, std::string content_type){
+void	server_data::_entity_no_accept(int code_n, int clientfd){
 	std::stringstream out;
-
+	std::string content_type = _entity_ctype(clientfd); 
+	
 	out << "HTTP/1.1 "<< display_code(code_n) << "\r\n";
 	out << "Server: webserv/1.0\n";
 	if (content_type[0])
 		out << "Content-Type: " << content_type << "\n";
-	out << "Content-Length: " << parse_temp.size() << "\n";
+	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\n";
 	out << "Connection: close\r\n\r\n";
-	_data_begin(parse_temp, out.str());
+	_data_begin(tab_request[clientfd].r_buffer, out.str());
 }
 
 std::string	server_data::_entity_ctype(int clientfd){

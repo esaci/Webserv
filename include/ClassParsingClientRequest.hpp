@@ -8,6 +8,9 @@
 class RP15
 {
 	public:
+		std::fstream	fs;
+		int		responding;
+		DATA	r_buffer;
 		DATA	parse_data;
 		DATA	method;
 		DATA	ressource;
@@ -30,7 +33,7 @@ class RP15
 
 	public:
 		RP15	( void );
-		~RP15	( void ){}
+		~RP15	( void );
 		RP15	(const RP15&);
 		RP15	operator=(const RP15 &);
 		void	parse_request_line(DATA &arg);

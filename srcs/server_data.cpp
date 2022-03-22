@@ -19,7 +19,7 @@ void	server_data::_table_poll_init( void ){
 	if (serverfd < 0)
 		return ;
 	client_poll.fd = serverfd;
-	client_poll.events = POLLIN | POLLOUT;
+	client_poll.events = POLLIN;
 	client_poll.revents = 0;
 	tab_poll.push_back(client_poll);
 }

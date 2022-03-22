@@ -56,15 +56,19 @@ int	server_data::_server( void ){
 			if (it->revents & POLLIN)
 				n = _server_read(it);
 			if (n == -10)
+				it->events = POLLOUT;
+			else if (n)
+				break ;
+			n = 0;
+			if (it->revents & POLLOUT)
+				n = _response(it->fd);
+			if (n == -10)
 			{
+				tab_request.erase(it->fd);
 				close(it->fd);
 				tab_poll.erase(it);
 				pos--;
-			}
-			else if (n)
-				break ;
-			if (it->revents & POLLOUT)
-				std::cout << "OMG CA POLLOUT\n\n\n\n";
+			}	
 		}
 	}
 	return (0);
