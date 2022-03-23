@@ -2,7 +2,7 @@
 # define W_DEFINES_HPP
 
 #	define SERVER_PORT 18000
-#	define MAXLINE 40960
+#	define MAXLINE 4
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
 #	define ROOT "/var/www/webserv"

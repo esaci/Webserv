@@ -1,4 +1,6 @@
 #include "../include/w_library.hpp"
+#include <stdio.h>
+#include <errno.h>
 
 int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 	if (listening && it->revents && !(it->revents & POLLIN) && !(it->revents & POLLOUT))
@@ -48,23 +50,25 @@ int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 		std::cout << "Ca va lire le " << it->fd << " fd \n";
 		recvline.clear();
 		int n;
-		if ( (n = recv(it->fd, recvline.begin().base(), MAXLINE - 1, 0)) > 0 )
+		if ( (n = read(it->fd, recvline.begin().base(), MAXLINE - 1)) > 0 )
 			tab_request[files_to_socket[it->fd]].r_buffer.insert(tab_request[files_to_socket[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
+		perror("");
 		if (n < 0)
 			return (print_return("ERROR: READ_FILE", 1));
 		if (n < (MAXLINE - 1))
 		{
 			recvline.clear();
-			if (recv(it->fd, recvline.begin().base(), 1, 0))
+			if (read(it->fd, recvline.begin().base(), 1))
 			{
 				tab_request[files_to_socket[it->fd]].r_buffer.insert(tab_request[files_to_socket[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + 1);
 				return (0);
 			}
 			tab_request[files_to_socket[it->fd]].responding = 3;
+			files_to_socket[it->fd] = 0;
 			close(it->fd);
 			tab_poll.erase(it);
 			pos--;
-			files_to_socket[it->fd] = 0;
+			
 		}
 	}
 	return (0);
