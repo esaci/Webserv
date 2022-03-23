@@ -3,6 +3,7 @@
 
 #	define SERVER_PORT 18000
 #	define MAXLINE 40960
+#	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
 #	define ROOT "/var/www/webserv"
 #	define TMPINDEX "/var/www/webserv/index.html"

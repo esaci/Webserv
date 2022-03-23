@@ -11,10 +11,12 @@
 			R_DATA						tab_request;
 			int							serverfd;
 //			VARIABLES MODIFIES REGULIEREMENT
+			struct pollfd				client_poll;
 			std::vector<struct pollfd>	tab_poll;
 			DATA						recvline;
 			std::vector<char>			char_buff;
 			DATA						read_temp;
+			bool						listening;
 		public:
 			server_data(std::fstream &file);
 			~server_data( void );
@@ -35,6 +37,7 @@
 			void			_entity_no_accept(int code_n, int clientfd);
 			std::string		_entity_ctype(int clientfd);
 			int				_send(int client, int code);
+			int				setup_listening(int fd);
 		private:
 			server_data( void );
 			server_data(const server_data&);

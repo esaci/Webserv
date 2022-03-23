@@ -8,11 +8,7 @@ DATA _data_init(std::string arg)
 	return (tmp);
 }
 
-char *_d_s(DATA &arg)
-{
-	arg.push_back('\0');
-	return ((char*)arg.begin().base());
-}
+char *_d_s(DATA &arg){return ((char*)arg.begin().base());}
 
 void	_data_begin(DATA &buff, std::string arg)
 {

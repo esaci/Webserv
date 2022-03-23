@@ -15,7 +15,7 @@ int	server_data::_send(int clientfd, int code){
 		if (!val)
 			return (-10);
 		val = write(clientfd, tab_request[clientfd].r_buffer.begin().base(), val);
-		std::cout << "bonjour, ca a voullu suppr " << tab_request[clientfd].r_buffer << std::endl;
+		// std::cout << "bonjour, ca a voullu suppr " << tab_request[clientfd].r_buffer << std::endl;
 		tab_request[clientfd].r_buffer.erase(tab_request[clientfd].r_buffer.begin(), tab_request[clientfd].r_buffer.begin() + val);
 		return (val);
 	}

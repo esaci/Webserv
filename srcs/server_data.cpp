@@ -6,15 +6,25 @@ server_data::server_data(std::fstream &file): conf(file){
 	serverfd = -1;
 	recvline.resize(MAXLINE + 1);
 	char_buff.resize(MAXLINE + 1);
+	listening = false;
 }
 server_data::~server_data( void ){
 	if (serverfd >= 0 || serverfd == -2)
 		close(serverfd);
 }
 
-void	server_data::_table_poll_init( void ){
-	struct pollfd	client_poll;
+int				server_data::setup_listening(int fd){
+	if (!listening && fd == serverfd)
+	{
+		listening = true;
+		if ((listen(serverfd, NBRCLIENTMAX)) < 0)
+			return (print_return("Error: Listen", 1));
+	}
+	return (0);
+}
 
+
+void	server_data::_table_poll_init( void ){
 	tab_poll.clear();
 	if (serverfd < 0)
 		return ;

@@ -1,21 +1,12 @@
 #include "../include/w_library.hpp"
 
-int	server_data::_server_read(std::vector<struct pollfd>::iterator it)
-{
-	if (it->fd == serverfd)
-		return (_new_client(it));
-	return (_read_client(it));
-}
 // Je peux en accept plusieurs potentiellement, mais ca me sonne complique
 int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 	int	clientfd = accept(serverfd, (SA*) NULL, NULL);
 
 	std::cout << "Connection Cree pour le fd " << clientfd << " !\n";
 	if (clientfd < 0)
-		return (print_return("Error: accept", 1));
-	
-	struct pollfd	client_poll;
-	
+		return (print_return("Error: accept", 1));	
 	client_poll.fd = clientfd;
 	client_poll.events = POLLIN;
 	client_poll.revents = 0;
@@ -40,11 +31,20 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 	{
 		tab_request[it->fd].insert(read_temp);
 		// tab_request[it->fd].display_cpcr();
-		if (!tab_request[it->fd].responding && tab_request[it->fd].is_ready())
+		if (tab_request[it->fd].is_ready())
 		{
 			tab_request[it->fd].request_ready();
 			return (-10);
 		}
 	}
 	return(0);
+}
+
+int	server_data::_server_read(std::vector<struct pollfd>::iterator it)
+{
+	if (tab_request[it->fd].responding)
+		return (0);
+	if (it->fd == serverfd)
+		return (_new_client(it));
+	return (_read_client(it));
 }

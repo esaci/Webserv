@@ -18,15 +18,9 @@ int	init_socket( void ){
 	servaddr.sin_family = AF_INET;
 	//Prend n'importe quel adress
 	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	//Port 18000 pour eviter le port 80 et ainsi ne pas avoir de soucis
 	servaddr.sin_port = htons(SERVER_PORT);
-	
-	// Bind la socket a l'adress 
 	if ((bind(serverfd, (SA *) &servaddr, sizeof(servaddr))) < 0)
 		print_return("Error: Bind", -1);
-	// On donne ensuite l'ordre qu'on le listen
-	if ((listen(serverfd, 10)) < 0)
-		print_return("Error: Listen", -1);
 	return (serverfd);
 }
 
@@ -34,6 +28,7 @@ int	init_socket( void ){
 int	server_data::_server( void ){
 	int		n;
 	size_t	pos, len;
+
 	serverfd = init_socket();
 	if (serverfd < 0)
 		return (1);
@@ -50,8 +45,10 @@ int	server_data::_server( void ){
 		pos = 0;
 		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos)
 		{
-			if (it->revents && !(it->revents & POLLIN) && !(it->revents & POLLOUT))
+			if (listening && it->revents && !(it->revents & POLLIN) && !(it->revents & POLLOUT))
 				return (print_return("Revents chelou\n\n\n", 1));
+			if (setup_listening(it->fd))
+				return (1);
 			n = 0;
 			if (it->revents & POLLIN)
 				n = _server_read(it);
@@ -64,6 +61,7 @@ int	server_data::_server( void ){
 				n = _response(it->fd);
 			if (n == -10)
 			{
+				std::cout << "Connection " << it->fd << " Closed !\n";
 				tab_request.erase(it->fd);
 				close(it->fd);
 				tab_poll.erase(it);
