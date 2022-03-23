@@ -48,3 +48,20 @@ int	server_data::_server_read(std::vector<struct pollfd>::iterator it)
 		return (_new_client(it));
 	return (_read_client(it));
 }
+
+int	server_data::_set_file(int clientfd){
+	int filefd;
+
+	tab_request[clientfd].ressource.push_back('\0');
+	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
+	tab_request[clientfd].ressource.pop_back();
+	if (filefd < 0)
+		return (1);
+	files_to_socket[filefd] = clientfd;
+	client_poll.fd = filefd;
+	client_poll.events = POLLIN;
+	client_poll.revents = 0;
+	tab_poll.push_back(client_poll);
+	tab_request[clientfd].responding = 2;
+	return (0);
+}

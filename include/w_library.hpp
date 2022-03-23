@@ -19,6 +19,7 @@
 #	include <iostream>
 #	include <vector>
 #	include <map>
+#	include <set>
 // Ne PAS stocker de donnee dans une string, peut poser soucis par la suite
 #	include <string>
 #	include <fstream>

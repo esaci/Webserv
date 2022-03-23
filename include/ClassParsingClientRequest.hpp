@@ -8,7 +8,6 @@
 class RP15
 {
 	public:
-		std::fstream	fs;
 		int		responding;
 		DATA	r_buffer;
 		DATA	parse_data;

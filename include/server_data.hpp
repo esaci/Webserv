@@ -7,8 +7,8 @@
 		public:
 			C_DATA						codes;
 			CT_DATA						ctypes;
-			p_conf						conf;
 			R_DATA						tab_request;
+			std::map<int, int>			files_to_socket;
 			int							serverfd;
 //			VARIABLES MODIFIES REGULIEREMENT
 			struct pollfd				client_poll;
@@ -17,6 +17,9 @@
 			std::vector<char>			char_buff;
 			DATA						read_temp;
 			bool						listening;
+			size_t						pos;
+			// Ca va etre bientot suppr
+			p_conf						conf;
 		public:
 			server_data(std::fstream &file);
 			~server_data( void );
@@ -37,7 +40,11 @@
 			void			_entity_no_accept(int code_n, int clientfd);
 			std::string		_entity_ctype(int clientfd);
 			int				_send(int client, int code);
-			int				setup_listening(int fd);
+			int				setup_listen(std::vector<struct pollfd>::iterator it);
+			int				setup_read(std::vector<struct pollfd>::iterator it);
+			int				setup_response(std::vector<struct pollfd>::iterator it);
+			int				setup_read_files(std::vector<struct pollfd>::iterator it);
+			int				_set_file(int clientfd);
 		private:
 			server_data( void );
 			server_data(const server_data&);

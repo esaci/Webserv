@@ -13,16 +13,6 @@ server_data::~server_data( void ){
 		close(serverfd);
 }
 
-int				server_data::setup_listening(int fd){
-	if (!listening && fd == serverfd)
-	{
-		listening = true;
-		if ((listen(serverfd, NBRCLIENTMAX)) < 0)
-			return (print_return("Error: Listen", 1));
-	}
-	return (0);
-}
-
 
 void	server_data::_table_poll_init( void ){
 	tab_poll.clear();

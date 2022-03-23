@@ -15,6 +15,7 @@ SRCS =	main.cpp \
 		entity.cpp	\
 		get_response.cpp \
 		utils.cpp	\
+		setup.cpp	\
 		send_response.cpp
 
 OBJS_DIR = ./objects/

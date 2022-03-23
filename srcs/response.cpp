@@ -4,6 +4,8 @@ int	server_data::_response(int clientfd)
 {
 	DATA	buff;
 
+	if (tab_request[clientfd].responding == 2)
+		return (0);
 	if (tab_request[clientfd].method == _data_init("GET"))
 	{
 		// Il faudra rajouter la condition si on prend en ressource lindex directement

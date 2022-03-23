@@ -3,10 +3,7 @@
 
 RP15::ClassParsingClientRequest( void ): responding(0){}
 
-RP15::~RP15	( void ){
-	if (responding > 1)
-		fs.close();
-}
+RP15::~RP15	( void ){}
 
 void RP15::insert(const DATA &arg){
 	parse_data.insert(parse_data.end(), arg.begin(), arg.end());
