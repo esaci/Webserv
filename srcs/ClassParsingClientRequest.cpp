@@ -60,7 +60,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 
 void	ClassParsingClientRequest::request_ready( void )
 {
-	std::cout << parse_data;
+	// std::cout << parse_data;
 	DATA	tmp_data, tmp_compare;
 	size_t	line = 0, i = 0;
 	std::vector<DATA>	tab;
@@ -154,7 +154,7 @@ void	ClassParsingClientRequest::request_ready( void )
 		}
 	}
 	responding = 1;
-	display_cpcr();
+	// display_cpcr();
 }
 
 RP15::ClassParsingClientRequest(const RP15 &arg){

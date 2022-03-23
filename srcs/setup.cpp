@@ -15,7 +15,7 @@ int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 	int n = 0;
 	
-	if (it->revents & POLLIN)
+	if (it->revents & POLLIN && !files_to_socket[it->fd])
 		n = _server_read(it);
 	if (n == -10)
 		it->events = POLLOUT;
@@ -43,8 +43,9 @@ int		server_data::setup_response(std::vector<struct pollfd>::iterator it){
 }
 
 int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
-	if (files_to_socket[it->fd])
+	if ((it->revents & POLLIN) && files_to_socket[it->fd] && tab_request[files_to_socket[it->fd]].responding == 2)
 	{
+		std::cout << "Ca va lire le " << it->fd << " fd \n";
 		recvline.clear();
 		int n;
 		if ( (n = recv(it->fd, recvline.begin().base(), MAXLINE - 1, 0)) > 0 )
@@ -53,6 +54,7 @@ int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 			return (print_return("ERROR: READ_FILE", 1));
 		if (n < (MAXLINE - 1))
 		{
+			recvline.clear();
 			if (recv(it->fd, recvline.begin().base(), 1, 0))
 			{
 				tab_request[files_to_socket[it->fd]].r_buffer.insert(tab_request[files_to_socket[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + 1);
