@@ -1,7 +1,7 @@
 #include "../include/w_library.hpp"
 
 int	server_data::_get_index(int clientfd){
-	std::cout << TMPINDEX << " est l'endroit ou jvais chercher lindex\n";
+	// std::cout << TMPINDEX << " est l'endroit ou jvais chercher lindex\n";
 	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
@@ -10,14 +10,11 @@ int	server_data::_get_index(int clientfd){
 			return (_get_error_404(clientfd));
 		return (0);
 	}
-	// std::cerr << "Ca rentre ici avec une valeur de " << tab_request[clientfd].responding << std::endl;
-	// tab_request[clientfd].fs.read(char_buff.begin().base(), MAXLINE);
-	// tab_request[clientfd].r_buffer.insert(tab_request[clientfd].r_buffer.end(), char_buff.begin().base(), char_buff.begin().base() + tab_request[clientfd].fs.gcount());
 	return (_send(clientfd, 200));
 }
 
 int	server_data::_get_favicon(int clientfd){
-	std::cout << TMPFAVICO << " est l'endroit ou jvais chercher lindex\n";
+	// std::cout << TMPFAVICO << " est l'endroit ou jvais chercher lindex\n";
 	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
@@ -26,15 +23,11 @@ int	server_data::_get_favicon(int clientfd){
 			return (_get_error_404(clientfd));
 		return (0);
 	}
-	std::cerr << "Ca rentre ici avec une valeur de " << tab_request[clientfd].responding << std::endl;
-	// tab_request[clientfd].fs.read(char_buff.begin().base(), MAXLINE);
-	// if (tab_request[clientfd].fs.gcount())
-		// tab_request[clientfd].r_buffer.insert(tab_request[clientfd].r_buffer.end(), char_buff.begin().base(), char_buff.begin().base() + tab_request[clientfd].fs.gcount());
 	return (_send(clientfd, 200));
 }
 
 int	server_data::_get_error_400(int clientfd){
-	std::cout << ERRORFILE_400 << " est l'endroit ou jvais chercher lindex\n";
+	// std::cout << ERRORFILE_400 << " est l'endroit ou jvais chercher lindex\n";
 	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
@@ -43,14 +36,11 @@ int	server_data::_get_error_400(int clientfd){
 			return (print_return("ERROR READ DU FICHIER _GET_ERROR 400", 1));
 		return (0);
 	}
-	// std::cerr << "Ca rentre ici avec une valeur de " << tab_request[clientfd].responding << std::endl;
-	// tab_request[clientfd].fs.read(char_buff.begin().base(), MAXLINE);
-	// tab_request[clientfd].r_buffer.insert(tab_request[clientfd].r_buffer.end(), char_buff.begin().base(), char_buff.begin().base() + tab_request[clientfd].fs.gcount());
 	return (_send(clientfd, 400));
 }
 
 int	server_data::_get_error_404(int clientfd){
-	std::cout << ERRORFILE_404 << " est l'endroit ou jvais chercher lindex\n";
+	// std::cout << ERRORFILE_404 << " est l'endroit ou jvais chercher lindex\n";
 	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
@@ -59,8 +49,5 @@ int	server_data::_get_error_404(int clientfd){
 			return (print_return("ERROR READ DU FICHIER _GET_ERROR 404", 1));
 		return (0);
 	}
-	// std::cerr << "Ca rentre ici avec une valeur de " << tab_request[clientfd].responding << std::endl;
-	// tab_request[clientfd].fs.read(char_buff.begin().base(), MAXLINE);
-	// tab_request[clientfd].r_buffer.insert(tab_request[clientfd].r_buffer.end(), char_buff.begin().base(), char_buff.begin().base() + tab_request[clientfd].fs.gcount());
 	return (_send(clientfd, 404));
 }

@@ -45,13 +45,13 @@ int	server_data::_server( void ){
 		n = 0;
 		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos, n = 0)
 		{
-			if (setup_listen(it))
+			if (setup_listen(tab_poll.begin() + pos))
 				return (1);
-			if (setup_read(it))
+			if (setup_read(tab_poll.begin() + pos))
 				break ;
-			if (setup_response(it))
+			if (setup_read_files(tab_poll.begin() + pos))
 				return (1);
-			if (setup_read_files(it))
+			if (setup_response(tab_poll.begin() + pos))
 				return (1);
 		}
 	}

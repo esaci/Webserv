@@ -4,7 +4,7 @@
 int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 	int	clientfd = accept(serverfd, (SA*) NULL, NULL);
 
-	std::cout << "Connection Cree pour le fd " << clientfd << " !\n";
+	// std::cout << "Connection Cree pour le fd " << clientfd << " !\n";
 	if (clientfd < 0)
 		return (print_return("Error: accept", 1));	
 	client_poll.fd = clientfd;
@@ -54,7 +54,6 @@ int	server_data::_set_file(int clientfd){
 
 	tab_request[clientfd].ressource.push_back('\0');
 	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
-	std::cout << "fd vaut " << filefd  << " Pour " << tab_request[clientfd].ressource.begin().base() << std::endl;
 	tab_request[clientfd].ressource.pop_back();
 	if (filefd < 0)
 		return (1);
