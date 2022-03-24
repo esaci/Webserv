@@ -37,6 +37,7 @@ int				print_return(std::string ptr, int value);
 DATA			_data_init(std::string arg);
 void			_data_begin(DATA &buff, std::string arg);
 char			*_d_s(DATA &arg);
+DATA	_link_root_init(std::string root, DATA &ressource);
 
 
 # endif

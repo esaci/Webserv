@@ -12,11 +12,10 @@ int	server_data::_response(int clientfd)
 		// Faudra ameliorer ce if
 		if ((_data_init("/") == tab_request[clientfd].ressource) || (_data_init(TMPINDEX) == tab_request[clientfd].ressource))
 			return (_get_index(clientfd));
-		if (_data_init("/favicon.ico") == tab_request[clientfd].ressource || (_data_init(TMPFAVICO) == tab_request[clientfd].ressource))
-			return (_get_favicon(clientfd));
-		if (AUTOINDEX)
-			return(_get_error_400(clientfd));
-		return(_get_error_404(clientfd));
+		return (_get(clientfd));
+		// if (AUTOINDEX)
+			// return(_get_error_400(clientfd));
+		// return(_get_error_404(clientfd));
 	}
 	else
 		return(print_return("REQUETE NON GEREE \n", -10));

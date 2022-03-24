@@ -13,12 +13,12 @@ int	server_data::_get_index(int clientfd){
 	return (_send(clientfd, 200));
 }
 
-int	server_data::_get_favicon(int clientfd){
+int	server_data::_get(int clientfd){
 	// std::cout << TMPFAVICO << " est l'endroit ou jvais chercher lindex\n";
 	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
-		tab_request[clientfd].ressource = _data_init(TMPFAVICO);
+		tab_request[clientfd].ressource = _link_root_init(ROOT, tab_request[clientfd].ressource);
 		if (_set_file(clientfd))
 			return (_get_error_404(clientfd));
 		return (0);

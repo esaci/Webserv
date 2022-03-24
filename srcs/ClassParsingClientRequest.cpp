@@ -1,19 +1,28 @@
 #include "../include/w_library.hpp"
-#include "../include/ClassParsingClientRequest.hpp"
 
 RP15::ClassParsingClientRequest( void ): responding(0){}
 
 RP15::~RP15	( void ){}
 
 void RP15::insert(const DATA &arg){
+	std::cout << parse_data << "\n--------------------------------------------" << std::endl;
 	parse_data.insert(parse_data.end(), arg.begin(), arg.end());
 }
 
 bool	RP15::is_ready( void ){
 	if (parse_data.size() < 4)
 		return (0);
-	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
-		return (1);
+	if (parse_data[0] == 'G')
+	{
+		if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
+			return (1);
+	}
+	else if (parse_data[0] == 'P')
+	{
+		return (extract_body_check());
+	}
+	else
+		std::cerr << "Method non geree\n";
 	return (0);
 }
 
@@ -83,7 +92,7 @@ void	ClassParsingClientRequest::request_ready( void )
 	for(DATA::iterator it = parse_data.begin(); it != parse_data.end(); it++, line++)
 	{
 		tmp_data.clear();
-		for(; *it != '\n' && it != parse_data.end(); it++)
+		for(; it != parse_data.end() && *it != '\n'; it++)
 		{
 			if (*it == '\r')
 				break;

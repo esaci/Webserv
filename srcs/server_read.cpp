@@ -25,6 +25,7 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 	recvline.clear();
 	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
 		read_temp.assign(recvline.begin().base(), recvline.begin().base() + n);
+	std::cout << read_temp;
 	if (n < 0)
 		return (print_return("Error: recv", 1));
 	if (read_temp.size())

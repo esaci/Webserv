@@ -11,6 +11,7 @@ SRCS =	main.cpp \
 		response.cpp \
 		p_conf.cpp \
 		ClassParsingClientRequest.cpp \
+		_post_parsing.cpp \
 		server_data.cpp \
 		entity.cpp	\
 		get_response.cpp \

@@ -20,3 +20,8 @@ int	print_return(std::string ptr, int value)
 	std::cerr << ptr << std::endl;
 	return (value);
 }
+
+DATA	_link_root_init(std::string root, DATA &ressource){
+	ressource.insert(ressource.begin(), root.begin(), root.end());
+	return (ressource);
+}
