@@ -12,17 +12,12 @@ void RP15::insert(const DATA &arg){
 bool	RP15::is_ready( void ){
 	if (parse_data.size() < 4)
 		return (0);
-	if (parse_data[0] == 'G')
-	{
-		if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
-			return (1);
-	}
-	else if (parse_data[0] == 'P')
+	if (parse_data[0] == 'P')
 	{
 		return (extract_body_check());
 	}
-	else
-		std::cerr << "Method non geree\n";
+	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
+		return (1);
 	return (0);
 }
 
