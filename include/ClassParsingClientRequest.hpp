@@ -10,6 +10,7 @@ class RP15
 	public:
 		int		responding;
 		DATA	r_buffer;
+		DATA	r_body_buffer;
 		DATA	parse_data;
 		DATA	method;
 		DATA	ressource;
@@ -38,7 +39,7 @@ class RP15
 		void	parse_request_line(DATA &arg);
 		void	request_ready( void );
 		bool	is_ready( void );
-		int		extract_body_check( void );
+		size_t	extract_body_check( void );
 		void	display_cpcr( void );
 		void	insert(const DATA &arg);
 	private:

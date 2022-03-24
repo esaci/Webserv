@@ -71,9 +71,11 @@ void	ClassParsingClientRequest::request_ready( void )
 {
 	// std::cout << parse_data;
 	DATA	tmp_data, tmp_compare;
-	size_t	line = 0, i = 0;
+	size_t	line = 0, i = 0, p = 0;
 	std::vector<DATA>	tab;
 
+	if (parse_data[0] == 'P')
+		p = extract_body_check();
 	tab.push_back(_data_init("Host: "));
 	tab.push_back(_data_init("Connection: "));
 	tab.push_back(_data_init("Cache-Control: "));
@@ -89,81 +91,90 @@ void	ClassParsingClientRequest::request_ready( void )
 	tab.push_back(_data_init("Sec-Fetch-Dest: "));
 	tab.push_back(_data_init("Accept-Encoding: "));
 	tab.push_back(_data_init("Accept-Language: "));
-	for(DATA::iterator it = parse_data.begin(); it != parse_data.end(); it++, line++)
+	for(DATA::iterator it = parse_data.begin(); it < parse_data.end(); it++, line++)
 	{
 		tmp_data.clear();
-		for(; it != parse_data.end() && *it != '\n'; it++)
+		for(;it < parse_data.end() && (*it == '\n' /* || *it == '\r' */); it++)
+			;
+		for(; it < parse_data.end() && *it != '\n'; it++)
 		{
 			if (*it == '\r')
 				break;
 			tmp_data.push_back(*it);
 		}
 		if (!line)
+		{
 			parse_request_line(tmp_data);
-		else{
-			for(i = 0; i < tab.size(); i++)
+			continue;
+		}
+		std::cout << "Ligne numero " << line << std::endl;
+		if (p && p <= line)
+		{
+			r_body_buffer.insert(r_body_buffer.end(), tmp_data.begin(), tmp_data.end());
+			continue;
+		}
+		for(i = 0; i < tab.size(); i++)
+		{
+			if (tmp_data.size() >= tab[i].size())
 			{
-				if (tmp_data.size() >= tab[i].size())
-				{
-					tmp_compare.assign(tmp_data.begin(), tmp_data.begin() + tab[i].size());
-					if (tab[i] == tmp_compare)
-						break;
-				}
-			}
-			switch (i)
-			{
-				case 0:
-					host.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 1:
-					connection.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 2:
-					cache_control.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 3:
-					sec_ch_ua.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 4:
-					sec_ch_ua_mobile.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 5:
-					sec_ch_ua_platform.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 6:
-					upgrade_insecure_requests.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 7:
-					user_agent.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 8:
-					accept.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 9:
-					sec_fetch_site.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 10:
-					sec_fetch_mode.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 11:
-					sec_fetch_dest.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 12:
-					accept_encoding.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				case 13:
-					accept_language.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-					break;
-				//  case x:
-				//    referer.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				//    break;
-				default:
+				tmp_compare.assign(tmp_data.begin(), tmp_data.begin() + tab[i].size());
+				if (tab[i] == tmp_compare)
 					break;
 			}
 		}
+		switch (i)
+		{
+			case 0:
+				host.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 1:
+				connection.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 2:
+				cache_control.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 3:
+				sec_ch_ua.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 4:
+				sec_ch_ua_mobile.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 5:
+				sec_ch_ua_platform.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 6:
+				upgrade_insecure_requests.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 7:
+				user_agent.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 8:
+				accept.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 9:
+				sec_fetch_site.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 10:
+				sec_fetch_mode.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 11:
+				sec_fetch_dest.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 12:
+				accept_encoding.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 13:
+				accept_language.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			//  case x:
+			//    referer.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			//    break;
+			default:
+				break;
+		}
 	}
 	responding = 1;
-	// display_cpcr();
+	display_cpcr();
 }
 
 RP15::ClassParsingClientRequest(const RP15 &arg){
@@ -231,4 +242,5 @@ void	ClassParsingClientRequest::display_cpcr( void )
 	std::cout << "Accept-Encoding: |"<< accept_encoding << "|" << std::endl;
 	std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	std::cout << "-----------------------------------------------------------\n"; 
+	std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
 }
