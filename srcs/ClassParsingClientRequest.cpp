@@ -91,10 +91,12 @@ void	ClassParsingClientRequest::request_ready( void )
 	tab.push_back(_data_init("Sec-Fetch-Dest: "));
 	tab.push_back(_data_init("Accept-Encoding: "));
 	tab.push_back(_data_init("Accept-Language: "));
+	tab.push_back(_data_init("Content-Length: "));
+	tab.push_back(_data_init("Transfer_Encoding: "));
 	for(DATA::iterator it = parse_data.begin(); it < parse_data.end(); it++, line++)
 	{
 		tmp_data.clear();
-		for(;it < parse_data.end() && (*it == '\n' /* || *it == '\r' */); it++)
+		for(;it < parse_data.end() && (*it == '\n'); it++)
 			;
 		for(; it < parse_data.end() && *it != '\n'; it++)
 		{
@@ -107,11 +109,13 @@ void	ClassParsingClientRequest::request_ready( void )
 			parse_request_line(tmp_data);
 			continue;
 		}
-		std::cout << "Ligne numero " << line << std::endl;
 		if (p && p <= line)
 		{
-			r_body_buffer.insert(r_body_buffer.end(), tmp_data.begin(), tmp_data.end());
-			continue;
+			for(; it < parse_data.end() && (*it == '\n' || *it == '\r'); it++)
+				;
+			parse_data.erase(parse_data.begin(), it);
+			r_body_buffer.swap(parse_data);
+			break;
 		}
 		for(i = 0; i < tab.size(); i++)
 		{
@@ -165,6 +169,12 @@ void	ClassParsingClientRequest::request_ready( void )
 				break;
 			case 13:
 				accept_language.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 14:
+				content_length.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+				break;
+			case 15:
+				transfer_encoding.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
 				break;
 			//  case x:
 			//    referer.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
@@ -241,6 +251,11 @@ void	ClassParsingClientRequest::display_cpcr( void )
 	std::cout << "sec_fetch_dest: |"<< sec_fetch_dest << "|" << std::endl;
 	std::cout << "Accept-Encoding: |"<< accept_encoding << "|" << std::endl;
 	std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
+	std::cout << "Content_Length: |"<< content_length << "|" << std::endl;
+	std::cout << "Transfer_Encoding: |"<< transfer_encoding << "|" << std::endl;
+	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
+	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
+	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	std::cout << "-----------------------------------------------------------\n"; 
 	std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
 }

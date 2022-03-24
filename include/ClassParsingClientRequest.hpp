@@ -30,6 +30,8 @@ class RP15
 		DATA	accept_encoding;
 		DATA	accept_language;
 		DATA	referer;
+		DATA	content_length;
+		DATA	transfer_encoding;
 
 	public:
 		RP15	( void );
