@@ -3,6 +3,7 @@
 
 # include "w_defines.hpp"
 
+
 // method ressource et protocole sont necessaire, le reste ne le sont pas forcement
 // responding:	   0 au depart, 
 				// 1 lorsque le l'entity a ete remplis(fin de requete pour GET, debut de parsing du body pour POST) et on s'apprete a appliquer la requete
