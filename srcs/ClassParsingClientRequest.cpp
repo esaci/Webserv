@@ -101,10 +101,8 @@ int	ClassParsingClientRequest::request_ready( void )
 		{
 			for(; it < parse_data.end() && (*it == '\n' || *it == '\r'); it++)
 				;
-			parse_data.erase(parse_data.begin(), it);
-			r_body_buffer.swap(parse_data);
-			responding = 1;
-			display_cpcr();
+			r_body_buffer.assign(it, parse_data.end());
+			parse_data.clear();
 			return (1);
 		}
 		for(i = 0; i < tab.size(); i++)

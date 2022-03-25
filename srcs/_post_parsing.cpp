@@ -3,7 +3,7 @@
 size_t		RP15::extract_body_check( void ){
 	size_t	line = 0, i;
 
-	for(DATA::iterator it = parse_data.begin(); it != parse_data.end(); it++, line++)
+	for(DATA::iterator it = parse_data.begin(); it < parse_data.end(); it++, line++)
 	{
 		i = 0;
 		for(;it < parse_data.end() && (*it == '\n'); it++)
@@ -11,8 +11,12 @@ size_t		RP15::extract_body_check( void ){
 		for(; it < parse_data.end() && *it != '\n'; it++)
 			i++;
 		if (i == 1 && it != parse_data.end())
+		{
+			std::cout << "extract_body_check va renvoyer un line " << line << std::endl;
 			return (line);
+		}
 	}
+	std::cout << "extract_body_check va renvoyer un 0 " << line << std::endl;
 	return (0);
 }
 
@@ -23,7 +27,11 @@ int			server_data::_post_read_cl(std::vector<pollfd>::iterator it){
 	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
 		tab_request[it->fd].r_body_buffer.insert(tab_request[it->fd].r_body_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
 	if (compare_size_cl(tab_request[it->fd].r_body_buffer.size(), tab_request[it->fd].content_length))
+	{
+		tab_request[it->fd].responding = 1;
+		tab_request[it->fd].display_cpcr();
 		return (-10);
+	}
 	return (0);
 }
 

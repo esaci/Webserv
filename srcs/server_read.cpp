@@ -26,7 +26,6 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 		return (print_return("Error: recv", 1));
 	if (tab_request[it->fd].is_ready())
 	{
-		std::cout << "C RDY\n";
 		if (!tab_request[it->fd].request_ready())
 			return (-10);
 	}
