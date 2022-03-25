@@ -2,22 +2,28 @@
 # define SERVER_DATA_HPP
 
 #	include "w_defines.hpp"
+// Modif Fichier de config
+// serverfd va etre un set_serverfd
+	// ca proc new_client que si il fait parti du set
+// listening deviendra un tableau de bool, chacun initialise a 0,
+	// Listen proc par chac bool
+// un meme client peut faire des requetes sur deux port different, auront ils deux fd differents (jespere que oui)
+// il faudra lier le client avec son server, 
+	// map<int, int> lien entre client et server , clients_to_servers
 
 	class server_data{
 		public:
 			C_DATA						codes;
 			CT_DATA						ctypes;
 			R_DATA						tab_request;
-			std::map<int, int>			files_to_socket;
+			std::map<int, int>			files_to_clients;
+			std::vector<struct pollfd>	tab_poll;
 			int							serverfd;
+			size_t						pos;
+			bool						listening;
 //			VARIABLES MODIFIES REGULIEREMENT
 			struct pollfd				client_poll;
-			std::vector<struct pollfd>	tab_poll;
 			DATA						recvline;
-			std::vector<char>			char_buff;
-			DATA						read_temp;
-			bool						listening;
-			size_t						pos;
 			// Ca va etre bientot suppr
 			p_conf						conf;
 		public:
@@ -28,6 +34,9 @@
 			int				_server_read(std::vector<struct pollfd>::iterator it);
 			int				_new_client(std::vector<struct pollfd>::iterator it);
 			int				_read_client(std::vector<pollfd>::iterator it);
+			int				_post_server_read(std::vector<pollfd>::iterator it);
+			int				_post_read_cl(std::vector<pollfd>::iterator it);
+			int				_post_read_ch(std::vector<pollfd>::iterator it);
 			int				_response(int clientfd);
 			void			_code_init( void );
 			void			_content_type( void );

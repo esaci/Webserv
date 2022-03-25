@@ -4,7 +4,11 @@
 # include "w_defines.hpp"
 
 // method ressource et protocole sont necessaire, le reste ne le sont pas forcement
-
+// responding:	   0 au depart, 
+				// 1 lorsque le l'entity a ete remplis(fin de requete pour GET, debut de parsing du body pour POST) et on s'apprete a appliquer la requete
+				// 2 lorsque la ressource a ete ouverte (_get_response) et on s'apprete a la lire
+				// 3 lorsque la ressource a ete lu completement et ecrite dans r_buffer et on s'apprete a ajouter l'entity au r_buffer
+				// 4 l'entity a ete ajoute a r_buffer(buffer de reponse) et on est en train d'envoyer la response
 class RP15
 {
 	public:
@@ -39,7 +43,7 @@ class RP15
 		RP15	(const RP15&);
 		RP15	operator=(const RP15 &);
 		void	parse_request_line(DATA &arg);
-		void	request_ready( void );
+		int		request_ready( void );
 		bool	is_ready( void );
 		size_t	extract_body_check( void );
 		void	display_cpcr( void );

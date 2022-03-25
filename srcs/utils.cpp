@@ -25,3 +25,21 @@ DATA	_link_root_init(std::string root, DATA &ressource){
 	ressource.insert(ressource.begin(), root.begin(), root.end());
 	return (ressource);
 }
+
+void	dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value)
+{
+	std::stringstream ss;
+
+	ss << std::hex << decimal_value; // int decimal_value
+	std::string res ( ss.str() );
+	buff.insert(it, res.begin(), res.end());
+}
+
+size_t	hexa_to_dec(DATA &buff){
+	size_t decimal_value;
+
+	buff.push_back('\0');
+	decimal_value = std::strtol((char*)buff.begin().base(), NULL, 16);
+	buff.pop_back();
+	return (decimal_value);
+}

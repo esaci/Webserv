@@ -4,8 +4,7 @@ server_data::server_data(std::fstream &file): conf(file){
 	_code_init();
 	_content_type();
 	serverfd = -1;
-	recvline.resize(MAXLINE + 1);
-	char_buff.resize(MAXLINE + 1);
+	recvline.resize(MAXLINE + 10);
 	listening = false;
 }
 server_data::~server_data( void ){

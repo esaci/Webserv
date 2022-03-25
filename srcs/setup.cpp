@@ -17,11 +17,13 @@ int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 }
 
 int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
-	int n = 0;
+	int n;
 	
-	if (!(it < tab_poll.end()))
+	if (!(it < tab_poll.end()) || !(it->revents & POLLIN) || tab_request[it->fd].responding)
 		return (0);
-	if (it->revents & POLLIN && !files_to_socket[it->fd])
+	if (tab_request[it->fd].method.size())
+		n = _post_server_read(it);
+	else if (!files_to_clients[it->fd])
 		n = _server_read(it);
 	if (n == -10)
 		it->events = POLLOUT;
@@ -35,7 +37,7 @@ int		server_data::setup_response(std::vector<struct pollfd>::iterator it){
 	
 	if (!(it < tab_poll.end()))
 		return (0);
-	if ((it->revents & POLLOUT) && !files_to_socket[it->fd])
+	if ((it->revents & POLLOUT) && !files_to_clients[it->fd])
 		n = _response(it->fd);
 	if (n == -10)
 	{
@@ -53,12 +55,12 @@ int		server_data::setup_response(std::vector<struct pollfd>::iterator it){
 int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 	if (it >= tab_poll.end())
 		return (0);
-	if (files_to_socket[it->fd] && (it->revents & POLLIN) && tab_request[files_to_socket[it->fd]].responding == 2)
+	if (files_to_clients[it->fd] && (it->revents & POLLIN) && tab_request[files_to_clients[it->fd]].responding == 2)
 	{
 		recvline.clear();
 		int n;
 		if ( (n = read(it->fd, recvline.begin().base(), MAXLINE - 1)) > 0 )
-			tab_request[files_to_socket[it->fd]].r_buffer.insert(tab_request[files_to_socket[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
+			tab_request[files_to_clients[it->fd]].r_buffer.insert(tab_request[files_to_clients[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
 		if (n < 0)
 			return (print_return("ERROR: READ_FILE", 1));
 		if (n < (MAXLINE - 1))
@@ -66,11 +68,11 @@ int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 			recvline.clear();
 			if (read(it->fd, recvline.begin().base(), 1))
 			{
-				tab_request[files_to_socket[it->fd]].r_buffer.insert(tab_request[files_to_socket[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + 1);
+				tab_request[files_to_clients[it->fd]].r_buffer.insert(tab_request[files_to_clients[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + 1);
 				return (0);
 			}
-			tab_request[files_to_socket[it->fd]].responding = 3;
-			files_to_socket[it->fd] = 0;
+			tab_request[files_to_clients[it->fd]].responding = 3;
+			files_to_clients[it->fd] = 0;
 			close(it->fd);
 			tab_poll.erase(it);
 			pos--;

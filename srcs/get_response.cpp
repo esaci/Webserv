@@ -2,7 +2,6 @@
 
 int	server_data::_get_index(int clientfd){
 	// std::cout << TMPINDEX << " est l'endroit ou jvais chercher lindex\n";
-	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
 		tab_request[clientfd].ressource = _data_init(TMPINDEX);
@@ -15,7 +14,6 @@ int	server_data::_get_index(int clientfd){
 
 int	server_data::_get(int clientfd){
 	// std::cout << TMPFAVICO << " est l'endroit ou jvais chercher lindex\n";
-	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
 		tab_request[clientfd].ressource = _link_root_init(ROOT, tab_request[clientfd].ressource);
@@ -28,7 +26,6 @@ int	server_data::_get(int clientfd){
 
 int	server_data::_get_error_400(int clientfd){
 	// std::cout << ERRORFILE_400 << " est l'endroit ou jvais chercher lindex\n";
-	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
 		tab_request[clientfd].ressource = _data_init(ERRORFILE_400);
@@ -41,7 +38,6 @@ int	server_data::_get_error_400(int clientfd){
 
 int	server_data::_get_error_404(int clientfd){
 	// std::cout << ERRORFILE_404 << " est l'endroit ou jvais chercher lindex\n";
-	char_buff.clear();
 	if (tab_request[clientfd].responding < 2)
 	{
 		tab_request[clientfd].ressource = _data_init(ERRORFILE_404);

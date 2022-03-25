@@ -21,30 +21,21 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 {
 	int	n;
 	
-	read_temp.clear();
 	recvline.clear();
 	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
-		read_temp.assign(recvline.begin().base(), recvline.begin().base() + n);
-	std::cout << read_temp;
+		tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
 	if (n < 0)
 		return (print_return("Error: recv", 1));
-	if (read_temp.size())
+	if (recvline.size() && tab_request[it->fd].is_ready())
 	{
-		tab_request[it->fd].insert(read_temp);
-		// tab_request[it->fd].display_cpcr();
-		if (tab_request[it->fd].is_ready())
-		{
-			tab_request[it->fd].request_ready();
+		if (!tab_request[it->fd].request_ready())
 			return (-10);
-		}
 	}
 	return(0);
 }
 
 int	server_data::_server_read(std::vector<struct pollfd>::iterator it)
 {
-	if (tab_request[it->fd].responding)
-		return (0);
 	if (it->fd == serverfd)
 		return (_new_client(it));
 	return (_read_client(it));
@@ -58,7 +49,7 @@ int	server_data::_set_file(int clientfd){
 	tab_request[clientfd].ressource.pop_back();
 	if (filefd < 0)
 		return (1);
-	files_to_socket[filefd] = clientfd;
+	files_to_clients[filefd] = clientfd;
 	client_poll.fd = filefd;
 	client_poll.events = POLLIN;
 	client_poll.revents = 0;

@@ -25,12 +25,14 @@ std::string bin2hex(const unsigned char *input, size_t len){
 
 int	main(int argc, char **argv)
 {
-	int			listenfd, connfd, n;
+	int			listenfd, listenfd2, connfd, n;
 	SA_IN		servaddr;
 	std::string	buff;
 	uint8_t		recvline[MAXLINE + 1];
 
 	if ((listenfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+		print_return("Error: Socket", 1);
+	if ((listenfd2 = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 		print_return("Error: Socket", 1);
 
 	servaddr.sin_family = AF_INET;
@@ -42,9 +44,14 @@ int	main(int argc, char **argv)
 	// Bind la socket a l'adress 
 	if ((bind(listenfd, (SA *) &servaddr, sizeof(servaddr))) < 0)
 		print_return("Error: Bind", 1);
-	// On donne ensuite l'ordre qu'on le listen
+	servaddr.sin_port = htons(19000);
+	if ((bind(listenfd2, (SA *) &servaddr, sizeof(servaddr))) < 0)
+		print_return("Error: Bind2", 1);
+// On donne ensuite l'ordre qu'on le listen
 	if ((listen(listenfd, 10)) < 0)
 		print_return("Error: Listen", 1);
+	if ((listen(listenfd2, 10)) < 0)
+		print_return("Error: Listen2", 1);
 	while(1){
 		SA_IN addr;
 		socklen_t addr_len;
@@ -53,6 +60,21 @@ int	main(int argc, char **argv)
 		std::cout.flush();
 		// accept va attendre que quelquun se connect
 		connfd = accept(listenfd, (SA *) NULL, NULL);
+		std::cout << connfd << "eme client\n";
+		while ((n = recv(connfd, recvline, MAXLINE, 0)) > 0)
+		{
+				std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
+				if (recvline[n - 1] == '\n'){
+					break;
+				}
+		}
+		if (n < 0)
+			print_return("Error: recv", 1);
+		buff = "HTTP/1.0 200 OK\r\n\r\nHello";
+		write(connfd, buff.c_str(), buff.size());
+		// close(connfd);
+		connfd = accept(listenfd2, (SA *) NULL, NULL);
+		std::cout << connfd << "eme client\n";
 		while ((n = recv(connfd, recvline, MAXLINE, 0)) > 0)
 		{
 				std::cout << bin2hex(recvline, n) << " " << recvline << std::endl;
@@ -65,6 +87,7 @@ int	main(int argc, char **argv)
 		buff = "HTTP/1.0 200 OK\r\n\r\nHello";
 		write(connfd, buff.c_str(), buff.size());
 		close(connfd);
+
 	}
 	return (0);
 }

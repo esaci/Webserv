@@ -62,7 +62,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 	arg.pop_back();
 }
 
-void	ClassParsingClientRequest::request_ready( void )
+int	ClassParsingClientRequest::request_ready( void )
 {
 	// std::cout << parse_data;
 	DATA	tmp_data, tmp_compare;
@@ -110,7 +110,9 @@ void	ClassParsingClientRequest::request_ready( void )
 				;
 			parse_data.erase(parse_data.begin(), it);
 			r_body_buffer.swap(parse_data);
-			break;
+			responding = 1;
+			display_cpcr();
+			return (1);
 		}
 		for(i = 0; i < tab.size(); i++)
 		{
@@ -180,6 +182,7 @@ void	ClassParsingClientRequest::request_ready( void )
 	}
 	responding = 1;
 	display_cpcr();
+	return (0);
 }
 
 RP15::ClassParsingClientRequest(const RP15 &arg){
