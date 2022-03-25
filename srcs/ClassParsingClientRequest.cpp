@@ -8,10 +8,7 @@ bool	RP15::is_ready( void ){
 	if (parse_data.size() < 4)
 		return (0);
 	if (parse_data[0] == 'P')
-	{
-		std::cout << "Ca passe ici au moins???? " << extract_body_check() << " \n\n\n";
 		return (extract_body_check());
-	}
 	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
 		return (1);
 	return (0);
