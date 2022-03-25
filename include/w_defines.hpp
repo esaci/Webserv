@@ -2,7 +2,7 @@
 # define W_DEFINES_HPP
 
 #	define SERVER_PORT 18000
-#	define MAXLINE 10
+#	define MAXLINE 1000
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
 #	define ROOT "/var/www/webserv"
@@ -20,6 +20,7 @@
 #	define CT_DATA	std::map<std::string, std::string>
 #	define R_DATA	std::map<int, RP15>
 #	define RP15 ClassParsingClientRequest
+// sudo apt-get install -y php-cgi
 #	define CGI "/usr/lib/cgi-bin/php" 
 
 #endif

@@ -15,13 +15,31 @@ int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 	(void)it;
 }
 
+int	server_data::handle_line_request(){
+	int	i = 0;
+
+	for(; i < n && (recvline[i] == '\n' || recvline[i] == '\r'); i++)
+		;
+	if (i == n)
+		return (0);
+	tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base() + i, recvline.begin().base() + n);
+}
+
 int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 {
-	int	n;
-	
+	int		n;
+
 	recvline.clear();
 	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
-		tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
+		{
+			if (!tab_request[it->fd].parse_data.size())
+			{
+				if (!handle_line_request())
+					return (0);
+			}
+			else
+				tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
+		}
 	if (n < 0)
 		return (print_return("Error: recv", 1));
 	if (tab_request[it->fd].is_ready())

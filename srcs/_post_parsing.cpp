@@ -11,12 +11,8 @@ size_t		RP15::extract_body_check( void ){
 		for(; it < parse_data.end() && *it != '\n'; it++)
 			i++;
 		if (i == 1 && it != parse_data.end())
-		{
-			std::cout << "extract_body_check va renvoyer un line " << line << std::endl;
 			return (line);
-		}
 	}
-	std::cout << "extract_body_check va renvoyer un 0 " << line << std::endl;
 	return (0);
 }
 

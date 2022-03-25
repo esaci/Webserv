@@ -1,5 +1,5 @@
 #include "../include/w_library.hpp"
-// DANS POST, EXTRACT BODY, TU PEUX RETIRER LE CONTAINER ET UTILISER UNIQUEMENT UN INT
+// handle_line_request il faut que mettre en palce le system pour renvoye la page d'erreurcorrespondant a l'erreur si jamais la request line est pas au bon for,mat
 
 int main (int ac, char *av[]){
 	std::fstream	file;
