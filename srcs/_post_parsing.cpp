@@ -1,35 +1,38 @@
 #include "../include/w_library.hpp"
 
 size_t		RP15::extract_body_check( void ){
-	size_t	line = 0;
-	DATA	tmp_data;
+	size_t	line = 0, i;
 
 	for(DATA::iterator it = parse_data.begin(); it != parse_data.end(); it++, line++)
 	{
-		tmp_data.clear();
+		i = 0;
 		for(;it < parse_data.end() && (*it == '\n'); it++)
 			;
 		for(; it < parse_data.end() && *it != '\n'; it++)
-			tmp_data.push_back(*it);
-		if (tmp_data.size() == 1)
+			i++;
+		if (i == 1 && it != parse_data.end())
 			return (line);
 	}
 	return (0);
 }
 
-int			_post_read_cl(std::vector<pollfd>::iterator it){
-		recvline.clear();
+int			server_data::_post_read_cl(std::vector<pollfd>::iterator it){
+	int	n;
+
+	recvline.clear();
 	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
-		tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
+		tab_request[it->fd].r_body_buffer.insert(tab_request[it->fd].r_body_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
+	if (compare_size_cl(tab_request[it->fd].r_body_buffer.size(), tab_request[it->fd].content_length))
+		return (-10);
+	return (0);
 }
 
-int			_post_read_ch(std::vector<pollfd>::iterator it){
-	
+int			server_data::_post_read_ch(std::vector<pollfd>::iterator it){
+	return (-10);
+	(void)it;
 }
 
 int			server_data::_post_server_read(std::vector<pollfd>::iterator it){
-	int n;
-
 	if (tab_request[it->fd].content_length.size())
 		return (_post_read_cl(it));
 	return (_post_read_ch(it));

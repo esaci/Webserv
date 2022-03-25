@@ -4,16 +4,12 @@ RP15::ClassParsingClientRequest( void ): responding(0){}
 
 RP15::~RP15	( void ){}
 
-void RP15::insert(const DATA &arg){
-	std::cout << parse_data << "\n--------------------------------------------" << std::endl;
-	parse_data.insert(parse_data.end(), arg.begin(), arg.end());
-}
-
 bool	RP15::is_ready( void ){
 	if (parse_data.size() < 4)
 		return (0);
 	if (parse_data[0] == 'P')
 	{
+		std::cout << "Ca passe ici au moins???? " << extract_body_check() << " \n\n\n";
 		return (extract_body_check());
 	}
 	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')

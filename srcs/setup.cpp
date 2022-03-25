@@ -17,7 +17,7 @@ int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 }
 
 int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
-	int n;
+	int n = 0;
 	
 	if (!(it < tab_poll.end()) || !(it->revents & POLLIN) || tab_request[it->fd].responding)
 		return (0);

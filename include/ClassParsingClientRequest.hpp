@@ -47,7 +47,6 @@ class RP15
 		bool	is_ready( void );
 		size_t	extract_body_check( void );
 		void	display_cpcr( void );
-		void	insert(const DATA &arg);
 	private:
 		RP15	(const DATA &arg);
 };

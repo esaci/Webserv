@@ -43,3 +43,9 @@ size_t	hexa_to_dec(DATA &buff){
 	buff.pop_back();
 	return (decimal_value);
 }
+
+bool	compare_size_cl(size_t len, DATA &buff){
+	size_t buff_len = std::strtol((char*)buff.begin().base(), NULL, 10);
+	std::cout << "On a len puis buff_len" << len << " " << buff_len << std::endl;
+	return (len == buff_len);
+}

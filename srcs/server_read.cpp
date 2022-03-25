@@ -15,8 +15,6 @@ int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 	(void)it;
 }
 
-// Pour linstant je met un gros read, mais il va falloir faire en sorte que lorsque ca read pas jusqua double \r\n\r\n
-// ca stock juste/ajoute dans le vector de la class
 int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 {
 	int	n;
@@ -26,8 +24,9 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 		tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
 	if (n < 0)
 		return (print_return("Error: recv", 1));
-	if (recvline.size() && tab_request[it->fd].is_ready())
+	if (tab_request[it->fd].is_ready())
 	{
+		std::cout << "C RDY\n";
 		if (!tab_request[it->fd].request_ready())
 			return (-10);
 	}

@@ -1,4 +1,5 @@
 #include "../include/w_library.hpp"
+// DANS POST, EXTRACT BODY, TU PEUX RETIRER LE CONTAINER ET UTILISER UNIQUEMENT UN INT
 
 int main (int ac, char *av[]){
 	std::fstream	file;
