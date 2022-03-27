@@ -1,6 +1,6 @@
 #include "../include/w_library.hpp"
 
-RP15::ClassParsingClientRequest( void ): responding(0), return_error(0){}
+RP15::ClassParsingClientRequest( void ): responding(0), return_error(0), r_l_v(false){}
 
 RP15::~RP15	( void ){}
 
@@ -179,39 +179,63 @@ int	ClassParsingClientRequest::request_ready( void )
 
 RP15::ClassParsingClientRequest(const RP15 &arg){
 	responding = arg.responding;
+	return_error = arg.return_error;
+	r_l_v = arg.r_l_v;
+	r_buffer = arg.r_buffer;
+	r_body_buffer = arg.r_body_buffer;
 	parse_data = arg.parse_data;
 	method = arg.method;
 	ressource = arg.ressource;
 	protocol = arg.protocol;
 	host = arg.host;
+	cache_control = arg.cache_control;
 	connection = arg.connection;
 	sec_ch_ua = arg.sec_ch_ua;
 	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
-	user_agent = arg.sec_ch_ua_mobile;
 	sec_ch_ua_platform = arg.sec_ch_ua_platform;
+	upgrade_insecure_requests = arg.upgrade_insecure_requests;
+	user_agent = arg.user_agent;
 	accept = arg.accept;
 	sec_fetch_site = arg.sec_fetch_site;
 	sec_fetch_mode = arg.sec_fetch_mode;
 	sec_fetch_dest = arg.sec_fetch_dest;
+	accept_encoding = arg.accept_encoding;
+	accept_language = arg.accept_language;
 	referer = arg.referer;
+	content_length = arg.content_length;
+	transfer_encoding = arg.transfer_encoding;
+	tmp_data = arg.tmp_data;
+	tmp_compare = arg.tmp_compare;
 }
 RP15	RP15::operator=(const RP15 &arg){
 	responding = arg.responding;
+	return_error = arg.return_error;
+	r_l_v = arg.r_l_v;
+	r_buffer = arg.r_buffer;
+	r_body_buffer = arg.r_body_buffer;
 	parse_data = arg.parse_data;
 	method = arg.method;
 	ressource = arg.ressource;
 	protocol = arg.protocol;
 	host = arg.host;
+	cache_control = arg.cache_control;
 	connection = arg.connection;
 	sec_ch_ua = arg.sec_ch_ua;
 	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
-	user_agent = arg.sec_ch_ua_mobile;
 	sec_ch_ua_platform = arg.sec_ch_ua_platform;
+	upgrade_insecure_requests = arg.upgrade_insecure_requests;
+	user_agent = arg.user_agent;
 	accept = arg.accept;
 	sec_fetch_site = arg.sec_fetch_site;
 	sec_fetch_mode = arg.sec_fetch_mode;
 	sec_fetch_dest = arg.sec_fetch_dest;
+	accept_encoding = arg.accept_encoding;
+	accept_language = arg.accept_language;
 	referer = arg.referer;
+	content_length = arg.content_length;
+	transfer_encoding = arg.transfer_encoding;
+	tmp_data = arg.tmp_data;
+	tmp_compare = arg.tmp_compare;
 	return (*this);
 }
 

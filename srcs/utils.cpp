@@ -45,7 +45,8 @@ size_t	hexa_to_dec(DATA &buff){
 }
 
 bool	compare_size_cl(size_t len, DATA &buff){
+	buff.push_back('\0');
 	size_t buff_len = std::strtol((char*)buff.begin().base(), NULL, 10);
-	
+	buff.pop_back();
 	return (len == buff_len);
 }

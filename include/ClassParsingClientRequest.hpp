@@ -14,6 +14,8 @@ class RP15
 {
 	public:
 		int		responding;
+		int		return_error;
+		bool	r_l_v;
 		DATA	r_buffer;
 		DATA	r_body_buffer;
 		DATA	parse_data;
@@ -37,8 +39,8 @@ class RP15
 		DATA	referer;
 		DATA	content_length;
 		DATA	transfer_encoding;
-		DATA	tmp_data, tmp_compare;
-		int		return_error;
+		DATA	tmp_data;
+		DATA	tmp_compare;
 	public:
 		RP15	( void );
 		~RP15	( void );
