@@ -12,6 +12,7 @@
 #	include <stdarg.h>
 #	include <errno.h>
 #	include <fcntl.h>
+#	include <dirent.h>
 #	include <sys/time.h>
 #	include <sys/ioctl.h>
 #	include <netdb.h>

@@ -88,10 +88,13 @@ int	server_data::_server_read(std::vector<struct pollfd>::iterator it)
 
 int	server_data::_set_file(int clientfd){
 	int filefd;
-
+	DIR *folder;
 	tab_request[clientfd].ressource.push_back('\0');
+	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
+		std::cout << "BATMAN\n\n\n";
 	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 	tab_request[clientfd].ressource.pop_back();
+	// std::cout << "ALLO " << filefd << " " << tab_request[clientfd].ressource << std::endl;
 	if (filefd < 0)
 		return (1);
 	files_to_clients[filefd] = clientfd;
