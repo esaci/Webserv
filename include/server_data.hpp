@@ -32,7 +32,7 @@
 			std::string		display_code(int n_code);
 			int				_server( void );
 			int				_server_read(std::vector<struct pollfd>::iterator it);
-			int				handle_line_request();
+			int				handle_line_request(std::vector<struct pollfd>::iterator it, size_t n);
 			int				_new_client(std::vector<struct pollfd>::iterator it);
 			int				_read_client(std::vector<pollfd>::iterator it);
 			int				_post_server_read(std::vector<pollfd>::iterator it);
@@ -44,6 +44,7 @@
 			void			_table_poll_init( void );
 			int				_get_index(int clientfd);
 			int				_get(int clientfd);
+			int				_get_error(int clientfd);
 			int				_get_error_400(int clientfd);
 			int				_get_error_404(int clientfd);
 			void			_entity(int code_n, int clientfd);

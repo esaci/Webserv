@@ -1,6 +1,6 @@
 #include "../include/w_library.hpp"
 
-RP15::ClassParsingClientRequest( void ): responding(0){}
+RP15::ClassParsingClientRequest( void ): responding(0), return_error(0){}
 
 RP15::~RP15	( void ){}
 
@@ -58,7 +58,6 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 int	ClassParsingClientRequest::request_ready( void )
 {
 	// std::cout << parse_data;
-	DATA	tmp_data, tmp_compare;
 	size_t	line = 0, i = 0, p = 0;
 	std::vector<DATA>	tab;
 

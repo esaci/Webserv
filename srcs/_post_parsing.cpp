@@ -1,5 +1,5 @@
 #include "../include/w_library.hpp"
-
+// curl -v -d 'salut le monde' -H "Transfer-Encoding: chunked" -X POST localhost:80/uploads
 size_t		RP15::extract_body_check( void ){
 	size_t	line = 0, i;
 

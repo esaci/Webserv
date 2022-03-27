@@ -24,6 +24,20 @@ int	server_data::_get(int clientfd){
 	return (_send(clientfd, 200));
 }
 
+int	server_data::_get_error(int clientfd){
+	if (tab_request[clientfd].responding < 2)
+	{
+		if (tab_request[clientfd].return_error == 404)
+			tab_request[clientfd].ressource = _data_init(ERRORFILE_404);
+		else
+			tab_request[clientfd].ressource = _data_init(ERRORFILE_400);
+		if (_set_file(clientfd))
+			return (print_return("ERROR READ DU FICHIER _GET_ERROR", 1));
+		return (0);
+	}
+	return (_send(clientfd, 400));
+}
+
 int	server_data::_get_error_400(int clientfd){
 	// std::cout << ERRORFILE_400 << " est l'endroit ou jvais chercher lindex\n";
 	if (tab_request[clientfd].responding < 2)

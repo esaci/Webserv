@@ -8,6 +8,7 @@ SRCS_DIR = ./srcs/
 SRCS =	main.cpp \
 		server.cpp \
 		server_read.cpp \
+		fill_request.cpp \
 		response.cpp \
 		p_conf.cpp \
 		ClassParsingClientRequest.cpp \

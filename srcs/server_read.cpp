@@ -14,15 +14,52 @@ int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 	return (0);
 	(void)it;
 }
+int	server_data::handle_line_request(std::vector<struct pollfd>::iterator it, size_t n){
+	size_t	i = 0, step3 = 0;
+	int	step = 0;
 
-int	server_data::handle_line_request(){
-	int	i = 0;
-
-	for(; i < n && (recvline[i] == '\n' || recvline[i] == '\r'); i++)
-		;
-	if (i == n)
+	if (!tab_request[it->fd].parse_data.size())
+	{
+		for(; i < n && (recvline[i] == '\n' || recvline[i] == '\r'); i++)
+			;
+		if (i == n)
+			return (1);
+		tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base() + i, recvline.begin().base() + n);
 		return (0);
-	tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base() + i, recvline.begin().base() + n);
+	}
+	for (i = 0; i < tab_request[it->fd].parse_data.size() && tab_request[it->fd].parse_data[i] != '\n'; i++)
+	{
+		if (!step && (tab_request[it->fd].parse_data[i] < 'A' || tab_request[it->fd].parse_data[i] > 'Z'))
+			return (tab_request[it->fd].fill_request(400));
+		if (step == 1)
+		{
+			if (tab_request[it->fd].parse_data[i] != '/')
+				return (tab_request[it->fd].fill_request(400));
+			step++;
+		}
+		if (step == 3)
+			step3 = i;
+		if (tab_request[it->fd].parse_data[i] == ' ')
+		{
+			for (;i < tab_request[it->fd].parse_data.size() && tab_request[it->fd].parse_data[i] == ' '; i++)
+				;
+			if (i < tab_request[it->fd].parse_data.size())
+				step++;
+		}
+	}
+	if (!i || tab_request[it->fd].tmp_data.size() || tab_request[it->fd].parse_data[i] != '\n')
+	{
+		tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
+		return (0);
+	}
+	if (step != 3)
+		return (tab_request[it->fd].fill_request(400));
+	tab_request[it->fd].tmp_data.assign(tab_request[it->fd].parse_data.begin() + i, tab_request[it->fd].parse_data.end());
+
+	if (tab_request[it->fd].tmp_data != _data_init("HTTP/1.1") && tab_request[it->fd].tmp_data != _data_init("HTTP/1.1"))
+		return (tab_request[it->fd].fill_request(400));
+	tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
+	return (0);
 }
 
 int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
@@ -31,15 +68,7 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 
 	recvline.clear();
 	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
-		{
-			if (!tab_request[it->fd].parse_data.size())
-			{
-				if (!handle_line_request())
-					return (0);
-			}
-			else
-				tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
-		}
+		handle_line_request(it, n);
 	if (n < 0)
 		return (print_return("Error: recv", 1));
 	if (tab_request[it->fd].is_ready())

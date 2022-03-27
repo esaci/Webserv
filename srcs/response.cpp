@@ -8,8 +8,9 @@ int	server_data::_response(int clientfd)
 		return (0);
 	if (tab_request[clientfd].method == _data_init("GET"))
 	{
-		// Il faudra rajouter la condition si on prend en ressource lindex directement
-		// Faudra ameliorer ce if
+		// Ca renvoie que deux type d'error pour linstant
+		if (tab_request[clientfd].return_error)
+			return (_get_error(clientfd));
 		if ((_data_init("/") == tab_request[clientfd].ressource) || (_data_init(TMPINDEX) == tab_request[clientfd].ressource))
 			return (_get_index(clientfd));
 		return (_get(clientfd));

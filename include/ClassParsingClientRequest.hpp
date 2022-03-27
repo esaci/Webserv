@@ -37,7 +37,8 @@ class RP15
 		DATA	referer;
 		DATA	content_length;
 		DATA	transfer_encoding;
-
+		DATA	tmp_data, tmp_compare;
+		int		return_error;
 	public:
 		RP15	( void );
 		~RP15	( void );
@@ -48,6 +49,7 @@ class RP15
 		bool	is_ready( void );
 		size_t	extract_body_check( void );
 		void	display_cpcr( void );
+		int		fill_request(int code);
 	private:
 		RP15	(const DATA &arg);
 };
