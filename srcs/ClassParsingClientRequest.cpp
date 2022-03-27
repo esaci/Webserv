@@ -11,6 +11,8 @@ bool	RP15::is_ready( void ){
 		return (extract_body_check());
 	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
 		return (1);
+	if (*((parse_data.end() - 3)) == '\n')
+		std::cout << "tentative de is_ready\n";
 	return (0);
 }
 

@@ -25,24 +25,24 @@ int	server_data::handle_line_request(std::vector<struct pollfd>::iterator it, si
 		if (i == n)
 			return (1);
 		tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base() + i, recvline.begin().base() + n);
-		return (0);
 	}
 	for (i = 0; i < tab_request[it->fd].parse_data.size() && tab_request[it->fd].parse_data[i] != '\n'; i++)
 	{
-		if (!step && (tab_request[it->fd].parse_data[i] < 'A' || tab_request[it->fd].parse_data[i] > 'Z'))
-			return (tab_request[it->fd].fill_request(400));
+		if (!step && (tab_request[it->fd].parse_data[i] < 'A' || tab_request[it->fd].parse_data[i] > 'Z') && (!i || tab_request[it->fd].parse_data[i] != ' '))
+			return (tab_request[it->fd].fill_request(401));
 		if (step == 1)
 		{
 			if (tab_request[it->fd].parse_data[i] != '/')
-				return (tab_request[it->fd].fill_request(400));
+				return (tab_request[it->fd].fill_request(402));
 			step++;
 		}
-		if (step == 3)
+		if (step == 3 && !step3)
 			step3 = i;
 		if (tab_request[it->fd].parse_data[i] == ' ')
 		{
-			for (;i < tab_request[it->fd].parse_data.size() && tab_request[it->fd].parse_data[i] == ' '; i++)
+			for (;i < tab_request[it->fd].parse_data.size() && tab_request[it->fd].parse_data[i] == ' ' && tab_request[it->fd].parse_data[i] != '\n'; i++)
 				;
+			i--;
 			if (i < tab_request[it->fd].parse_data.size())
 				step++;
 		}
@@ -53,11 +53,12 @@ int	server_data::handle_line_request(std::vector<struct pollfd>::iterator it, si
 		return (0);
 	}
 	if (step != 3)
-		return (tab_request[it->fd].fill_request(400));
-	tab_request[it->fd].tmp_data.assign(tab_request[it->fd].parse_data.begin() + i, tab_request[it->fd].parse_data.end());
-
-	if (tab_request[it->fd].tmp_data != _data_init("HTTP/1.1") && tab_request[it->fd].tmp_data != _data_init("HTTP/1.1"))
-		return (tab_request[it->fd].fill_request(400));
+		return (tab_request[it->fd].fill_request(403));
+	tab_request[it->fd].tmp_data.assign(tab_request[it->fd].parse_data.begin() + step3, tab_request[it->fd].parse_data.begin() + i - 1);
+	// tab_request[it->fd].tmp_data.push_back('\0');
+	std::cout << "|" << tab_request[it->fd].tmp_data << "|" << std::endl;
+	if (tab_request[it->fd].tmp_data != _data_init("HTTP/1.1") && tab_request[it->fd].tmp_data != _data_init("HTTP/1.0"))
+		return (tab_request[it->fd].fill_request(404));
 	tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
 	return (0);
 }
