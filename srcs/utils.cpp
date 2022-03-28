@@ -42,6 +42,10 @@ void	dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value)
 }
 
 DATA	retire_root(DATA &buff){
+	if (buff.size() < strlen(ROOT))
+		return (buff);
+	DATA tmp = _data_init(ROOT);
+	for(DATA::iterator it = buff.begin(), itmp = ROOT; it != buff.end() && itmp != ROOT; )
 }
 
 
