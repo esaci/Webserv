@@ -16,7 +16,6 @@ int	server_data::_get(int clientfd){
 	if (tab_request[clientfd].responding < 2)
 	{
 		tab_request[clientfd].ressource = _link_root_init(ROOT, tab_request[clientfd].ressource);
-		std::cout << "on passe bien par la pour " << tab_request[clientfd].ressource <<std::endl;
 		if (_set_file(clientfd))
 			return (_get_error_404(clientfd));
 		return (0);

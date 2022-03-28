@@ -15,6 +15,12 @@ void	_data_begin(DATA &buff, std::string arg)
 	buff.insert(buff.begin(), arg.begin(), arg.end());
 }
 
+void	_data_end(DATA &buff, std::string arg)
+{
+	buff.insert(buff.end(), arg.begin(), arg.end());
+}
+
+
 int	print_return(std::string ptr, int value)
 {
 	std::cerr << ptr << std::endl;

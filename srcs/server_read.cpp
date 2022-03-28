@@ -86,15 +86,40 @@ int	server_data::_server_read(std::vector<struct pollfd>::iterator it)
 	return (_read_client(it));
 }
 
+int	server_data::_set_folder(DIR	*folder, int clientfd)
+{
+	tab_request[clientfd].r_buffer = _data_init("<html>\n<head><title>WEBSERV Index of /</title></head>\n<body>\n<h1>Index of /</h1><hr><pre>\n");
+	for	(struct dirent	*tmp_f = readdir(folder); tmp_f; tmp_f = readdir(folder))
+	{
+		_data_end(tab_request[clientfd].r_buffer, "<a href=\"");
+		_data_end(tab_request[clientfd].r_buffer, tmp_f->d_name);
+		if (tmp_f->d_type == DT_DIR)
+			_data_end(tab_request[clientfd].r_buffer, "/");
+		_data_end(tab_request[clientfd].r_buffer, "\">");
+		_data_end(tab_request[clientfd].r_buffer, tmp_f->d_name);
+		if (tmp_f->d_type == DT_DIR)
+			_data_end(tab_request[clientfd].r_buffer, "/");
+		_data_end(tab_request[clientfd].r_buffer, "</a>\n");
+	}
+	_data_end(tab_request[clientfd].r_buffer, "</pre><hr></body>\n</html>");
+	_data_end(tab_request[clientfd].r_buffer, "\0");
+	std::cout << tab_request[clientfd].r_buffer << std::endl;
+	tab_request[clientfd].ressource.pop_back();
+	tab_request[clientfd].responding = 3;
+	closedir(folder);
+	return (0);
+}
+
 int	server_data::_set_file(int clientfd){
 	int filefd;
 	DIR *folder;
+	
 	tab_request[clientfd].ressource.push_back('\0');
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
-		std::cout << "BATMAN\n\n\n";
-	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
+		return (_set_folder(folder, clientfd));
+	else
+		filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 	tab_request[clientfd].ressource.pop_back();
-	// std::cout << "ALLO " << filefd << " " << tab_request[clientfd].ressource << std::endl;
 	if (filefd < 0)
 		return (1);
 	files_to_clients[filefd] = clientfd;
