@@ -1,11 +1,16 @@
 NAME = webserv
 
-CXX = c++
-CXX_FLAGS = -Wextra -Wall -Werror -std=c++98
+CC = clang++
 
+CFLAGS = --std=c++98 -Wall -Wextra -Werror #-g -g3 -fsanitize=address
 
-SRCS_DIR = ./srcs/
-SRCS =	main.cpp \
+HEADER =	include/ClassParsingClientRequest.hpp \
+			include/p_conf.hpp \
+			include/server_data.hpp \
+			include/w_defines.hpp \
+			include/w_library.hpp \
+
+SRC = 	main.cpp \
 		server.cpp \
 		server_read.cpp \
 		response.cpp \
@@ -17,29 +22,41 @@ SRCS =	main.cpp \
 		get_response.cpp \
 		utils.cpp	\
 		setup.cpp	\
-		send_response.cpp
+		send_response.c
 
+SRCS_DIR = ./srcs/
 OBJS_DIR = ./objects/
-OBJ = $(SRCS:.cpp=.o)
+OBJ = $(SRC:.cpp=.o)
 OBJS = $(addprefix $(OBJS_DIR), $(OBJ))
-DEP = $(OBJS:.o=.d)
-$(NAME) : $(OBJS)
-	$(CXX) $(CXX_FLAGS) $^ -o $@
-
--include $(DEP)
 
 $(OBJS_DIR)%.o : $(SRCS_DIR)%.cpp
-	@mkdir -p $(@D)
-	$(CXX) $(CXX_FLAGS) -MMD -o $@ -c $<
-all : $(NAME)
-	
+			@mkdir -p $(@D)
+			@$(ECHO)
+			@echo "\033[0;32mCompiling... \033[0m"  $<
+			$(CC) $(CFLAGS) -c -o $@ $<	
+			@echo "\033[A\033[A"
+                
+all: $(NAME)
 
-clean :
-	rm -rf $(OBJS_DIR)
+$(NAME): ${OBJS} ${HEADER}
+		@echo "\n\n\033[0;33mLinking...\033[0m\n"
+		$(CC) ${CFLAGS} $(OBJS) -o $(NAME)
+		@echo "\n\033[0;32mDONE\033[0m"
 
-fclean : clean
-	rm -rf $(NAME)
+install: sudo apt-get install php-cgi
 
-re : fclean all
+test: re && ./${NAME}
 
-.PHONY : all clean fclean re
+clean:
+		@echo "\033[0;31mWipeout..."
+		rm -rf $(OBJS)
+		@echo "\033[0m"
+
+fclean: clean
+		@echo "\033[0;31mRemoving executable..."
+		rm -f $(NAME)
+		@echo "\033[0m"
+
+re: fclean all
+
+.PHONY: all clean fclean re
