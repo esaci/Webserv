@@ -178,6 +178,7 @@ int	ClassParsingClientRequest::request_ready( void )
 }
 
 RP15::ClassParsingClientRequest(const RP15 &arg){
+	redirection = arg.redirection;
 	responding = arg.responding;
 	return_error = arg.return_error;
 	r_l_v = arg.r_l_v;
@@ -208,6 +209,7 @@ RP15::ClassParsingClientRequest(const RP15 &arg){
 	tmp_compare = arg.tmp_compare;
 }
 RP15	RP15::operator=(const RP15 &arg){
+	redirection = arg.redirection;
 	responding = arg.responding;
 	return_error = arg.return_error;
 	r_l_v = arg.r_l_v;

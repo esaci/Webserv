@@ -88,6 +88,14 @@ int	server_data::_server_read(std::vector<struct pollfd>::iterator it)
 
 int	server_data::_set_folder(DIR	*folder, int clientfd)
 {
+	if (*(tab_request[clientfd].ressource.end() - 2) != '/')
+	{
+		tab_request[clientfd].return_error = 301;
+		tab_request[clientfd].redirection.reserve(tab_request[clientfd].ressource.size() + 2);
+		tab_request[clientfd].redirection = retire_root(tab_request[clientfd].ressource); 
+		tab_request[clientfd].redirection.push_back('/');
+		return (0);
+	}
 	tab_request[clientfd].r_buffer = _data_init("<html>\n<head><title>WEBSERV Index of /</title></head>\n<body>\n<h1>Index of /</h1><hr><pre>\n");
 	for	(struct dirent	*tmp_f = readdir(folder); tmp_f; tmp_f = readdir(folder))
 	{

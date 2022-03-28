@@ -9,6 +9,7 @@
 #	define TMPINDEX "/var/www/webserv/index.html"
 #	define TMPFAVICO "/var/www/webserv/favicon.ico"
 #	define ERRORFILE_400 "./files_system/Bad_Request.html"
+#	define ERRORFILE_301 "./files_system/Moved_Permanently.html"
 #	define ERRORFILE_404 "./files_system/Not_Found.html"
 #	define METHOD	"GET"
 #	define TARGET	"/"

@@ -28,13 +28,18 @@ int	server_data::_get_error(int clientfd){
 	{
 		if (tab_request[clientfd].return_error == 404)
 			tab_request[clientfd].ressource = _data_init(ERRORFILE_404);
+		else if (tab_request[clientfd].return_error == 301)
+			tab_request[clientfd].ressource = _data_init(ERRORFILE_301);
 		else
+		{
+			tab_request[clientfd].return_error = 400;
 			tab_request[clientfd].ressource = _data_init(ERRORFILE_400);
+		}
 		if (_set_file(clientfd))
 			return (print_return("ERROR OPEN DU FICHIER _GET_ERROR", 1));
 		return (0);
 	}
-	return (_send(clientfd, 400));
+	return (_send(clientfd, tab_request[clientfd].return_error));
 }
 
 int	server_data::_get_error_400(int clientfd){

@@ -41,6 +41,10 @@ void	dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value)
 	buff.insert(it, res.begin(), res.end());
 }
 
+DATA	retire_root(DATA &buff){
+}
+
+
 size_t	hexa_to_dec(DATA &buff){
 	size_t decimal_value;
 
