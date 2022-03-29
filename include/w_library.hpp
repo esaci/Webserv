@@ -46,4 +46,9 @@ bool			compare_size_cl(size_t len, DATA &buff);
 DATA			retire_root(DATA &buff);
 
 
+//for cgi with tests purpose
+int basic_cgi(void);
+
+
+
 # endif

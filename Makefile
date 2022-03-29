@@ -2,7 +2,7 @@ NAME = webserv
 
 CC = c++
 
-CFLAGS = --std=c++98 -Wall -Wextra -Werror #-g -g3 -fsanitize=address
+CFLAGS = --std=c++98 -Wall -Wextra -Werror  -g3 #-g -fsanitize=address
 
 HEADER =	include/ClassParsingClientRequest.hpp \
 			include/p_conf.hpp \
@@ -23,8 +23,9 @@ SRC = 	main.cpp \
 		get_response.cpp \
 		utils.cpp	\
 		setup.cpp	\
+		send_response.cpp \
+		cgi.cpp \
 		set.cpp		\
-		send_response.cpp
 
 SRCS_DIR = ./srcs/
 OBJS_DIR = ./objects/
@@ -45,7 +46,7 @@ $(NAME): ${OBJS} ${HEADER}
 		$(CC) ${CFLAGS} $(OBJS) -o $(NAME)
 		@echo "\n\033[0;32mDONE\033[0m"
 
-install: sudo apt-get install php-cgi
+install: sudo apt-get install-y php-cgi
 
 test: re && ./${NAME}
 
