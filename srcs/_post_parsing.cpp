@@ -16,26 +16,29 @@ size_t		RP15::extract_body_check( void ){
 	return (0);
 }
 
-int			_post_read_cl(std::vector<pollfd>::iterator it){
-	(void)it;
-	return 0;
-		// recvline.clear();
-	// if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
-		// tab_request[it->fd].parse_data.insert(tab_request[it->fd].parse_data.end(), recvline.begin().base(), recvline.begin().base() + n);
+int			server_data::_post_read_cl(std::vector<pollfd>::iterator it){
+	int	n;
+
+	recvline.clear();
+	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
+		tab_request[it->fd].r_body_buffer.insert(tab_request[it->fd].r_body_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
+	if (compare_size_cl(tab_request[it->fd].r_body_buffer.size(), tab_request[it->fd].content_length))
+	{
+		tab_request[it->fd].responding = 1;
+		tab_request[it->fd].display_cpcr();
+		return (-10);
+	}
+	return (0);
 }
 
-int			_post_read_ch(std::vector<pollfd>::iterator it){
+int			server_data::_post_read_ch(std::vector<pollfd>::iterator it){
+	return (-10);
 	(void)it;
-	return 0;
 }
 
 int			server_data::_post_server_read(std::vector<pollfd>::iterator it){
-	// int n;
-
-	// if (tab_request[it->fd].content_length.size())
-	// 	return (_post_read_cl(it));
-	// return (_post_read_ch(it));
-	(void)it;
-	return 0;
+	if (tab_request[it->fd].content_length.size())
+		return (_post_read_cl(it));
+	return (_post_read_ch(it));
 }
 
