@@ -44,7 +44,7 @@ void	RP15::clear_ressource( void ){
 	size_t	pos_ressource = 0;
 	size_t	pos_protocol = 0;
 	
-	for (DATA::iterator it = ressource.begin(); it < ressource.end(); it++)
+	for (DATA::iterator it = ressource.begin(); it < ressource.end() && *it != '\n'; it++)
 	{
 		if (*it == '/')
 		{
