@@ -1,6 +1,6 @@
 NAME = webserv
 
-CC = clang++
+CC = c++
 
 CFLAGS = --std=c++98 -Wall -Wextra -Werror #-g -g3 -fsanitize=address
 
@@ -23,7 +23,7 @@ SRC = 	main.cpp \
 		get_response.cpp \
 		utils.cpp	\
 		setup.cpp	\
-		send_response.c
+		send_response.cpp
 
 SRCS_DIR = ./srcs/
 OBJS_DIR = ./objects/

@@ -5,14 +5,16 @@ void	server_data::_entity(int code_n, int clientfd){
 	std::stringstream out;
 
 	out << "HTTP/1.1 "<< display_code(code_n) << "\r\n";
-	out << "Server: webserv/1.0\n";
+	out << "Server: webserv/1.0\r\n";
 	if (content_type[0])
-		out << "Content-Type: " << content_type << "\n";
+		out << "Content-Type: " << content_type << "\r\n";
+	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\r\n";
 	if (code_n == 301)
-		out << "Location: " << "localhost: " << SERVER_PORT << "/" << tab_request[clientfd].redirection << " \n";
-	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\n";
-	out << "Connection: close\n";
-	out << "Accept-Ranges: bytes\r\n\r\n";
+		out << "Location: " << "http://127.0.0.1:" << SERVER_PORT << tab_request[clientfd].redirection << " \r\n";
+	out << "Connection: close\r\n";
+	if (code_n != 301)
+		out << "Accept-Ranges: bytes\r\n";
+	out << "\r\n";
 	_data_begin(tab_request[clientfd].r_buffer, out.str());
 }
 
@@ -21,13 +23,14 @@ void	server_data::_entity_no_accept(int code_n, int clientfd){
 	std::string content_type = _entity_ctype(clientfd); 
 	
 	out << "HTTP/1.1 "<< display_code(code_n) << "\r\n";
-	out << "Server: webserv/1.0\n";
+	out << "Server: webserv/1.0\r\n";
 	if (content_type[0])
-		out << "Content-Type: " << content_type << "\n";
+		out << "Content-Type: " << content_type << "\r\n";
+	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\r\n";
 	if (code_n == 301)
-		out << "Location: " << tab_request[clientfd].redirection << " \n";
-	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\n";
-	out << "Connection: close\r\n\r\n";
+		out << "Location: " << "http://127.0.0.1:" << SERVER_PORT << tab_request[clientfd].redirection << " \r\n";
+	out << "Connection: close\r\n";
+	out << "\r\n";
 	_data_begin(tab_request[clientfd].r_buffer, out.str());
 }
 
