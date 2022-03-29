@@ -2,7 +2,7 @@ NAME = webserv
 
 CC = clang++
 
-CFLAGS = --std=c++98 -Wall -Wextra -Werror #-g -g3 -fsanitize=address
+CFLAGS = --std=c++98 -Wall -Wextra -Werror  -g3 #-g -fsanitize=address
 
 HEADER =	include/ClassParsingClientRequest.hpp \
 			include/p_conf.hpp \
@@ -13,6 +13,7 @@ HEADER =	include/ClassParsingClientRequest.hpp \
 SRC = 	main.cpp \
 		server.cpp \
 		server_read.cpp \
+		fill_request.cpp \
 		response.cpp \
 		p_conf.cpp \
 		ClassParsingClientRequest.cpp \
@@ -22,7 +23,7 @@ SRC = 	main.cpp \
 		get_response.cpp \
 		utils.cpp	\
 		setup.cpp	\
-		send_response.c
+		send_response.cpp
 
 SRCS_DIR = ./srcs/
 OBJS_DIR = ./objects/

@@ -15,6 +15,12 @@ void	_data_begin(DATA &buff, std::string arg)
 	buff.insert(buff.begin(), arg.begin(), arg.end());
 }
 
+void	_data_end(DATA &buff, std::string arg)
+{
+	buff.insert(buff.end(), arg.begin(), arg.end());
+}
+
+
 int	print_return(std::string ptr, int value)
 {
 	std::cerr << ptr << std::endl;
@@ -35,6 +41,15 @@ void	dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value)
 	buff.insert(it, res.begin(), res.end());
 }
 
+DATA	retire_root(DATA &buff){
+	if (buff.size() < strlen(ROOT))
+		return (buff);
+	DATA tmp = _data_init(ROOT);
+	// for(DATA::iterator it = buff.begin(), itmp = ROOT; it != buff.end() && itmp != ROOT; )
+	return buff;
+}
+
+
 size_t	hexa_to_dec(DATA &buff){
 	size_t decimal_value;
 
@@ -42,4 +57,11 @@ size_t	hexa_to_dec(DATA &buff){
 	decimal_value = std::strtol((char*)buff.begin().base(), NULL, 16);
 	buff.pop_back();
 	return (decimal_value);
+}
+
+bool	compare_size_cl(size_t len, DATA &buff){
+	buff.push_back('\0');
+	size_t buff_len = std::strtol((char*)buff.begin().base(), NULL, 10);
+	buff.pop_back();
+	return (len == buff_len);
 }

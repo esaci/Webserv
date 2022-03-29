@@ -14,6 +14,9 @@ class RP15
 {
 	public:
 		int		responding;
+		int		return_error;
+		bool	r_l_v;
+		DATA	redirection;
 		DATA	r_buffer;
 		DATA	r_body_buffer;
 		DATA	parse_data;
@@ -37,7 +40,8 @@ class RP15
 		DATA	referer;
 		DATA	content_length;
 		DATA	transfer_encoding;
-
+		DATA	tmp_data;
+		DATA	tmp_compare;
 	public:
 		RP15	( void );
 		~RP15	( void );
@@ -48,7 +52,7 @@ class RP15
 		bool	is_ready( void );
 		size_t	extract_body_check( void );
 		void	display_cpcr( void );
-		void	insert(const DATA &arg);
+		int		fill_request(int code);
 	private:
 		RP15	(const DATA &arg);
 };

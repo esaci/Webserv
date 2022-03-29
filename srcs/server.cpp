@@ -24,11 +24,10 @@ int	init_socket( void ){
 	return (serverfd);
 }
 
-//FAUDRA METTRE LE COMPORTEMENT AVEC POLLOUT
 int	server_data::_server( void ){
 	int		n;
 	size_t	len;
-	// int	fd = open(TMPFAVICO, O_RDONLY);
+
 	serverfd = init_socket();
 	if (serverfd < 0)
 		return (1);
@@ -42,9 +41,10 @@ int	server_data::_server( void ){
 		if (n < 0)
 			return (print_return("ERROR: poll", 1));
 		pos = 0;
-		n = 0;
-		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos, n = 0)
+		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos)
 		{
+			// if (it->fd != serverfd)
+				// std::cout << "ON EST A LA STEP " << tab_request[it->fd].responding << std::endl;
 			if (setup_listen(tab_poll.begin() + pos))
 				return (1);
 			if (setup_read(tab_poll.begin() + pos))

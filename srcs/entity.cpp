@@ -8,6 +8,8 @@ void	server_data::_entity(int code_n, int clientfd){
 	out << "Server: webserv/1.0\n";
 	if (content_type[0])
 		out << "Content-Type: " << content_type << "\n";
+	if (code_n == 301)
+		out << "Location: " << "localhost: " << SERVER_PORT << "/" << tab_request[clientfd].redirection << " \n";
 	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\n";
 	out << "Connection: close\n";
 	out << "Accept-Ranges: bytes\r\n\r\n";
@@ -22,6 +24,8 @@ void	server_data::_entity_no_accept(int code_n, int clientfd){
 	out << "Server: webserv/1.0\n";
 	if (content_type[0])
 		out << "Content-Type: " << content_type << "\n";
+	if (code_n == 301)
+		out << "Location: " << tab_request[clientfd].redirection << " \n";
 	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\n";
 	out << "Connection: close\r\n\r\n";
 	_data_begin(tab_request[clientfd].r_buffer, out.str());

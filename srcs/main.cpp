@@ -1,4 +1,5 @@
 #include "../include/w_library.hpp"
+// handle_line_request il faut que mettre en palce le system pour renvoye la page d'erreurcorrespondant a l'erreur si jamais la request line est pas au bon for,mat
 
 int main (int ac, char *av[]){
 	std::fstream	file;

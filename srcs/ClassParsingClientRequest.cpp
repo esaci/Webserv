@@ -1,23 +1,18 @@
 #include "../include/w_library.hpp"
 
-RP15::ClassParsingClientRequest( void ): responding(0){}
+RP15::ClassParsingClientRequest( void ): responding(0), return_error(0), r_l_v(false){}
 
 RP15::~RP15	( void ){}
-
-void RP15::insert(const DATA &arg){
-	std::cout << parse_data << "\n--------------------------------------------" << std::endl;
-	parse_data.insert(parse_data.end(), arg.begin(), arg.end());
-}
 
 bool	RP15::is_ready( void ){
 	if (parse_data.size() < 4)
 		return (0);
 	if (parse_data[0] == 'P')
-	{
 		return (extract_body_check());
-	}
 	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
 		return (1);
+	if (*((parse_data.end() - 3)) == '\n')
+		std::cout << "tentative de is_ready\n";
 	return (0);
 }
 
@@ -65,7 +60,6 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg){
 int	ClassParsingClientRequest::request_ready( void )
 {
 	// std::cout << parse_data;
-	DATA	tmp_data, tmp_compare;
 	size_t	line = 0, i = 0, p = 0;
 	std::vector<DATA>	tab;
 
@@ -108,10 +102,8 @@ int	ClassParsingClientRequest::request_ready( void )
 		{
 			for(; it < parse_data.end() && (*it == '\n' || *it == '\r'); it++)
 				;
-			parse_data.erase(parse_data.begin(), it);
-			r_body_buffer.swap(parse_data);
-			responding = 1;
-			display_cpcr();
+			r_body_buffer.assign(it, parse_data.end());
+			parse_data.clear();
 			return (1);
 		}
 		for(i = 0; i < tab.size(); i++)
@@ -186,40 +178,66 @@ int	ClassParsingClientRequest::request_ready( void )
 }
 
 RP15::ClassParsingClientRequest(const RP15 &arg){
+	redirection = arg.redirection;
 	responding = arg.responding;
+	return_error = arg.return_error;
+	r_l_v = arg.r_l_v;
+	r_buffer = arg.r_buffer;
+	r_body_buffer = arg.r_body_buffer;
 	parse_data = arg.parse_data;
 	method = arg.method;
 	ressource = arg.ressource;
 	protocol = arg.protocol;
 	host = arg.host;
+	cache_control = arg.cache_control;
 	connection = arg.connection;
 	sec_ch_ua = arg.sec_ch_ua;
 	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
-	user_agent = arg.sec_ch_ua_mobile;
 	sec_ch_ua_platform = arg.sec_ch_ua_platform;
+	upgrade_insecure_requests = arg.upgrade_insecure_requests;
+	user_agent = arg.user_agent;
 	accept = arg.accept;
 	sec_fetch_site = arg.sec_fetch_site;
 	sec_fetch_mode = arg.sec_fetch_mode;
 	sec_fetch_dest = arg.sec_fetch_dest;
+	accept_encoding = arg.accept_encoding;
+	accept_language = arg.accept_language;
 	referer = arg.referer;
+	content_length = arg.content_length;
+	transfer_encoding = arg.transfer_encoding;
+	tmp_data = arg.tmp_data;
+	tmp_compare = arg.tmp_compare;
 }
 RP15	RP15::operator=(const RP15 &arg){
+	redirection = arg.redirection;
 	responding = arg.responding;
+	return_error = arg.return_error;
+	r_l_v = arg.r_l_v;
+	r_buffer = arg.r_buffer;
+	r_body_buffer = arg.r_body_buffer;
 	parse_data = arg.parse_data;
 	method = arg.method;
 	ressource = arg.ressource;
 	protocol = arg.protocol;
 	host = arg.host;
+	cache_control = arg.cache_control;
 	connection = arg.connection;
 	sec_ch_ua = arg.sec_ch_ua;
 	sec_ch_ua_mobile = arg.sec_ch_ua_mobile;
-	user_agent = arg.sec_ch_ua_mobile;
 	sec_ch_ua_platform = arg.sec_ch_ua_platform;
+	upgrade_insecure_requests = arg.upgrade_insecure_requests;
+	user_agent = arg.user_agent;
 	accept = arg.accept;
 	sec_fetch_site = arg.sec_fetch_site;
 	sec_fetch_mode = arg.sec_fetch_mode;
 	sec_fetch_dest = arg.sec_fetch_dest;
+	accept_encoding = arg.accept_encoding;
+	accept_language = arg.accept_language;
 	referer = arg.referer;
+	content_length = arg.content_length;
+	transfer_encoding = arg.transfer_encoding;
+	tmp_data = arg.tmp_data;
+	tmp_compare = arg.tmp_compare;
 	return (*this);
 }
 
@@ -255,5 +273,5 @@ void	ClassParsingClientRequest::display_cpcr( void )
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	std::cout << "-----------------------------------------------------------\n"; 
-	std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
+	// std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
 }

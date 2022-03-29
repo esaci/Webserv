@@ -1,17 +1,16 @@
 #include "../include/w_library.hpp"
-
+// curl -v -d 'salut le monde' -H "Transfer-Encoding: chunked" -X POST localhost:80/uploads
 size_t		RP15::extract_body_check( void ){
-	size_t	line = 0;
-	DATA	tmp_data;
+	size_t	line = 0, i;
 
-	for(DATA::iterator it = parse_data.begin(); it != parse_data.end(); it++, line++)
+	for(DATA::iterator it = parse_data.begin(); it < parse_data.end(); it++, line++)
 	{
-		tmp_data.clear();
+		i = 0;
 		for(;it < parse_data.end() && (*it == '\n'); it++)
 			;
 		for(; it < parse_data.end() && *it != '\n'; it++)
-			tmp_data.push_back(*it);
-		if (tmp_data.size() == 1)
+			i++;
+		if (i == 1 && it != parse_data.end())
 			return (line);
 	}
 	return (0);
@@ -35,6 +34,8 @@ int			server_data::_post_server_read(std::vector<pollfd>::iterator it){
 
 	// if (tab_request[it->fd].content_length.size())
 	// 	return (_post_read_cl(it));
-	return (_post_read_ch(it));
+	// return (_post_read_ch(it));
+	(void)it;
+	return 0;
 }
 
