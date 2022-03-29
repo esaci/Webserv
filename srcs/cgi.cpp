@@ -40,6 +40,7 @@ int basic_cgi(void){
     //     exit(ret);
     // }
 	// 	// ret = ft_parent(c, s);
+    
 	return (ret);
     return 0;
 }
