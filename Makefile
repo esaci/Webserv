@@ -23,6 +23,7 @@ SRC = 	main.cpp \
 		get_response.cpp \
 		utils.cpp	\
 		setup.cpp	\
+		set.cpp		\
 		send_response.cpp
 
 SRCS_DIR = ./srcs/
