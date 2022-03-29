@@ -1,24 +1,24 @@
 #include "../include/w_library.hpp"
 
-RP15::ClassParsingClientRequest( void ): responding(0), return_error(0), r_l_v(false){}
+RP15::ClassParsingClientRequest(void) : responding(0), return_error(0), r_l_v(false) {}
 
-RP15::~RP15	( void ){}
+RP15::~RP15(void) {}
 
-bool	RP15::is_ready( void ){
+bool RP15::is_ready(void)
+{
 	if (parse_data.size() < 4)
 		return (0);
 	if (parse_data[0] == 'P')
 		return (extract_body_check());
 	if (*((parse_data.end() - 1)) == '\n' && *((parse_data.end() - 2)) == '\r' && *((parse_data.end() - 3)) == '\n')
 		return (1);
-	if (*((parse_data.end() - 3)) == '\n')
-		std::cout << "tentative de is_ready\n";
 	return (0);
 }
 
-size_t	until_space(DATA::iterator	it){
-	size_t			res;
-	unsigned char	*tmp_c = it.base();
+size_t until_space(DATA::iterator it)
+{
+	size_t res;
+	unsigned char *tmp_c = it.base();
 
 	if (!tmp_c)
 		return (0);
@@ -27,9 +27,10 @@ size_t	until_space(DATA::iterator	it){
 	return (res);
 }
 
-size_t	until_no_space(DATA::iterator it){
-	size_t			res;
-	unsigned char	*tmp_c = it.base();
+size_t until_no_space(DATA::iterator it)
+{
+	size_t res;
+	unsigned char *tmp_c = it.base();
 
 	if (!tmp_c)
 		return (0);
@@ -38,30 +39,61 @@ size_t	until_no_space(DATA::iterator it){
 	return (res);
 }
 
-void	ClassParsingClientRequest::parse_request_line(DATA &arg){
-	size_t	pos_method;
-	size_t	pos_ressource;
-	size_t	pos_protocol;
+void	RP15::clear_ressource( void ){
+	size_t	pos_method = 0;
+	size_t	pos_ressource = 0;
+	size_t	pos_protocol = 0;
+	
+	for (DATA::iterator it = ressource.begin(); it < ressource.end(); it++)
+	{
+		if (*it == '/')
+		{
+			pos_method = pos_ressource;
+			pos_ressource = it - ressource.begin();
+			pos_protocol = 0;
+		}
+		if (*it == '.')
+			pos_protocol++;
+		else if (*it != '/')
+			pos_protocol = 10;
+		if (pos_protocol == 2 && (it + 1) < ressource.end() && *(it + 1) == '/')
+		{
+			ressource.erase(ressource.begin() + pos_method, it + 1);
+			if (!pos_ressource)
+				return_error = 400;
+			return (clear_ressource());
+		}
+	}
+}
+
+void	ClassParsingClientRequest::parse_request_line(DATA &arg)
+{
+	size_t pos_method;
+	size_t pos_ressource;
+	size_t pos_protocol;
 
 	arg.push_back('\0');
+
 	pos_method = until_space(arg.begin());
 	method.assign(arg.begin(), arg.begin() + pos_method);
-	
+
 	pos_method += until_no_space(arg.begin() + pos_method);
 	pos_ressource = until_space(arg.begin() + pos_method);
 	ressource.assign(arg.begin() + pos_method, arg.begin() + pos_ressource + pos_method);
+
 	pos_ressource += pos_method;
 	pos_ressource += until_no_space(arg.begin() + pos_ressource);
 	pos_protocol = until_space(arg.begin() + pos_ressource);
 	protocol.assign(arg.begin() + pos_ressource, arg.begin() + pos_protocol + pos_ressource);
-	arg.pop_back();
-}
 
-int	ClassParsingClientRequest::request_ready( void )
+	arg.pop_back();
+	return (clear_ressource());	
+}
+int ClassParsingClientRequest::request_ready(void)
 {
 	// std::cout << parse_data;
-	size_t	line = 0, i = 0, p = 0;
-	std::vector<DATA>	tab;
+	size_t line = 0, i = 0, p = 0;
+	std::vector<DATA> tab;
 
 	if (parse_data[0] == 'P')
 		p = extract_body_check();
@@ -82,12 +114,12 @@ int	ClassParsingClientRequest::request_ready( void )
 	tab.push_back(_data_init("Accept-Language: "));
 	tab.push_back(_data_init("Content-Length: "));
 	tab.push_back(_data_init("Transfer_Encoding: "));
-	for(DATA::iterator it = parse_data.begin(); it < parse_data.end(); it++, line++)
+	for (DATA::iterator it = parse_data.begin(); it < parse_data.end(); it++, line++)
 	{
 		tmp_data.clear();
-		for(;it < parse_data.end() && (*it == '\n'); it++)
+		for (; it < parse_data.end() && (*it == '\n'); it++)
 			;
-		for(; it < parse_data.end() && *it != '\n'; it++)
+		for (; it < parse_data.end() && *it != '\n'; it++)
 		{
 			if (*it == '\r')
 				break;
@@ -100,13 +132,13 @@ int	ClassParsingClientRequest::request_ready( void )
 		}
 		if (p && p <= line)
 		{
-			for(; it < parse_data.end() && (*it == '\n' || *it == '\r'); it++)
+			for (; it < parse_data.end() && (*it == '\n' || *it == '\r'); it++)
 				;
 			r_body_buffer.assign(it, parse_data.end());
 			parse_data.clear();
 			return (1);
 		}
-		for(i = 0; i < tab.size(); i++)
+		for (i = 0; i < tab.size(); i++)
 		{
 			if (tmp_data.size() >= tab[i].size())
 			{
@@ -117,59 +149,59 @@ int	ClassParsingClientRequest::request_ready( void )
 		}
 		switch (i)
 		{
-			case 0:
-				host.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 1:
-				connection.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 2:
-				cache_control.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 3:
-				sec_ch_ua.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 4:
-				sec_ch_ua_mobile.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 5:
-				sec_ch_ua_platform.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 6:
-				upgrade_insecure_requests.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 7:
-				user_agent.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 8:
-				accept.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 9:
-				sec_fetch_site.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 10:
-				sec_fetch_mode.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 11:
-				sec_fetch_dest.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 12:
-				accept_encoding.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 13:
-				accept_language.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 14:
-				content_length.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			case 15:
-				transfer_encoding.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-				break;
-			//  case x:
-			//    referer.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
-			//    break;
-			default:
-				break;
+		case 0:
+			host.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 1:
+			connection.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 2:
+			cache_control.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 3:
+			sec_ch_ua.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 4:
+			sec_ch_ua_mobile.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 5:
+			sec_ch_ua_platform.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 6:
+			upgrade_insecure_requests.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 7:
+			user_agent.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 8:
+			accept.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 9:
+			sec_fetch_site.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 10:
+			sec_fetch_mode.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 11:
+			sec_fetch_dest.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 12:
+			accept_encoding.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 13:
+			accept_language.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 14:
+			content_length.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		case 15:
+			transfer_encoding.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+			break;
+		//  case x:
+		//    referer.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+		//    break;
+		default:
+			break;
 		}
 	}
 	responding = 1;
@@ -177,7 +209,8 @@ int	ClassParsingClientRequest::request_ready( void )
 	return (0);
 }
 
-RP15::ClassParsingClientRequest(const RP15 &arg){
+RP15::ClassParsingClientRequest(const RP15 &arg)
+{
 	redirection = arg.redirection;
 	responding = arg.responding;
 	return_error = arg.return_error;
@@ -208,7 +241,8 @@ RP15::ClassParsingClientRequest(const RP15 &arg){
 	tmp_data = arg.tmp_data;
 	tmp_compare = arg.tmp_compare;
 }
-RP15	RP15::operator=(const RP15 &arg){
+RP15 RP15::operator=(const RP15 &arg)
+{
 	redirection = arg.redirection;
 	responding = arg.responding;
 	return_error = arg.return_error;
@@ -241,37 +275,37 @@ RP15	RP15::operator=(const RP15 &arg){
 	return (*this);
 }
 
-std::ostream & operator<<(std::ostream & ostream, std::vector<unsigned char> const &i)
+std::ostream &operator<<(std::ostream &ostream, std::vector<unsigned char> const &i)
 {
 	for (std::vector<unsigned char>::const_iterator it = i.begin(); it != i.end(); it++)
 		ostream << *it;
 	return (ostream);
 }
 
-void	ClassParsingClientRequest::display_cpcr( void )
+void ClassParsingClientRequest::display_cpcr(void)
 {
-	std::cout << "method: |"<< method << "|" << std::endl;
+	std::cout << "method: |" << method << "|" << std::endl;
 	std::cout << "ressource: |" << ressource << "|" << std::endl;
-	std::cout << "protocol: |"<< protocol << "|" << std::endl;
-	std::cout << "host: |"<< host << "|" << std::endl;
-	std::cout << "connection: |"<< connection << "|" << std::endl;
-	std::cout << "Cache-Control: |"<< cache_control << "|" << std::endl;
-	std::cout << "sec_ch_ua: |"<< sec_ch_ua << "|" << std::endl;
-	std::cout << "sec_ch_ua_mobile: |"<< sec_ch_ua_mobile << "|" << std::endl;
-	std::cout << "user_agent: |"<< user_agent << "|" << std::endl;
-	std::cout << "sec_ch_ua_platform: |"<< sec_ch_ua_platform << "|" << std::endl;
+	std::cout << "protocol: |" << protocol << "|" << std::endl;
+	std::cout << "host: |" << host << "|" << std::endl;
+	std::cout << "connection: |" << connection << "|" << std::endl;
+	std::cout << "Cache-Control: |" << cache_control << "|" << std::endl;
+	std::cout << "sec_ch_ua: |" << sec_ch_ua << "|" << std::endl;
+	std::cout << "sec_ch_ua_mobile: |" << sec_ch_ua_mobile << "|" << std::endl;
+	std::cout << "user_agent: |" << user_agent << "|" << std::endl;
+	std::cout << "sec_ch_ua_platform: |" << sec_ch_ua_platform << "|" << std::endl;
 	std::cout << "Upgrade-Insecure-Requests: |" << upgrade_insecure_requests << "|" << std::endl;
-	std::cout << "accept: |"<< accept << "|" << std::endl;
-	std::cout << "sec_fetch_site: |"<< sec_fetch_site << "|" << std::endl;
-	std::cout << "sec_fetch_mode: |"<< sec_fetch_mode << "|" << std::endl;
-	std::cout << "sec_fetch_dest: |"<< sec_fetch_dest << "|" << std::endl;
-	std::cout << "Accept-Encoding: |"<< accept_encoding << "|" << std::endl;
-	std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
-	std::cout << "Content_Length: |"<< content_length << "|" << std::endl;
-	std::cout << "Transfer_Encoding: |"<< transfer_encoding << "|" << std::endl;
+	std::cout << "accept: |" << accept << "|" << std::endl;
+	std::cout << "sec_fetch_site: |" << sec_fetch_site << "|" << std::endl;
+	std::cout << "sec_fetch_mode: |" << sec_fetch_mode << "|" << std::endl;
+	std::cout << "sec_fetch_dest: |" << sec_fetch_dest << "|" << std::endl;
+	std::cout << "Accept-Encoding: |" << accept_encoding << "|" << std::endl;
+	std::cout << "Accept-Language: |" << accept_language << "|" << std::endl;
+	std::cout << "Content_Length: |" << content_length << "|" << std::endl;
+	std::cout << "Transfer_Encoding: |" << transfer_encoding << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
-	std::cout << "-----------------------------------------------------------\n"; 
+	std::cout << "-----------------------------------------------------------\n";
 	// std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
 }

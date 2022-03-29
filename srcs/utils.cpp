@@ -44,9 +44,9 @@ void	dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value)
 DATA	retire_root(DATA &buff){
 	if (buff.size() < strlen(ROOT))
 		return (buff);
-	DATA tmp = _data_init(ROOT);
-	// for(DATA::iterator it = buff.begin(), itmp = ROOT; it != buff.end() && itmp != ROOT; )
-	return buff;
+	DATA tmp(buff.begin() + std::strlen(ROOT), buff.end());
+	tmp.pop_back();
+	return (tmp);
 }
 
 
@@ -64,4 +64,17 @@ bool	compare_size_cl(size_t len, DATA &buff){
 	size_t buff_len = std::strtol((char*)buff.begin().base(), NULL, 10);
 	buff.pop_back();
 	return (len == buff_len);
+}
+
+bool indexcomp::operator()(const std::string& lhs, const std::string& rhs) const{
+	bool l = false, r = false;
+
+	if (*(--lhs.end()) == '/')
+		l = true;
+	if (*(--rhs.end()) == '/')
+		r = true;
+	if (l ^ r)
+		return (l);
+	std::less<std::string> comp;
+	return (comp(lhs, rhs));
 }

@@ -48,6 +48,7 @@ class RP15
 		RP15	(const RP15&);
 		RP15	operator=(const RP15 &);
 		void	parse_request_line(DATA &arg);
+		void	clear_ressource( void );
 		int		request_ready( void );
 		bool	is_ready( void );
 		size_t	extract_body_check( void );
