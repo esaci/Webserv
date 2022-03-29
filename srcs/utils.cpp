@@ -65,3 +65,16 @@ bool	compare_size_cl(size_t len, DATA &buff){
 	buff.pop_back();
 	return (len == buff_len);
 }
+
+bool indexcomp::operator()(const std::string& lhs, const std::string& rhs) const{
+	bool l = false, r = false;
+
+	if (*(--lhs.end()) == '/')
+		l = true;
+	if (*(--rhs.end()) == '/')
+		r = true;
+	if (l ^ r)
+		return (l);
+	std::less<std::string> comp;
+	return (comp(lhs, rhs));
+}

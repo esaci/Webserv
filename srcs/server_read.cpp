@@ -96,17 +96,27 @@ int	server_data::_set_folder(DIR	*folder, int clientfd)
 		tab_request[clientfd].redirection.push_back('/');
 		return (0);
 	}
-	tab_request[clientfd].r_buffer = _data_init("<html>\n<head><title>WEBSERV Index of /</title></head>\n<body>\n<h1>Index of /</h1><hr><pre>\n");
+	std::set<std::string, indexcomp> ordering;
+	std::string tmp_s;
+
+	tab_request[clientfd].r_buffer = _data_init("<html>\n<head><title>WEBSERV Index of ");
+	_data_end(tab_request[clientfd].r_buffer, (char*)retire_root(tab_request[clientfd].ressource).begin().base());
+	_data_end(tab_request[clientfd].r_buffer, "</title></head>\n<body>\n<h1>Index of /</h1><hr><pre>\n");
 	for	(struct dirent	*tmp_f = readdir(folder); tmp_f; tmp_f = readdir(folder))
 	{
+		if (std::string(tmp_f->d_name) == ".")
+			continue ;
+		tmp_s.assign(tmp_f->d_name);
+		if (tmp_f->d_type == DT_DIR)
+			tmp_s.push_back('/');
+		ordering.insert(tmp_s);
+	}
+	for(std::set<std::string>::iterator it = ordering.begin(); it != ordering.end(); it++)
+	{
 		_data_end(tab_request[clientfd].r_buffer, "<a href=\"");
-		_data_end(tab_request[clientfd].r_buffer, tmp_f->d_name);
-		if (tmp_f->d_type == DT_DIR)
-			_data_end(tab_request[clientfd].r_buffer, "/");
+		_data_end(tab_request[clientfd].r_buffer, *it);
 		_data_end(tab_request[clientfd].r_buffer, "\">");
-		_data_end(tab_request[clientfd].r_buffer, tmp_f->d_name);
-		if (tmp_f->d_type == DT_DIR)
-			_data_end(tab_request[clientfd].r_buffer, "/");
+		_data_end(tab_request[clientfd].r_buffer, *it);
 		_data_end(tab_request[clientfd].r_buffer, "</a>\n");
 	}
 	_data_end(tab_request[clientfd].r_buffer, "</pre><hr></body>\n</html>");

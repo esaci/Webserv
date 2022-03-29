@@ -32,6 +32,7 @@
 #	include "p_conf.hpp"
 #	include "ClassParsingClientRequest.hpp"
 #	include "server_data.hpp"
+#	include "indexcomp.hpp"
 
 int				print_return(std::string ptr, int value);
 DATA			_data_init(std::string arg);
