@@ -19,7 +19,7 @@ int	server_data::_response(int clientfd)
 		// return(_get_error_404(clientfd));
 	}
 	else{
-		basic_cgi();
+		// basic_cgi();
 		return(print_return("REQUETE NON GEREE \n", -10));
 	}
 	// std::cout << tab_request[clientfd].method << " : PARDON ???\n";
