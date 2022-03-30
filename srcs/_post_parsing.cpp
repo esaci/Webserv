@@ -37,6 +37,7 @@ int			server_data::_post_read_ch(std::vector<pollfd>::iterator it){
 }
 
 int			server_data::_post_server_read(std::vector<pollfd>::iterator it){
+	std::cout << "ca passe bien ici et regarde " << tab_request[it->fd].method << " ,etape responding " << tab_request[it->fd].responding << std::endl;
 	if (tab_request[it->fd].content_length.size())
 		return (_post_read_cl(it));
 	return (_post_read_ch(it));

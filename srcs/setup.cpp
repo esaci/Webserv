@@ -19,8 +19,6 @@ int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 	int n = 0;
 	
-	if ((it < tab_poll.end()))
-		std::cout << tab_request[it->fd].method.size() << " ON EST BIEN ICI \n\n\n\n";
 	if (!(it < tab_poll.end()) || !(it->revents & POLLIN) || tab_request[it->fd].responding)
 		return (0);
 	if (tab_request[it->fd].method.size())
