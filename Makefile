@@ -24,7 +24,8 @@ SRC = 	main.cpp \
 		utils.cpp	\
 		setup.cpp	\
 		set.cpp		\
-		send_response.cpp
+		send_response.cpp \
+		cgi.cpp \
 
 SRCS_DIR = ./srcs/
 OBJS_DIR = ./objects/
