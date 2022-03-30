@@ -11,38 +11,35 @@ int basic_cgi(void){
     std::cout << "\nTEST CGI\n\n";
 
 
-    std::string cmd = "php-cgi";
-    std::string arg1 = "files_test/testcgi1.php";
-    std::string arg2 = NULL;
-    // char *args[3] = {"php-cgi", "'echo \"Hello World\n\";'\";", NULL};
+    // std::string cmd[2] = { "php-cgi", NULL};
+    char *cmd0 = NULL;
+      char *cmd[2] = { cmd0, NULL};
+    //  char **env = NULL;
     // execve(cmd, args, NULL);
-
-
-    int		err;
+    strcpy(cmd[0], cmd0);
+    std::cout << cmd[0];
+    
 	int		ret;
 	pid_t	*pid;
     int     status;
 
     pid = NULL;
-	err = 0;
 	ret = 1;
 	*pid = fork();
-    // char *cmd = "php-cgi";
-    // char *args[3] = {"php-cgi", "testcgi1.php", NULL};
 	if (*pid < 0)
 		std::cout << "error: fork\n";
 	if (*pid == 0){
         waitpid(*pid, &status, 0);
     }
-	// 	// ret = ft_child(c, s);
-	// else{
+		// ret = ft_child(c, s);
+	else{
 
-    //     ret = execve(args[0], args, NULL);
-    //     exit(ret);
-    // }
+        ret = execve(cmd[0], cmd, NULL);
+        exit(ret);
+    }
 	// 	// ret = ft_parent(c, s);
-    if(err == -1){
-        return -1;}
+    // if(err == -1){
+    //     return -1;}
 	return (ret);
     return 0;
 }

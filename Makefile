@@ -2,7 +2,7 @@ NAME = webserv
 
 CC = c++
 
-CFLAGS = --std=c++98 -Wall -Wextra -Werror #-g -g3 -fsanitize=address
+CFLAGS = --std=c++98 -Wall -Wextra -Werror -g3 -fsanitize=address -g
 
 HEADER =	include/ClassParsingClientRequest.hpp \
 			include/p_conf.hpp \
