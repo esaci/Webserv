@@ -44,7 +44,7 @@ void	RP15::clear_ressource( void ){
 	size_t	pos_ressource = 0;
 	size_t	pos_protocol = 0;
 	
-	for (DATA::iterator it = ressource.begin(); it < ressource.end(); it++)
+	for (DATA::iterator it = ressource.begin(); it < ressource.end() && *it != '\n'; it++)
 	{
 		if (*it == '/')
 		{
@@ -136,6 +136,12 @@ int ClassParsingClientRequest::request_ready(void)
 				;
 			r_body_buffer.assign(it, parse_data.end());
 			parse_data.clear();
+			if (compare_size_cl(r_body_buffer.size(), content_length))
+			{
+				responding = 1;
+				display_cpcr();
+				return (0);
+			}
 			return (1);
 		}
 		for (i = 0; i < tab.size(); i++)

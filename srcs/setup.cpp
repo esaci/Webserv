@@ -9,9 +9,9 @@ int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 		return (print_return("Revents chelou\n\n\n", 1));
 	if (!listening && it->fd == serverfd)
 	{
-		listening = true;
 		if ((listen(serverfd, NBRCLIENTMAX)) < 0)
 			return (print_return("Error: Listen", 1));
+		listening = true;
 	}
 	return (0);
 }

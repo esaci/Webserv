@@ -20,7 +20,6 @@ int	server_data::_response(int clientfd)
 		// return(_get_error_404(clientfd));
 	}
 	else{
-		std::cout << "\nCACACAC1\n";
 		basic_cgi();
 		return(print_return("REQUETE NON GEREE \n", -10));
 	}
