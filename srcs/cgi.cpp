@@ -23,6 +23,7 @@ int basic_cgi(void){
 	pid_t	*pid;
     int     status;
 
+    pid = NULL;
 	err = 0;
 	ret = 1;
 	*pid = fork();
@@ -40,7 +41,8 @@ int basic_cgi(void){
     //     exit(ret);
     // }
 	// 	// ret = ft_parent(c, s);
-    
+    if(err == -1){
+        return -1;}
 	return (ret);
     return 0;
 }
