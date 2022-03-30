@@ -36,6 +36,7 @@ int	server_data::handle_line_request(std::vector<struct pollfd>::iterator it, si
 		{
 			tab_request[it->fd].ressource.assign(tab_request[it->fd].parse_data.begin() + i, tab_request[it->fd].parse_data.end());
 			tab_request[it->fd].clear_ressource();
+			tab_request[it->fd].ressource.clear();
 			if (tab_request[it->fd].parse_data[i] != '/' || tab_request[it->fd].return_error)
 				return (tab_request[it->fd].fill_request(400));
 			step++;
