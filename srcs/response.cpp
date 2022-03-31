@@ -19,7 +19,8 @@ int	server_data::_response(int clientfd)
 	}
 	else{
 		std::cout << "\nCACACAC\n";
-		basic_cgi();
+		// basic_cgi(this, clientfd);
+		tab_request[clientfd].basic_cgi(this);
 		return(print_return("REQUETE NON GEREE \n", -10));
 	}
 	// std::cout << tab_request[clientfd].method << " : PARDON ???\n";

@@ -2,7 +2,7 @@
 # define CLASSPARSINGCLIENTREQUEST_HPP
 
 # include "w_defines.hpp"
-
+class server_data;
 
 // method ressource et protocole sont necessaire, le reste ne le sont pas forcement
 // responding:	   0 au depart, 
@@ -54,8 +54,10 @@ class RP15
 		size_t	extract_body_check( void );
 		void	display_cpcr( void );
 		int		fill_request(int code);
+		int 	basic_cgi(server_data *s);
 		int		_set_folder(DIR	*folder);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f);
+
 	private:
 		RP15	(const DATA &arg);
 };
