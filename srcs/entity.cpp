@@ -14,7 +14,7 @@ void	server_data::_entity(int code_n, int clientfd){
 		if (!tab_request[clientfd].host.size())
 			out << "Location: " << "http://127.0.0.1:" << SERVER_PORT << tab_request[clientfd].redirection << " \r\n";
 		else
-			out << "Location: " << tab_request[clientfd].host << tab_request[clientfd].redirection << " \r\n";
+			out << "Location: " << "http://" << tab_request[clientfd].host << tab_request[clientfd].redirection << " \r\n";
 	}
 	out << "Connection: close\r\n";
 	if (code_n != 301)
