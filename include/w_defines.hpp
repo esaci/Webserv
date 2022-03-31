@@ -11,6 +11,7 @@
 #	define ERRORFILE_400 "./files_system/Bad_Request.html"
 #	define ERRORFILE_301 "./files_system/Moved_Permanently.html"
 #	define ERRORFILE_404 "./files_system/Not_Found.html"
+#	define FILE_CGI	"/var/www/webserv/file_cgi.html"
 #	define METHOD	"GET"
 #	define TARGET	"/"
 #	define AUTOINDEX	0
@@ -23,5 +24,4 @@
 #	define RP15 ClassParsingClientRequest
 // sudo apt-get install -y php-cgi
 #	define CGI "/usr/lib/cgi-bin/php" 
-
 #endif

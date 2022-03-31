@@ -312,6 +312,6 @@ void ClassParsingClientRequest::display_cpcr(void)
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
+	std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
 	std::cout << "-----------------------------------------------------------\n";
-	// std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
 }

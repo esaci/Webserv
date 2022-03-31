@@ -59,9 +59,11 @@ int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 		return (0);
 	if (files_to_clients[it->fd] && (it->revents & POLLIN) && tab_request[files_to_clients[it->fd]].responding == 2)
 	{
+		std::cout << "CA PASSE ICI\n";
 		recvline.clear();
 		if ( (n = read(it->fd, recvline.begin().base(), MAXLINE - 1)) > 0 )
 			tab_request[files_to_clients[it->fd]].r_buffer.insert(tab_request[files_to_clients[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
+		std::cout << tab_request[files_to_clients[it->fd]].r_buffer << std::endl;
 		if (n < 0)
 			return (print_return("ERROR: READ_FILE", 1));
 		if (n < (MAXLINE - 1))

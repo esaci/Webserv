@@ -17,13 +17,12 @@ int	server_data::_response(int clientfd)
 			// return(_get_error_400(clientfd));
 		// return(_get_error_404(clientfd));
 	}
-	else{
-		std::cout << "\nCACACAC\n";
+	else if (tab_request[clientfd].method == _data_init("POST")){
 		// basic_cgi(this, clientfd);
-		tab_request[clientfd].basic_cgi(this);
-		return(print_return("REQUETE NON GEREE \n", -10));
+		return (tab_request[clientfd]._post_cgi(this, clientfd));
+		// tab_request[clientfd].basic_cgi(this);
 	}
-	// std::cout << tab_request[clientfd].method << " : PARDON ???\n";
+	std::cout << tab_request[clientfd].method << " : PARDON ???\n";
 	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
 	write(clientfd, buff.begin().base(), buff.size());
 	return (-10);
