@@ -12,9 +12,10 @@ void    set_cgi_env(){
 
 }
 
-int basic_cgi(void){
+int RP15::basic_cgi(server_data *s){
+    (void)s;
     std::cout << "\nTEST CGI\n\n";
-
+    // std::cout <<
     char **args = (char **)malloc(sizeof(char *) * 3);
     args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng  
     args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
@@ -34,6 +35,7 @@ int basic_cgi(void){
         fd = open("mabite.html", O_RDWR | O_CREAT | O_TRUNC, 0666);
         dup2(fd, STDOUT_FILENO);
         ret = execve(args[0], args, NULL);
+        delete s;
         exit(ret);
     }
 
