@@ -20,7 +20,7 @@ int	server_data::_response(int clientfd)
 	else{
 		std::cout << "\nCACACAC\n";
 		basic_cgi();
-		return(print_return("REQUETE NON GEREE \n", -10));
+		return(print_return("REQUETE NON GEREE \n", 1));
 	}
 	// std::cout << tab_request[clientfd].method << " : PARDON ???\n";
 	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
