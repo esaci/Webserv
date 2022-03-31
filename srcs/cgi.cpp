@@ -15,7 +15,7 @@ void	set_cgi_env(){
 int RP15::basic_cgi(server_data *s, int fd){
 	char **args = (char **)malloc(sizeof(char *) * 3);
 	args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng  
-	args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
+	args[1] = strdup(FILE_CGI); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
 	args[2] = NULL;
 	// dup2()
 	std::cout << "\nTEST CGI\n\n";

@@ -35,7 +35,6 @@ int	server_data::_server( void ){
 		std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n" << std::endl;
 	while (1){
 		len = tab_poll.size();
-		std::cout << "Len vaut " << len << std::endl;
 		if ( !(n = poll(tab_poll.begin().base(), tab_poll.size(), TIMEOUT)) )
 			return (print_return("TIMEOUT: poll", 1));
 		if (n < 0)

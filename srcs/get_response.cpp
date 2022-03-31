@@ -55,7 +55,7 @@ int	server_data::_get_error_400(int clientfd){
 }
 
 int	server_data::_get_error_404(int clientfd){
-	std::cout << ERRORFILE_404 << " est l'endroit ou jvais chercher lindex\n";
+	// std::cout << ERRORFILE_404 << " est l'endroit ou jvais chercher lindex\n";
 	if (tab_request[clientfd].responding < 2)
 	{
 		tab_request[clientfd].ressource = _data_init(ERRORFILE_404);
