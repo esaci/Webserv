@@ -56,7 +56,6 @@
 			int				setup_response(std::vector<struct pollfd>::iterator it);
 			int				setup_read_files(std::vector<struct pollfd>::iterator it);
 			int				_set_file(int clientfd);
-			int				_set_folder(DIR *folder, int clientfd);
 		private:
 			server_data( void );
 			server_data(const server_data&);
