@@ -2,7 +2,7 @@ NAME = webserv
 
 CC = c++
 
-CFLAGS = --std=c++98 -Wall -Wextra -Werror -g3 -fsanitize=address -g
+CFLAGS = --std=c++98 -Wall -Wextra -Werror -g3
 
 HEADER =	include/ClassParsingClientRequest.hpp \
 			include/p_conf.hpp \
@@ -20,6 +20,7 @@ SRC = 	main.cpp \
 		_post_parsing.cpp \
 		server_data.cpp \
 		entity.cpp	\
+		post_response.cpp \
 		get_response.cpp \
 		utils.cpp	\
 		setup.cpp	\
@@ -38,7 +39,7 @@ $(OBJS_DIR)%.o : $(SRCS_DIR)%.cpp
 			@echo "\033[0;32mCompiling... \033[0m"  $<
 			$(CC) $(CFLAGS) -c -o $@ $<	
 			@echo "\033[A\033[A"
-                
+
 all: $(NAME)
 
 $(NAME): ${OBJS} ${HEADER}
