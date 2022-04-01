@@ -7,20 +7,14 @@ int	server_data::_response(int clientfd)
 		return (0);
 	if (tab_request[clientfd].method == _data_init("GET"))
 	{
-		// Ca renvoie que deux type d'error pour linstant
 		if (tab_request[clientfd].return_error)
 			return (_get_error(clientfd));
 		if ((_data_init("/") == tab_request[clientfd].ressource) || (_data_init(TMPINDEX) == tab_request[clientfd].ressource))
 			return (_get_index(clientfd));
 		return (_get(clientfd));
-		// if (AUTOINDEX)
-			// return(_get_error_400(clientfd));
-		// return(_get_error_404(clientfd));
 	}
 	else if (tab_request[clientfd].method == _data_init("POST")){
-		// basic_cgi(this, clientfd);
 		return (tab_request[clientfd]._post_cgi(this, clientfd));
-		// tab_request[clientfd].basic_cgi(this);
 	}
 	std::cout << tab_request[clientfd].method << " : PARDON ???\n";
 	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
