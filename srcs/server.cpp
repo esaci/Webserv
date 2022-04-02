@@ -45,13 +45,13 @@ int	server_data::_server( void ){
 			// if (it->fd != serverfd)
 				// std::cout << "ON EST A LA STEP " << tab_request[it->fd].responding << std::endl;
 			if (setup_listen(tab_poll.begin() + pos))
-				return (1);
+				return (print_return("SOUCIS VIENT DE setup_listen ",1));
 			if (setup_read(tab_poll.begin() + pos))
 				break ;
 			if (setup_read_files(tab_poll.begin() + pos))
-				return (1);
+				return (print_return("SOUCIS VIENT DE read_files ",1));
 			if (setup_response(tab_poll.begin() + pos))
-				return (1);
+				return (print_return("SOUCIS VIENT DE setup_response ",1));
 		}
 	}
 	return (0);
