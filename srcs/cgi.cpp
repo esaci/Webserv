@@ -9,7 +9,28 @@
 */
 
 void    set_cgi_env(){
-
+    map env<std::string, std::string> env;
+    env.["SERVER_SOFTWARE="] "webserv1.0";
+    env.["SERVER_NAME="] = ;          : host name of the server, may be dot-decimal IP address.
+    env.["GATEWAY_INTERFACE="] = "PHP 7.2.24-0ubuntu0.18.04.11";               : CGI/version.
+    env.["SERVER_PROTOCOL="] = "HTTP/1.1"               : HTTP/version.
+    env.["SERVER_PORT="] =   // a remplir            : TCP port (decimal).
+    env.["REQUEST_METHOD="] =   // a remplir         : name of HTTP method (see above).
+    env.["PATH_INFO="] =               : path suffix, if appended to URL after program name and a slash.
+    env.["PATH_TRANSLATED="] =               : corresponding full path as supposed by server, if PATH_INFO is present.
+    env.["SCRIPT_NAME="] =               : relative path to the program, like /cgi-bin/script.cgi.
+    env.["QUERY_STRING="] =               
+    env.["REMOTE_HOST="] =               
+    env.["REMOTE_ADDR="] =               
+    env.["AUTH_TYPE="] =               
+    env.["REMOTE_USER="] = 
+    env.["REMOTE_IDENT="] =               
+    env.["CONTENT_TYPE="] =               
+    env.["CONTENT_LENGTH="] =               
+    env.["HTTP_ACCEPT="] =                
+    env.["HTTP_ACCEPT_LANGUAGE="] =                
+    env.["HTTP_USER_AGENT="] =               
+    env.["HTTP_COOKIE="] =               
 }
 
 int RP15::basic_cgi(server_data *s){
