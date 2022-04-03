@@ -1,6 +1,8 @@
 #include "../include/w_library.hpp"
 
-RP15::ClassParsingClientRequest(void) : responding(0), return_error(0), r_l_v(false) {}
+RP15::ClassParsingClientRequest(void) : responding(0), return_error(0), r_l_v(false) {
+	_time_init();
+}
 
 RP15::~RP15(void) {}
 
@@ -219,6 +221,7 @@ RP15::ClassParsingClientRequest(const RP15 &arg)
 {
 	redirection = arg.redirection;
 	responding = arg.responding;
+	time_request = arg.time_request;
 	return_error = arg.return_error;
 	r_l_v = arg.r_l_v;
 	r_buffer = arg.r_buffer;
@@ -251,6 +254,7 @@ RP15 RP15::operator=(const RP15 &arg)
 {
 	redirection = arg.redirection;
 	responding = arg.responding;
+	time_request = arg.time_request;
 	return_error = arg.return_error;
 	r_l_v = arg.r_l_v;
 	r_buffer = arg.r_buffer;
@@ -312,6 +316,6 @@ void ClassParsingClientRequest::display_cpcr(void)
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
-	std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
+	// std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
 	std::cout << "-----------------------------------------------------------\n";
 }

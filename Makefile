@@ -22,6 +22,7 @@ SRC = 	main.cpp \
 		entity.cpp	\
 		post_response.cpp \
 		get_response.cpp \
+		time.cpp	\
 		utils.cpp	\
 		setup.cpp	\
 		set.cpp		\

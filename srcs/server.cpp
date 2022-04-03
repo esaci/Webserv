@@ -39,11 +39,10 @@ int	server_data::_server( void ){
 			return (print_return("TIMEOUT: poll", 1));
 		if (n < 0)
 			return (print_return("ERROR: poll", 1));
+		_time_maj();
 		pos = 0;
 		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos)
 		{
-			// if (it->fd != serverfd)
-				// std::cout << "ON EST A LA STEP " << tab_request[it->fd].responding << std::endl;
 			if (setup_listen(tab_poll.begin() + pos))
 				return (print_return("SOUCIS VIENT DE setup_listen ",1));
 			if (setup_read(tab_poll.begin() + pos))
