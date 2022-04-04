@@ -28,6 +28,7 @@
 #	include <fstream>
 #	include <cstring>
 #	include <cstdlib>
+#   include <cctype>
 #	include <sstream>
 
 #	include "w_defines.hpp"

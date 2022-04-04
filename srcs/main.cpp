@@ -10,7 +10,7 @@ int main (int ac, char *av[]){
 		return (1);
 	}
 	if (ac == 1)
-		file.open("config_file/first_conf", std::fstream::in);
+		file.open("config_file/lala.conf", std::fstream::in);
 	else
 		file.open(av[1], std::fstream::in);
 	if (!file.is_open())
