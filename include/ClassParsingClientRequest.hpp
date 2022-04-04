@@ -55,6 +55,7 @@ class RP15
 		void	display_cpcr( void );
 		int		fill_request(int code);
 		int 	basic_cgi(server_data *s);
+		void    set_cgi_env(void);
 		int		_set_folder(DIR	*folder);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f);
 

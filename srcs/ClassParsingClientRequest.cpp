@@ -72,6 +72,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg)
 	size_t pos_ressource;
 	size_t pos_protocol;
 
+	std::cout << "ll\n" << arg << "\nlol\n";
 	arg.push_back('\0');
 
 	pos_method = until_space(arg.begin());
@@ -91,7 +92,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg)
 }
 int ClassParsingClientRequest::request_ready(void)
 {
-	// std::cout << parse_data;
+	std::cout <<"hello" << parse_data << "\nlol\n";
 	size_t line = 0, i = 0, p = 0;
 	std::vector<DATA> tab;
 
@@ -313,5 +314,5 @@ void ClassParsingClientRequest::display_cpcr(void)
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	std::cout << "-----------------------------------------------------------\n";
-	// std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
+	std::cout << "Body: |" << r_body_buffer << "|" << std::endl;
 }

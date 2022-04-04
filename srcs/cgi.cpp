@@ -2,41 +2,88 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <map>
+#include<string>
 
 /*
     php-cgi testcgi1.php //working test
     php-cgi lol.php //404 test 
 */
 
-void    set_cgi_env(){
-    map env<std::string, std::string> env;
-    env.["SERVER_SOFTWARE="] "webserv1.0";
-    env.["SERVER_NAME="] = ;          : host name of the server, may be dot-decimal IP address.
-    env.["GATEWAY_INTERFACE="] = "PHP 7.2.24-0ubuntu0.18.04.11";               : CGI/version.
-    env.["SERVER_PROTOCOL="] = "HTTP/1.1"               : HTTP/version.
-    env.["SERVER_PORT="] =   // a remplir            : TCP port (decimal).
-    env.["REQUEST_METHOD="] =   // a remplir         : name of HTTP method (see above).
-    env.["PATH_INFO="] =               : path suffix, if appended to URL after program name and a slash.
-    env.["PATH_TRANSLATED="] =               : corresponding full path as supposed by server, if PATH_INFO is present.
-    env.["SCRIPT_NAME="] =               : relative path to the program, like /cgi-bin/script.cgi.
-    env.["QUERY_STRING="] =               
-    env.["REMOTE_HOST="] =               
-    env.["REMOTE_ADDR="] =               
-    env.["AUTH_TYPE="] =               
-    env.["REMOTE_USER="] = 
-    env.["REMOTE_IDENT="] =               
-    env.["CONTENT_TYPE="] =               
-    env.["CONTENT_LENGTH="] =               
-    env.["HTTP_ACCEPT="] =                
-    env.["HTTP_ACCEPT_LANGUAGE="] =                
-    env.["HTTP_USER_AGENT="] =               
-    env.["HTTP_COOKIE="] =               
+void    RP15::set_cgi_env(void){
+    std::vector<char *> env;
+    std::string content_lengthenv(this->content_length.begin(), this->content_length.end());
+    std::string hostenv(this->host.begin(), this->host.end());
+    std::string acceptenv(this->accept.begin(), this->accept.end());
+    std::string accept_languageenv(this->accept_language.begin(), this->accept_language.end());
+    std::string user_agentenv(this->user_agent.begin(), this->user_agent.end());
+    std::string methodenv(this->method.begin(), this->method.end());
+    
+    env.push_back((char *)"SERVER_SOFTWARE=webserv1.0");
+    env.push_back((char*)"GATEWAY_INTERFACE=PHP 7.2.24-0ubuntu0.18.04.11");
+    env.push_back((char*)"SERVER_PROTOCOL=HTTP/1.1");
+    env.push_back((char*)"REDIRECT_STATUS0=200");
+  
+    std::string metenv("REDIRECT_STATUS0=");
+    metenv += methodenv;
+    // env.push_back((char*)("REDIRECT_STATUS0=200" += methodenv));
+    std::cout << metenv << "holq\n";
+    env.push_back((char *)metenv.c_str());
+
+
+
+    std::string content_lengthv("CONTENT_LENGTH=");
+    content_lengthv += content_lengthenv;
+    std::string hostv("SERVER_NAME=");
+    hostv += hostenv;
+    std::string acceptv();
+    std::string accept_languagev();
+    std::string user_agentv();
+    std::string methodv();
+
+
+
+
+    // env["SERVER_NAME="] = hostenv;   //remove :port at end : host name of the server, may be dot-decimal IP address.
+    // env["CONTENT_LENGTH="] = content_lengthenv;         
+    // env["HTTP_ACCEPT="] = acceptenv;
+    // env["HTTP_ACCEPT_LANGUAGE="] = accept_languageenv;  
+    // env["HTTP_USER_AGENT="] = user_agentenv;
+
+    // // env["QUERY_STRING="] =   // tout apres le points d'iterrogation
+    // // env["CONTENT_TYPE="] =   //type in header 
+
+    // env["REQUEST_METHOD="] = methodenv;
+
+    // //a mettre a jour avec le parsing de raph
+    // env["PATH_INFO="] = "/usr/bin/php-cgi";          // path to .php 
+    // env["PATH_TRANSLATED="] = "/usr/bin/php-cgi";      // le meme en path absolu
+    // env["SCRIPT_NAME="] = "/usr/bin/php-cgi";      //path vers .php : raph 
+
+    for(std::vector<char *>::iterator it = env.begin() ;it != env.end(); it++)
+        std::cout << *it << "\n";
+
+    /* optionnal:
+    // env.["SERVER_PORT="] =   // a remplir parse port from host          : TCP port (decimal).
+    // env.["REMOTE_HOST="] =               
+    // env.["REMOTE_ADDR="] =
+    // env.["AUTH_TYPE="] =               
+    // env.["REMOTE_USER="] = 
+    // env.["REMOTE_IDENT="] =               
+    // env.["CONTENT_TYPE="] =   //type in header         
+    // env.["CONTENT_LENGTH="] = this->content_lenght;//body lenght           
+    // env.["HTTP_ACCEPT="] = this->accept;
+    // env.["HTTP_ACCEPT_LANGUAGE="] = this->accept_language;               
+    // env.["HTTP_USER_AGENT="] = this->user_agent;        
+    // env.["HTTP_COOKIE="] =
+
+    */               
 }
 
 int RP15::basic_cgi(server_data *s){
     (void)s;
     std::cout << "\nTEST CGI\n\n";
-    // std::cout <<
+    set_cgi_env();
     char **args = (char **)malloc(sizeof(char *) * 3);
     args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng  
     args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
