@@ -24,25 +24,36 @@ void    RP15::set_cgi_env(void){
     env.push_back((char*)"SERVER_PROTOCOL=HTTP/1.1");
     env.push_back((char*)"REDIRECT_STATUS0=200");
   
-    std::string metenv("REDIRECT_STATUS0=");
-    metenv += methodenv;
-    // env.push_back((char*)("REDIRECT_STATUS0=200" += methodenv));
-    std::cout << metenv << "holq\n";
-    env.push_back((char *)metenv.c_str());
+    // std::string metenv("REDIRECT_STATUS0=");
+    // metenv += methodenv;
+    // // env.push_back((char*)("REDIRECT_STATUS0=200" += methodenv));
+    // std::cout << metenv << "holq\n";
+    // env.push_back((char *)metenv.c_str());
 
 
 
     std::string content_lengthv("CONTENT_LENGTH=");
     content_lengthv += content_lengthenv;
+    env.push_back((char *)content_lengthv.c_str());
     std::string hostv("SERVER_NAME=");
     hostv += hostenv;
-    std::string acceptv();
-    std::string accept_languagev();
-    std::string user_agentv();
-    std::string methodv();
+    env.push_back((char *)hostv.c_str());
+    std::string acceptv("HTTP_ACCEPT=");
+    acceptv += acceptenv;
+    env.push_back((char *)acceptv.c_str());
+    std::string accept_languagev("HTTP_ACCEPT_LANGUAGE=");
+    accept_languagev += accept_languageenv;
+    env.push_back((char *)accept_languagev.c_str());
+    std::string user_agentv("HTTP_USER_AGENT=");
+    user_agentv += user_agentenv;
+    env.push_back((char *)user_agentv.c_str());
+    std::string methodv("REQUEST_METHOD=");
+    methodv += methodenv;
+    env.push_back((char *)methodv.c_str());
 
 
 
+    //A FINIR IL EN MAQUE COMMENTE EN DESSOUS
 
     // env["SERVER_NAME="] = hostenv;   //remove :port at end : host name of the server, may be dot-decimal IP address.
     // env["CONTENT_LENGTH="] = content_lengthenv;         
