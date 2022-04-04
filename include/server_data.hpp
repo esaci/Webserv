@@ -22,6 +22,7 @@
 			size_t						pos;
 			bool						listening;
 //			VARIABLES MODIFIES REGULIEREMENT
+			std::time_t					time_server;
 			struct pollfd				client_poll;
 			DATA						recvline;
 			// Ca va etre bientot suppr
@@ -56,6 +57,7 @@
 			int				setup_response(std::vector<struct pollfd>::iterator it);
 			int				setup_read_files(std::vector<struct pollfd>::iterator it);
 			int				_set_file(int clientfd);
+			int				_time_maj( void );
 		private:
 			server_data( void );
 			server_data(const server_data&);

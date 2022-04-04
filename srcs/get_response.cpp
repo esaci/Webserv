@@ -5,6 +5,7 @@ int	server_data::_get_index(int clientfd){
 	if (tab_request[clientfd].responding < 2)
 	{
 		tab_request[clientfd].ressource = _data_init(TMPINDEX);
+		tab_request[clientfd].ressource = _link_root_init(ROOT, tab_request[clientfd].ressource);
 		if (_set_file(clientfd))
 			return (_get_error_404(clientfd));
 		return (0);

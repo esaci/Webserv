@@ -9,6 +9,7 @@
 #	include <stdlib.h>
 #	include <string.h>
 #	include <unistd.h>
+#	include <ctime>
 #	include <arpa/inet.h>
 #	include <stdarg.h>
 #	include <errno.h>

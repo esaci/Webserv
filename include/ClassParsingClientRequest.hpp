@@ -13,35 +13,36 @@ class server_data;
 class RP15
 {
 	public:
-		int		responding;
-		int		return_error;
-		bool	r_l_v;
-		DATA	redirection;
-		DATA	r_buffer;
-		DATA	r_body_buffer;
-		DATA	parse_data;
-		DATA	method;
-		DATA	ressource;
-		DATA	protocol;
-		DATA	host;
-		DATA	cache_control;
-		DATA	connection;
-		DATA	sec_ch_ua;
-		DATA	sec_ch_ua_mobile;
-		DATA	sec_ch_ua_platform;
-		DATA	upgrade_insecure_requests;
-		DATA	user_agent;
-		DATA	accept;
-		DATA	sec_fetch_site;
-		DATA	sec_fetch_mode;
-		DATA	sec_fetch_dest;
-		DATA	accept_encoding;
-		DATA	accept_language;
-		DATA	referer;
-		DATA	content_length;
-		DATA	transfer_encoding;
-		DATA	tmp_data;
-		DATA	tmp_compare;
+		int			responding;
+		int			return_error;
+		bool		r_l_v;
+		std::time_t	time_client;
+		DATA		redirection;
+		DATA		r_buffer;
+		DATA		r_body_buffer;
+		DATA		parse_data;
+		DATA		method;
+		DATA		ressource;
+		DATA		protocol;
+		DATA		host;
+		DATA		cache_control;
+		DATA		connection;
+		DATA		sec_ch_ua;
+		DATA		sec_ch_ua_mobile;
+		DATA		sec_ch_ua_platform;
+		DATA		upgrade_insecure_requests;
+		DATA		user_agent;
+		DATA		accept;
+		DATA		sec_fetch_site;
+		DATA		sec_fetch_mode;
+		DATA		sec_fetch_dest;
+		DATA		accept_encoding;
+		DATA		accept_language;
+		DATA		referer;
+		DATA		content_length;
+		DATA		transfer_encoding;
+		DATA		tmp_data;
+		DATA		tmp_compare;
 	public:
 		RP15	( void );
 		~RP15	( void );
@@ -58,7 +59,7 @@ class RP15
 		int		_set_folder(DIR	*folder);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f);
 		int		_post_cgi(server_data *d_s, int clientfd);
-
+		int		_time_init( void );
 	private:
 		RP15	(const DATA &arg);
 };
