@@ -6,11 +6,11 @@
 #include<string>
 
 /*
-    php-cgi testcgi1.php //working test
-    php-cgi lol.php //404 test 
+	php-cgi testcgi1.php //working test
+	php-cgi lol.php //404 test 
 */
 
-void    RP15::set_cgi_env(void){
+char    **RP15::set_cgi_env(void){
     std::vector<char *> env;
     std::string cgipath("/usr/bin/php-cgi");                // mettre a jour avec parsing raph
     std::string content_lengthenv(this->content_length.begin(), this->content_length.end());
@@ -23,7 +23,7 @@ void    RP15::set_cgi_env(void){
     env.push_back((char *)"SERVER_SOFTWARE=webserv1.0");
     env.push_back((char*)"GATEWAY_INTERFACE=CGI/1.1");
     env.push_back((char*)"SERVER_PROTOCOL=HTTP/1.1");
-    env.push_back((char*)"REDIRECT_STATUS0=200");
+    env.push_back((char*)"REDIRECT_STATUS=200");
     std::string content_lengthv("CONTENT_LENGTH=");
     content_lengthv += content_lengthenv;
     env.push_back((char *)content_lengthv.c_str());
@@ -58,72 +58,24 @@ void    RP15::set_cgi_env(void){
     // content_typev += ;                                // var par elias
     env.push_back((char *)content_typev.c_str());
 
-    // for(std::vector<char *>::iterator it = env.begin() ;it != env.end(); it++)
-    //     std::cout << *it << "\n";
 
-    char *ev[15];
     int i = 0;
     for(std::vector<char *>::iterator it = env.begin() ;it != env.end(); it++, i++){
         ev[i] = *it;
-         std::cout << ev[i] << "\n";
+        std::cout << ev[i] << "\n";
     }
-
+    return ev;
     // std::cout << &ev[0];
     /* optionnal:
-    // env.["SERVER_PORT="] =   // a remplir parse port from host          : TCP port (decimal).
-    // env.["REMOTE_HOST="] =               
-    // env.["REMOTE_ADDR="] =
-    // env.["AUTH_TYPE="] =               
-    // env.["REMOTE_USER="] = 
-    // env.["REMOTE_IDENT="] =               
-    // env.["CONTENT_TYPE="] =   //type in header         
-    // env.["CONTENT_LENGTH="] = this->content_lenght;//body lenght           
-    // env.["HTTP_ACCEPT="] = this->accept;
-    // env.["HTTP_ACCEPT_LANGUAGE="] = this->accept_language;               
-    // env.["HTTP_USER_AGENT="] = this->user_agent;        
-    // env.["HTTP_COOKIE="] =
-
+    // "SERVER_PORT=" // a remplir parse port from host          : TCP port (decimal).
+    // "REMOTE_HOST="               
+    // "REMOTE_ADDR="
+    // "AUTH_TYPE="              
+    // "REMOTE_USER=" 
+    // "REMOTE_IDENT="                             
+    // "HTTP_COOKIE="
     */               
 }
-
-// int RP15::basic_cgi(server_data *s){
-//     (void)s;
-    
-//     char **args = (char **)malloc(sizeof(char *) * 3);
-//     args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng  
-//     args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
-//     args[2] = NULL;
-//     // dup2()
-// 	int		ret = 1;
-// 	pid_t	pid = fork();
-//     int     status;
-//     int fd = -1;
-
-// 	if (pid < 0)
-// 		std::cout << "error: fork\n";
-// 	if (pid == 0){
-//         waitpid(pid, &status, 0);
-//     }
-// 	else{
-//         fd = open("mabite.html", O_RDWR | O_CREAT | O_TRUNC, 0666);
-//         dup2(fd, STDOUT_FILENO);
-//         ret = execve(args[0], args, NULL);
-//         delete s;
-//         exit(ret);
-//     }
-
-// 	// // 	// ret = ft_parent(c, s);
-//     // // if(err == -1){
-//     // //     return -1;}
-// 	// return (ret);
-//     if(fd != -1)
-//         close(fd);
-//     for(int i = 0; i < 3 && args[i]; i++)
-//         free(args[i]);
-//     if(args)
-//         free(args);
-//     return 0;
-// }
 
 int RP15::basic_cgi(server_data *s, int fd){
 	int		ret = 1;
@@ -144,7 +96,7 @@ int RP15::basic_cgi(server_data *s, int fd){
 	{
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		ret = execve(args[0], args, NULL);
+		ret = execve(args[0], args, set_cgi_env());
 		delete s;
 		for(int i = 0; i < 3 && args[i]; i++)
 			free(args[i]);
@@ -163,3 +115,4 @@ int RP15::basic_cgi(server_data *s, int fd){
 		close(fd);
 	return 0;
 }
+

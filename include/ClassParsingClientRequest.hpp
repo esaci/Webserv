@@ -2,8 +2,8 @@
 # define CLASSPARSINGCLIENTREQUEST_HPP
 
 # include "w_defines.hpp"
-class server_data;
 
+class server_data;
 // method ressource et protocole sont necessaire, le reste ne le sont pas forcement
 // responding:	   0 au depart, 
 				// 1 lorsque le l'entity a ete remplis(fin de requete pour GET, debut de parsing du body pour POST) et on s'apprete a appliquer la requete
@@ -55,12 +55,14 @@ class RP15
 		void	display_cpcr( void );
 		int		fill_request(int code);
 		int		basic_cgi(server_data *s, int fd);
-		void    set_cgi_env(void);
+		char    **set_cgi_env(void);
 		int		_set_folder(DIR	*folder);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f);
+		int		_post_cgi(server_data *d_s, int clientfd);
 
 	private:
 		RP15	(const DATA &arg);
+		char 	*ev[15];
 };
 
 std::ostream & operator<<(std::ostream & ostream, DATA const &i);
