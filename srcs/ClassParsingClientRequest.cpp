@@ -221,7 +221,7 @@ RP15::ClassParsingClientRequest(const RP15 &arg)
 {
 	redirection = arg.redirection;
 	responding = arg.responding;
-	time_request = arg.time_request;
+	time_client = arg.time_client;
 	return_error = arg.return_error;
 	r_l_v = arg.r_l_v;
 	r_buffer = arg.r_buffer;
@@ -254,7 +254,7 @@ RP15 RP15::operator=(const RP15 &arg)
 {
 	redirection = arg.redirection;
 	responding = arg.responding;
-	time_request = arg.time_request;
+	time_client = arg.time_client;
 	return_error = arg.return_error;
 	r_l_v = arg.r_l_v;
 	r_buffer = arg.r_buffer;
