@@ -55,9 +55,9 @@ int		server_data::setup_response(std::vector<struct pollfd>::iterator it){
 int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 	int n;
 
-	if (it >= tab_poll.end())
+	if (it >= tab_poll.end() || !files_to_clients[it->fd])
 		return (0);
-	if (files_to_clients[it->fd] && (it->revents & POLLIN) && tab_request[files_to_clients[it->fd]].responding == 2)
+	if (!tab_request[files_to_clients[it->fd]].return_error && (it->revents & POLLIN) && tab_request[files_to_clients[it->fd]].responding == 2)
 	{
 		recvline.clear();
 		if ( (n = read(it->fd, recvline.begin().base(), MAXLINE - 1)) > 0 )

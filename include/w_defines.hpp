@@ -2,15 +2,17 @@
 # define W_DEFINES_HPP
 
 #	define SERVER_PORT 18000
-#	define MAXLINE 1000
+#	define MAXLINE 100000000
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
+#	define TIMEOUT_CLIENT	5
 #	define ROOT "/goinfre/esaci/Webserv/files_test"
 #	define TMPINDEX "/index.html"
 #	define TMPFAVICO "/var/www/webserv/favicon.ico"
 #	define ERRORFILE_400 "./files_system/Bad_Request.html"
 #	define ERRORFILE_301 "./files_system/Moved_Permanently.html"
 #	define ERRORFILE_404 "./files_system/Not_Found.html"
+#	define ERRORFILE_408 "./files_system/Request_Timeout.html"
 #	define FILE_CGI	"./files_system/file_cgi.html"
 #	define METHOD	"GET"
 #	define TARGET	"/"

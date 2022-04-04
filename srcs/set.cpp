@@ -89,6 +89,7 @@ int	server_data::_set_file(int clientfd){
 	DIR *folder;
 
 	tab_request[clientfd].ressource.push_back('\0');
+	std::cout << "Comment ca j'ouvre ce fichier " << tab_request[clientfd].ressource << std::endl;
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
 		return (tab_request[clientfd]._set_folder(folder));
 	else
@@ -96,6 +97,7 @@ int	server_data::_set_file(int clientfd){
 	tab_request[clientfd].ressource.pop_back();
 	if (filefd < 0)
 		return (1);
+	tab_request[filefd]._time_init();
 	files_to_clients[filefd] = clientfd;
 	client_poll.fd = filefd;
 	client_poll.events = POLLIN;

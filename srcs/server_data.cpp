@@ -183,3 +183,26 @@ void	server_data::_content_type( void ){
 	ctypes.insert(std::pair<std::string, std::string>(std::string("wmv"),std::string("video/x-ms-wmv")));
 	ctypes.insert(std::pair<std::string, std::string>(std::string("avi"),std::string("video/x-msvideo")));
 }
+
+void	server_data::erase_poll_fd(int fd)
+{
+	std::vector<struct pollfd>::iterator it;
+
+	for (it = tab_poll.begin(); it < tab_poll.end() && it->fd != fd; it++)
+		;
+	if (it < tab_poll.end())
+		tab_poll.erase(it);
+	std::cout << 1 << std::endl;
+}
+
+void	server_data::pollout_poll_fd(int fd)
+{
+	std::vector<struct pollfd>::iterator it;
+
+	for (it = tab_poll.begin(); it < tab_poll.end() && it->fd != fd; it++)
+		;
+	if (it < tab_poll.end())
+		it->revents = POLLOUT;
+	std::cout << 2 << std::endl;
+}
+

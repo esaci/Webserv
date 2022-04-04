@@ -21,7 +21,7 @@ int RP15::basic_cgi(server_data *s, int fd){
 	// dup2()
 	int		ret = 1;
 	pid_t	pid = fork();
-
+	int		status;
 	if (pid < 0)
 		return (print_return("error: fork", 1));
 	if (!pid)
@@ -36,7 +36,8 @@ int RP15::basic_cgi(server_data *s, int fd){
 			free(args);
 		exit(ret);
 	}
-	wait(NULL);
+	else
+		waitpid(pid, &status, 0);
 	for(int i = 0; i < 3 && args[i]; i++)
 		free(args[i]);
 	if(args)

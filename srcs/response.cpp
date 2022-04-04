@@ -6,10 +6,10 @@ int	server_data::_response(int clientfd)
 
 	if (tab_request[clientfd].responding == 2)
 		return (0);
+	if (tab_request[clientfd].return_error)
+		return (_get_error(clientfd));
 	if (tab_request[clientfd].method == _data_init("GET"))
 	{
-		if (tab_request[clientfd].return_error)
-			return (_get_error(clientfd));
 		if ((_data_init("/") == tab_request[clientfd].ressource) || (_data_init(TMPINDEX) == tab_request[clientfd].ressource))
 			return (_get_index(clientfd));
 		return (_get(clientfd));
