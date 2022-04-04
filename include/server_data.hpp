@@ -2,6 +2,7 @@
 # define SERVER_DATA_HPP
 
 #	include "w_defines.hpp"
+#	include "P_server.hpp"
 // Modif Fichier de config
 // serverfd va etre un set_serverfd
 	// ca proc new_client que si il fait parti du set
@@ -13,6 +14,7 @@
 
 	class server_data{
 		public:
+			bool						error_conf; // savoir si il y a une erreur dans le fichier .conf
 			C_DATA						codes;
 			CT_DATA						ctypes;
 			R_DATA						tab_request;
@@ -26,7 +28,8 @@
 			struct pollfd				client_poll;
 			DATA						recvline;
 			// Ca va etre bientot suppr
-			p_conf						conf;
+			// element que je dois modifier;
+			std::vector<P_server>		servs_conf;
 		public:
 			server_data(std::fstream &file);
 			~server_data( void );
