@@ -29,7 +29,7 @@
 # define _ERRORP        std::map<int, std::string>
 # define _MAP_ERRORP    std::map<std::string, _ERRORP>
 # define _INDEX         std::vector<std::string>
-# define _MAP_ADDR_PORT std::map<std::string, std::vector<int> >
+# define _MAP_ADDR_PORT std::map<int, std::vector<std::string> >
 # define _MAP_ROOT      std::map<std::string, std::string>
 # define _MAP_L_EXEPT   std::map<std::string, std::vector<std::string> >
 # define _MAP_AUTO_I    std::map<std::string, bool>

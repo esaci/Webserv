@@ -31,6 +31,7 @@ bool    P_server::set_new_port(std::string &line)
     if (found!=std::string::npos)
     {
         buff = line.substr(0, found);
+        std::string fin = buff;
         std::string buff2 = line.substr(found + 1, line.size());
         found = buff.find(".");
         int size = 0;
@@ -66,7 +67,7 @@ bool    P_server::set_new_port(std::string &line)
         if (buff2.size() > 10)
             return (1);
         int port = atoi(buff2.c_str());
-        this->tab_addr_port[buff].push_back(port);
+        this->tab_addr_port[port].push_back(fin);
         return (0);
     }
     return (1);
@@ -244,7 +245,7 @@ std::string P_server::get_error_page(std::string loc, int err)
         if (it == this->map_error_p.end())
         {
             it = this->map_error_p.find("");
-            return (it->second[err];)
+            return (it->second[err]);
         }
         return (it->second[err]);
     }
@@ -285,13 +286,33 @@ size_t  P_server::get_client_max_body(std::string loc)
     return (it->second);
 }
 
-/*std::vector<std::string>    P_server::get_all_index(std::string loc)
+std::vector<std::string>    P_server::get_all_index(std::string loc)
 {
     _MAP_INDEX::iterator it;
     it = this->map_index.find(loc);
     if (it == this->map_index.end())
     {
-        it = this->
+        it = this->map_index.find("/");
+        if (it == this->map_index.end())
+        {
+            it = this->map_index.find("");
+            return (it->second);
+        }
+        return (it->second);
     }
     return (it->second);
-}*/
+}
+
+std::vector<std::string>    P_server::get_addresses(int port)
+{
+    _MAP_ADDR_PORT::iterator it;
+    it = this->tab_addr_port.find(port);
+    if (it == this->tab_addr_port.end())
+    {
+        //je ne sais pas (voir apres quoi renvoyer)
+        std::vector<std::string> lala;
+        return (lala);
+        //////////////////////////////////////////
+    }
+    return (it->second);
+}

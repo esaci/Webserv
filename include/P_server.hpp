@@ -13,7 +13,7 @@
 # define _ERRORP        std::map<int, std::string>
 # define _MAP_ERRORP    std::map<std::string, _ERRORP>
 # define _INDEX         std::vector<std::string>
-# define _MAP_ADDR_PORT std::map<std::string, std::vector<int> >
+# define _MAP_ADDR_PORT std::map<int, std::vector<std::string> >
 # define _MAP_ROOT      std::map<std::string, std::string>
 # define _MAP_L_EXEPT   std::map<std::string, std::vector<std::string> >
 # define _MAP_AUTO_I    std::map<std::string, bool>
@@ -64,7 +64,8 @@ class P_server
         std::string                 get_error_page(std::string, int); // envoie la location et le code d'erreur. renvoie la page a afficher.
         bool                        get_autoindex(std::string); // envoie la location et renvoie si l'autoindex est 0 ou 1;
         size_t                      get_client_max_body(std::string); // envoie la location et renvoie le client_max_body en fonction de la location;
-        //std::vector<std::string>    get_all_index(std::string) // envoie la location et renvoie tous les index indiquer en fonction de la localisation;  
+        std::vector<std::string>    get_addresses(int port);  // envoie le port et renvoie les addresses du port sur lequelle il ecoute;
+        std::vector<std::string>    get_all_index(std::string); // envoie la location et renvoie tous les index indiquer en fonction de la localisation; 
 };
 
 #endif

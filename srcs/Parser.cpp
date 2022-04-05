@@ -237,10 +237,16 @@ Parser::Parser(std::fstream &file)
 
         }
         // elem pour debug a enlever par la suite.
-        std::cout << this->serv[nb].get_root("/image/") << std::endl;
+        //std::cout << this->serv[nb].get_root("/image/") << std::endl;
         //std::cout << this->serv[nb].get_error_page("/image/", 400) << std::endl;
         //std::cout << this->serv[nb].get_autoindex("/image/") << std::endl;
         //std::cout << this->serv[nb].get_client_max_body("/") << std::endl;
+        /*std::vector<std::string> ko = this->serv[nb].get_all_index("/");
+        for (std::vector<std::string>::iterator it = ko.begin(); it != ko.end(); it++)
+            std::cout << *it << std::endl;*/
+        /*std::vector<std::string> ko = this->serv[nb].get_addresses(18000);
+        for (std::vector<std::string>::iterator it = ko.begin(); it != ko.end(); it++)
+            std::cout << *it << std::endl;*/
     }
 }
 
