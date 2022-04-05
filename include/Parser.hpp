@@ -16,7 +16,7 @@ class Parser
         _ERRORP     error_p;   // set default error; Context:	http, server, location, if in location  4 Setup des pages d’erreur par défaut
         size_t      size_cmb;  // client_max_boody;  Context:	http, server, location                  5 Limiter la taille du body des clients
         std::string root;      // Context:	http, server, location, if in location                      8 Définir un répertoire ou un fichier à partir duquel le fichier doit être recherché (par exemple si l’url /kapouet est rootée sur /tmp/www, l’url /kapouet/pouic/toto/pouet est /tmp/www/pouic/toto/pouet).
-        std::string autoindex; // Context:	http, server, location                                      9 Activer ou désactiver le listing des répertoires
+        bool        autoindex; // Context:	http, server, location                                      9 Activer ou désactiver le listing des répertoires
         bool        error;     // if error == 0; il n'y pas d'erreur;
         std::vector<P_server> serv;
 

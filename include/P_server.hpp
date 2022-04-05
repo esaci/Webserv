@@ -1,10 +1,28 @@
 #ifndef P_SERVER_HPP
 # define P_SERVER_HPP
 
-# include "w_library.hpp"
+# include <iostream>
+# include <vector>
+# include <map>
+# include <fstream>
+# include <cstdlib>
+# include <cctype>
+# include <arpa/inet.h>
+# include <sstream>
 
-
-
+# define _ERRORP        std::map<int, std::string>
+# define _MAP_ERRORP    std::map<std::string, _ERRORP>
+# define _INDEX         std::vector<std::string>
+# define _MAP_ADDR_PORT std::map<std::string, std::vector<int> >
+# define _MAP_ROOT      std::map<std::string, std::string>
+# define _MAP_L_EXEPT   std::map<std::string, std::vector<std::string> >
+# define _MAP_AUTO_I    std::map<std::string, bool>
+# define _CMBS          std::map<std::string, size_t> // client max size;
+# define _MAP_INDEX     std::map<std::string, _INDEX>
+# define _MAP_CGI_EXT   std::map<std::string, std::vector<std::string> >
+# define _MAP_CGI_DIR   std::map<std::string, std::string>
+# define _MAP_REDIRECT  std::map<std::string, std::map<std::string, std::string> >
+# define _ERR_FILE      std::cout << "\e[0;31m" << "error_file" << "\e[0m" << std::endl
 class P_server
 {
     private:
@@ -39,6 +57,14 @@ class P_server
         void    set_cgi_ext(std::string &, std::string &);
         void    set_cgi_dir(std::string &, std::string &);
         bool    set_redirect(std::string &, std::string &);
+
+        // getter pour different elements //
+        // pas besoin pour le server name car il est le meme pour tout le server du coup il faut juste aller le chercher dans sa string.
+        std::string                 get_root(std::string); // envoie la location et retourne le root en fonction de la location. si la location n'existe pas envoie le root par default. ou envoie le root "\";
+        std::string                 get_error_page(std::string, int); // envoie la location et le code d'erreur. renvoie la page a afficher.
+        bool                        get_autoindex(std::string); // envoie la location et renvoie si l'autoindex est 0 ou 1;
+        size_t                      get_client_max_body(std::string); // envoie la location et renvoie le client_max_body en fonction de la location;
+        //std::vector<std::string>    get_all_index(std::string) // envoie la location et renvoie tous les index indiquer en fonction de la localisation;  
 };
 
 #endif

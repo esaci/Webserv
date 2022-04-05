@@ -7,10 +7,57 @@ Parser::Parser(std::fstream &file)
     bool    in_s = 0;   // pour savoir si je suis dans une directive de block server
     bool    in_l = 0;   // pour savoir si je suis dans une directive de block location
     std::string loc = ""; // me sert a la location par deafaut;
+    this->size_cmb = 1; // default size ajouter;
+    // ajout des pages d'erreur de client et de serveur par defaut
+    // client error responses //
+    
+    this->error_p[400] = "./files_system/Bad_Request.html";
+    this->error_p[401] = "a remplir";
+    this->error_p[402] = "a remplir";
+    this->error_p[403] = "a remplir";
+    this->error_p[404] = "./files_system/Not_Found.html";
+    this->error_p[405] = "a remplir";
+    this->error_p[406] = "a remplir";
+    this->error_p[407] = "a remplir";
+    this->error_p[408] = "a remplir";
+    this->error_p[409] = "a remplir";
+    this->error_p[410] = "a remplir";
+    this->error_p[411] = "a remplir";
+    this->error_p[412] = "a remplir";
+    this->error_p[413] = "a remplir";
+    this->error_p[414] = "a remplir";
+    this->error_p[415] = "a remplir";
+    this->error_p[416] = "a remplir";
+    this->error_p[417] = "a remplir";
+    this->error_p[418] = "a remplir";
+    this->error_p[421] = "a remplir";
+    this->error_p[422] = "a remplir";
+    this->error_p[423] = "a remplir";
+    this->error_p[424] = "a remplir";
+    this->error_p[425] = "a remplir";
+    this->error_p[426] = "a remplir";
+    this->error_p[428] = "a remplir";
+    this->error_p[429] = "a remplir";
+    this->error_p[431] = "a remplir";
+    this->error_p[451] = "a remplir";
 
+    //Server error responses
+    this->error_p[500] = "a remplir";
+    this->error_p[501] = "a remplir";
+    this->error_p[502] = "a remplir";
+    this->error_p[503] = "a remplir";
+    this->error_p[504] = "a remplir";
+    this->error_p[505] = "a remplir";
+    this->error_p[506] = "a remplir";
+    this->error_p[507] = "a remplir";
+    this->error_p[508] = "a remplir";
+    this->error_p[510] = "a remplir";
+    this->error_p[511] = "a remplir";
+
+    //////////////////////////////////////////////////////////////////
     while (std::getline(file, line))
     {
-        int     i = 0; // sert a enlever les premiers ' ' de chaque ligne
+        int     i = 0; // sert a enlever les premiers ' ' ainsi que tab horizontal de chaque ligne
         for (; line[i] == ' ' || line[i] == 9; i++){}
         line = line.substr(i);
         if (line.length() != 0 && line[0] != '#')
@@ -107,7 +154,7 @@ Parser::Parser(std::fstream &file)
             }
             if (line.compare(0, 5, "root ") == 0 && in_s == 0)
                 this->set_root(line);
-            if (line.compare(0, 5, "root ") == 0 && in_s == 1 && in_l == 0)
+            if (line.compare(0, 5, "root ") == 0 && in_s == 1)
                 this->serv[this->serv.size() - 1].set_root(line, loc);
             if (line.compare(0, 13, "limit_except ") == 0 && in_s == 1 && in_l == 1)
             {
@@ -162,6 +209,39 @@ Parser::Parser(std::fstream &file)
         return;
     }
 
+    for (size_t nb = 0; nb < this->serv.size(); nb++)
+    {
+        if (this->serv[nb].map_root[""] == "")
+        {
+            this->error = 1;
+            std::cerr << "\e[0;31m" << "root empty in one server" << "\e[0m" << std::endl;
+            return ;
+        }
+        if (this->serv[nb].tab_addr_port.size() == 0)
+        {
+            this->error = 1;
+            std::cerr << "\e[0;31m" << "server have to listen on an address with a port" << "\e[0m" << std::endl;
+            return ;
+        }
+        for (_MAP_L_EXEPT::iterator it = this->serv[nb].map_limit_exept.begin() ; it != this->serv[nb].map_limit_exept.end(); it++)
+        {
+            if (it->second.size() == 0)
+            {
+                it->second.push_back("GET");
+                it->second.push_back("DELETE");
+                it->second.push_back("POST");
+            }
+        }
+        for (_MAP_ADDR_PORT::iterator it = this->serv[nb].tab_addr_port.begin(); it != this->serv[nb].tab_addr_port.end(); it++)
+        {
+
+        }
+        // elem pour debug a enlever par la suite.
+        std::cout << this->serv[nb].get_root("/image/") << std::endl;
+        //std::cout << this->serv[nb].get_error_page("/image/", 400) << std::endl;
+        //std::cout << this->serv[nb].get_autoindex("/image/") << std::endl;
+        //std::cout << this->serv[nb].get_client_max_body("/") << std::endl;
+    }
 }
 
 Parser::~Parser(){}
@@ -269,7 +349,7 @@ bool    Parser::set_autoindex(std::string &line)
     line = line.substr(0, line.length() - 1);
     if (!(line == "on" || line == "off"))
         return (1);
-    this->autoindex = line;
+    this->autoindex = (line == "on") ? 1 : 0;
     return (0);
 }
 
@@ -290,11 +370,12 @@ void    Parser::set_index(std::string &line)
 
 bool    Parser::check_if_error_parsing(std::vector<P_server> &servs)
 {
-    std::cout << "check error" << std::endl;
+    /*std::cout << "check error" << std::endl;
     for (size_t i = 0; i < servs.size(); i++)
     {
         for (_MAP_ADDR_PORT::iterator it = servs[i].tab_addr_port.begin(); it != servs[i].tab_addr_port.end(); it++)
             std::cout << "addresse " <<  it->first << " " << "port " << it->second << std::endl;
-    }
+    }*/
+    (void)servs;
     return (0);
 }

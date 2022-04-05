@@ -60,14 +60,13 @@ bool    P_server::set_new_port(std::string &line)
         int num = atoi(buff3.c_str());
         if (num < 0 || num > 255)
             return (1);
-
         for (int i = 0; buff2[i] != '\0'; i++)
             if (!(std::isdigit(buff2[i])))
                 return (1);
         if (buff2.size() > 10)
             return (1);
         int port = atoi(buff2.c_str());
-        this->tab_addr_port[buff] = port;
+        this->tab_addr_port[buff].push_back(port);
         return (0);
     }
     return (1);
@@ -156,7 +155,7 @@ bool    P_server::set_autoindex(std::string &line, std::string &loc)
     line = line.substr(0, line.length() - 1);
     if (!(line == "on" || line == "off"))
         return (1);
-    this->map_autoindex[loc] = line;
+    this->map_autoindex[loc] = (line == "on") ? 1 : 0;
     return (0);
 }
 
@@ -216,3 +215,83 @@ bool    P_server::set_redirect(std::string &line, std::string &loc)
     }
     return (1);
 }
+
+std::string P_server::get_root(std::string loc)
+{
+    _MAP_ROOT::iterator it;
+    it = this->map_root.find(loc);
+    if (it == this->map_root.end())
+    {
+        it = this->map_root.find("/");
+        if (it == this->map_root.end())
+        {
+            it = this->map_root.find("");
+            return (it->second);
+        }
+        //return ("no find elem");// soit renvoyer une erreur;
+        return (it->second);    // soit renvoyer le chemin par defaut;
+    }
+    return (it->second + loc);
+}
+
+std::string P_server::get_error_page(std::string loc, int err)
+{
+    _MAP_ERRORP::iterator it;
+    it = this->map_error_p.find(loc);
+    if (it == this->map_error_p.end())
+    {
+        it = this->map_error_p.find("/");
+        if (it == this->map_error_p.end())
+        {
+            it = this->map_error_p.find("");
+            return (it->second[err];)
+        }
+        return (it->second[err]);
+    }
+    return (it->second[err]);
+}
+
+bool    P_server::get_autoindex(std::string loc)
+{
+    _MAP_AUTO_I::iterator it;
+    it = this->map_autoindex.find(loc);
+    if (it == this->map_autoindex.end())
+    {
+        it = this->map_autoindex.find("/");
+        if (it == this->map_autoindex.end())
+        {
+            it = this->map_autoindex.find("");
+            return (it->second);
+        }
+        return (it->second);
+    }
+    return (it->second);
+}
+
+size_t  P_server::get_client_max_body(std::string loc)
+{
+    _CMBS::iterator it;
+    it = this->map_size_cmb.find(loc);
+    if (it == this->map_size_cmb.end())
+    {
+        it = this->map_size_cmb.find("/");
+        if (it == this->map_size_cmb.end())
+        {
+            it = this->map_size_cmb.find("");
+            return (it->second);
+        }
+        return (it->second);
+    }
+    return (it->second);
+}
+
+/*std::vector<std::string>    P_server::get_all_index(std::string loc)
+{
+    _MAP_INDEX::iterator it;
+    it = this->map_index.find(loc);
+    if (it == this->map_index.end())
+    {
+        it = this->
+    }
+    return (it->second);
+}*/
