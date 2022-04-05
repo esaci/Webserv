@@ -25,8 +25,6 @@
 			std::time_t					time_server;
 			struct pollfd				client_poll;
 			DATA						recvline;
-			// Ca va etre bientot suppr
-			p_conf						conf;
 		public:
 			server_data(std::fstream &file);
 			~server_data( void );

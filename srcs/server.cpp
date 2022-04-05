@@ -35,11 +35,11 @@ int	server_data::_server( void ){
 		std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n" << std::endl;
 	while (1){
 		len = tab_poll.size();
+		_time_maj();
 		if ( !(n = poll(tab_poll.begin().base(), tab_poll.size(), TIMEOUT)) )
 			return (print_return("TIMEOUT: poll", 1));
 		if (n < 0)
 			return (print_return("ERROR: poll", 1));
-		_time_maj();
 		pos = 0;
 		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos)
 		{

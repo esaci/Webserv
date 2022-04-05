@@ -1,6 +1,7 @@
 #include "../include/w_library.hpp"
 
-server_data::server_data(std::fstream &file): conf(file){
+server_data::server_data(std::fstream &file){
+	(void)file;
 	_code_init();
 	_content_type();
 	serverfd = -1;

@@ -13,8 +13,10 @@ int		RP15::_time_init( void ){
 
 int			server_data::_time_stop_client(std::vector<struct pollfd>::iterator it)
 {
+	std::cout << "---------------\n";
 	if (tab_request[it->fd].return_error || (files_to_clients[it->fd] && tab_request[files_to_clients[it->fd]].return_error))
 		return (0);
+	std::cout << "||||||||||||||||\n";
 	if (files_to_clients[it->fd])
 	{
 		close(it->fd);
