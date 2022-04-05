@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>XHR upload large file with slice</title>
+        <style>
+            #debug {
+                border: 3px dashed #ccc;
+                margin: 10px 0;
+                padding: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <p>XHR upload large file with slice. Upload multiple chunks per time.</p>
+        <form id="upload-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="hidden-name" value="hidden-value">
+            <p>text: <input type="text" name="text"></p>
+            <p>file: <input id="file" type="file" name="file"></p>
+
+            <button type="submit">Submit</button>
+            <button type="reset">Reset</button>
+
+            <div id="debug"></div>
+            <p>
+                References:<br>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData" target="_blank">https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData</a><br>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Blob/slice" target="_blank">https://developer.mozilla.org/en-US/docs/Web/API/Blob/slice</a><br>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise" target="_blank">https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise</a><br>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/XMLHttpRequest" target="_blank">https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/XMLHttpRequest</a><br>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/FileReader" target="_blank">https://developer.mozilla.org/en-US/docs/Web/API/FileReader</a><br>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/File" target="_blank">https://developer.mozilla.org/en-US/docs/Web/API/File</a><br>
+            </p>
+        </form>
+
+        <script src="xhr.js"></script>
+        <script type="application/javascript">
+            function uploadChunks(formData, file, numberOfChunks) {
+                function doUpload(i, allResolve, allReject) {
+                    formData.delete('file');// delete previous for append new.
+                    formData.append('file', chunkContentParts[i]);
+
+                    return XHR('upload-single.php?chunkNumber=' + i, formData)
+                        .then((responseObject) => {
+                            const response = responseObject.response;
+
+                            if (typeof(response.chunkNumber) === 'number' && totalFailure > 0) {
+                                totalFailure = (totalFailure - 1);// decrease total failure.
+                            } else if (typeof(response.chunkNumber) === 'undefined' || response.chunkNumber === null || response.chunkNumber === '') {
+                                // if did not response chunk number that was uploaded
+                                // mark as failure permanently and can't continue. you must have return `chunkNumber` from server before continue.
+                                totalFailure = (totalFailure + 100000);
+
+                                // for debug
+                                debugElement.insertAdjacentHTML('beforeend', '<p style="color: red;"> &nbsp; &gt; The property chunkNumber must be returned from the server.</p>');
+
+                                throw new Error('The property chunkNumber must be returned from the server.');
+                            }
+
+                            console.log('upload for chunk number ' + i + ' of ' + (numberOfChunks - 1) + ' success.', response);
+                            // for debug
+                            debugElement.insertAdjacentHTML('beforeend', '<p> &nbsp; &gt; Chunk number ' + response.chunkNumber + ' uploaded success!</p>');
+
+                            if (response.chunkNumber) {
+                                // if there is response chunk number.
+                                // add success number to array.
+                                ajaxSuccessChunks.push(response.chunkNumber);
+                                delete chunkContentParts[i];
+                            }
+
+                            if (parseInt(ajaxSuccessChunks.length) === (parseInt(numberOfChunks) - 1)) {
+                                // if finish upload all chunks.
+                                console.log('all chunks uploaded completed.');
+                                allResolve(responseObject);
+                            }
+
+                            return Promise.resolve(responseObject);
+                        })
+                        .catch((responseObject) => {
+                            const response = responseObject.response;
+
+                            totalFailure++;// increase total failure.
+
+                            console.warn('connection error! Loop ' + i, responseObject);
+                            if (totalFailure <= maxFailConnection) {
+                                // if total failure does not reach limit.
+                                // retry.
+                                console.warn('retrying from total failure: ', totalFailure);
+                                // for debug
+                                debugElement.insertAdjacentHTML('beforeend', '<p style="color: red;"> &nbsp; &gt; Error in chunk number ' + response.chunkNumber + '!, retrying. (see console.)</p>');
+
+                                doUpload(i, allResolve, allReject);
+                            } else {
+                                // for debug
+                                debugElement.insertAdjacentHTML('beforeend', '<p style="color: red;"> &nbsp; &gt; Error in chunk number ' + response.chunkNumber + '! aborting.(see console.)</p>');
+                            }
+
+                            return Promise.reject(responseObject);
+                        })
+                }// doUpload
+
+
+                let chunkStart = 0;
+                let chunkEnd = parseInt(chunkFileSize);
+                let totalFailure = 0;
+                let ajaxCons = [];
+                let ajaxSuccessChunks = [];
+                let chunkContentParts = {};
+
+                let promiseObject = new Promise((allResolve, allReject) => {
+                    let loopPromise = Promise.resolve();
+
+                    for (let i = 0; i < numberOfChunks; i++) {
+                        loopPromise = loopPromise.then(() => {
+                            if (ajaxCons.length < maxConcurrentConnection && totalFailure <= maxFailConnection) {
+                                // for debug
+                                debugElement.insertAdjacentHTML('beforeend', '<p>Uploading file to server for chunk number ' + i + ' of ' + (numberOfChunks - 1) + '</p>');
+
+                                chunkContentParts[i] = file.slice(chunkStart, chunkEnd, file.type);
+                                chunkStart = chunkEnd;
+                                chunkEnd = (chunkStart + parseInt(chunkFileSize));
+
+                                ajaxCons.push(
+                                    doUpload(i, allResolve, allReject)
+                                );
+
+                                if ((parseInt(ajaxCons.length)) === parseInt(maxConcurrentConnection)) {
+                                    // if number of concurrent connection reach maximum allowed.
+                                    // hold using Promise.
+                                    return new Promise((resolve, reject) => {
+                                        Promise.any(ajaxCons)
+                                        .then((responseObject) => {
+                                            // for debug
+                                            debugElement.insertAdjacentHTML('beforeend', '<p> &nbsp; <em>Removing finished connection count to allow make new connection.</em></p>');
+                                            ajaxCons.splice(0, 1);
+                                            resolve();
+                                        });
+                                    });
+                                }
+                            }// endif; concurrent connection not reach maximum.
+                        });// loopPromise.then()
+                    }// endfor;
+                });
+
+                return promiseObject;
+            }// uploadChunks
+
+
+            function mergeChunks(formData, totalMergeLoop, startMergeOffset, numberOfChunks) {
+                let loopPromise = Promise.resolve();
+                // loop request for merge uploaded chunks.
+                // start from 1 because 0 already has been done by first request where there is only chunkNumber=-1 in GET parameter.
+                for (let i = 1; i < totalMergeLoop; i++) {
+                    loopPromise = loopPromise.then(() => {
+                        return new Promise((resolve, reject) => {
+                            XHR('upload-single.php?chunkNumber=-1&startMergeOffset=' + startMergeOffset, formData)
+                            .then((responseObject) => {
+                                const response = responseObject.response;
+
+                                console.log('merged chunk ' + startMergeOffset + ' to ' + (parseInt(response.mergedChunkNumberEnd) - 1) + ' of ' + (numberOfChunks - 1));
+                                // for debug
+                                debugElement.insertAdjacentHTML('beforeend', '<p> &nbsp; &gt; Merged chunk ' + startMergeOffset + ' to ' + (parseInt(response.mergedChunkNumberEnd) - 1) + ' of ' + (numberOfChunks - 1) + '</p>');
+                                
+                                startMergeOffset = response.mergedChunkNumberEnd
+
+                                resolve(responseObject);
+                            })
+                            .catch((responseObject) => {
+                                const response = responseObject.response;
+
+                                reject(responseObject);
+                            });
+                        });// end return new Promise()
+                    });// end loopPromise.then()
+                }// endfor;
+                
+                return loopPromise;
+            }// mergeChunks
+
+
+            let debugElement = document.getElementById('debug');
+            const thisForm = document.getElementById('upload-form');
+            const inputFile = thisForm.querySelector('#file');
+            const chunkFileSize = 1000000;// 1,000,000 bytes = 1MB. Limit this too high may cause out of memory on server when merge process.
+            const maxConcurrentConnection = 3;// Limit too much concurrent connection may flood the request on server and can be blocked by firewall.
+            const maxFailConnection = 3;
+
+            thisForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                let formData = new FormData(thisForm);
+                formData.delete('file');// delete original input file.
+
+                if (!inputFile || !inputFile.files || inputFile.files.length <= 0) {
+                    alert('Please select a file to upload.');
+                    return ;
+                }
+
+                const file = inputFile.files[0];
+                const fileName = inputFile.files[0].name;
+                const numberOfChunks = Math.ceil(parseInt(file.size) / chunkFileSize);
+
+                // for debug
+                debugElement.innerHTML = '';
+                let debugMessage = '<p>File size: ' + file.size + ' bytes.<br>'
+                    + ' Chunk file size: ' + chunkFileSize + ' bytes.<br>'
+                    + ' Number of chunks: ' + numberOfChunks + ' (loop 0 - ' + (parseInt(numberOfChunks) - 1) + ').'
+                    + '</p><hr style="border: none; border-top: 1px dashed #ccc;">';
+                debugElement.insertAdjacentHTML('beforeend', debugMessage);
+
+                // upload chunks.
+                uploadChunks(formData, file, numberOfChunks)
+                // all chunks were uploaded successfully.
+                .then((responseObject) => {
+                    // prepare for merge them.
+                    formData.delete('file');
+                    formData.append('file_name', file.name);
+                    formData.append('file_size', file.size);
+                    formData.append('file_mimetype', file.type);
+                    formData.append('file_chunkcount', (parseInt(numberOfChunks) - 1));
+
+                    let totalMergeLoop = 0;
+                    let allSuccess = false;
+                    let startMergeOffset = 0;
+
+                    console.log('starting to merge chunks.');
+
+                    XHR('upload-single.php?chunkNumber=-1', formData)
+                    .then((responseObject) => {
+                        const response = responseObject.response;
+
+                        if (response.mergeSuccess === true) {
+                            // if merged success.
+                            allSuccess = true;
+
+                            console.log('all chunks merged completed (in 1 request).');
+
+                            // for debug
+                            debugElement.insertAdjacentHTML('beforeend', '<p style="color: green;">All chunks were uploaded and merged successfully.</p><hr>');
+                        } else {
+                            if (response.totalMergeLoop && totalMergeLoop === 0) {
+                                totalMergeLoop = parseInt(response.totalMergeLoop);
+                            }
+                            startMergeOffset = parseInt(response.mergedChunkNumberEnd);
+
+                            // for debug
+                            debugElement.insertAdjacentHTML('beforeend', '<hr style="border: none; border-top: 1px dashed #ccc;">');
+                            debugElement.insertAdjacentHTML('beforeend', '<p>Starting to merge uploaded temp files. Total loop: ' + totalMergeLoop + ', start next merge offset: ' + startMergeOffset + '</p>');
+                        }
+
+                        return Promise.resolve(responseObject);
+                    }, (responseObject) => {
+                        return Promise.reject(responseObject);
+                    })
+                    .then((responseObject) => {
+                        if (totalMergeLoop > 0 && allSuccess === false) {
+                            mergeChunks(formData, totalMergeLoop, startMergeOffset, numberOfChunks)
+                            .then(() => {
+                                // for debug
+                                debugElement.insertAdjacentHTML('beforeend', '<p style="color: green;">All chunks were uploaded and merged successfully.</p>');
+                                console.log('all chunks were merged complete successfully.');
+                            });
+                        }
+
+                        return Promise.resolve(responseObject);
+                    }, (responseObject) => {
+                        return Promise.reject(responseObject);
+                    })
+                    .catch((responseObject) => {
+                        console.warn(responseObject);
+                        const response = responseObject.response;
+
+                        if (response.error && response.error.message) {
+                            alert(response.error.message);
+                        }
+
+                        return Promise.reject(responseObject);
+                    }); // merge chunks first round finished.
+                }); // uploadChunks() promise finished.
+            });// form event listener submit.
+        </script>
+    </body>
+</html>

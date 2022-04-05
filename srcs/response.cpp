@@ -3,6 +3,7 @@
 int	server_data::_response(int clientfd)
 {
 	DATA	buff;
+
 	if (tab_request[clientfd].responding == 2)
 		return (0);
 	if (tab_request[clientfd].method == _data_init("GET"))
@@ -23,5 +24,4 @@ int	server_data::_response(int clientfd)
 	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
 	write(clientfd, buff.begin().base(), buff.size());
 	return (-10);
-	// return (n);
 }
