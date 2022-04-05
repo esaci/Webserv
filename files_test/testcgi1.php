@@ -7,5 +7,6 @@
     <?php
       echo '<strong>LE CGI FONCTIONNE  !</strong>';
     ?>
+    DELETE /file.html HTTP/1.1
   </body>
 </html>
