@@ -28,6 +28,7 @@
 #	include <fstream>
 #	include <cstring>
 #	include <cstdlib>
+#   include <cctype>
 #	include <sstream>
 
 #	include "w_defines.hpp"
@@ -46,6 +47,5 @@ size_t			hexa_to_dec(DATA &buff);
 void			dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value);
 bool			compare_size_cl(size_t len, DATA &buff);
 DATA			retire_root(DATA &buff);
-// int basic_cgi(server_data *s);
 
 # endif

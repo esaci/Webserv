@@ -5,7 +5,8 @@
   </head>
   <body>
     <?php
-      echo '<strong>Hello World !</strong>';
+      echo '<strong>LE CGI FONCTIONNE  !</strong>';
     ?>
+    DELETE /file.html HTTP/1.1
   </body>
 </html>

@@ -23,4 +23,50 @@
 	<input type="submit" value="Upload" name="submit">
 </form>
 </body>
+
+      label {
+        display: inline-block;
+        width: 240px;
+        text-align: right;
+        padding-right: 10px;
+      }
+
+      button, input {
+        float: right;
+      }
+    </style>
+    <script>
+        $(".delete").restintag(optionsObj, function(data) {
+          console.log(data);
+      },
+      function(error) {
+          console.log(error);
+  });</script>
+  </head>
+  <body>
+    <form method="post" action="php-example.php">
+      <div>
+        <label for="rp15">Qui est lolRaphifou15 Oo?</label>
+        <input name="rp15" id="rp15" value="rkhelif">
+      </div>
+      <div>
+        <label for="brp15">Es-tu sur ??</label>
+        <input name="brp15" value="Non">
+      </div>
+      <div>
+        <button>Donnez votre reponse</button>
+      </div>
+    </form>
+    <br></br>
+    <p>cgi base test</p>
+      <form method="post" action="testcgi1.php">
+        <p><input type="text" name="pseudo" /></p>
+         <p>testcgi1.php</p>
+      </form>
+      <br></br>
+    <p>delete base test</p>
+    <button class="delete" data-target="http://example.com/post/post-id/" data-method="DELETE" data-disabled="true">send Delete request</button>
+         <p>testcgi1.php</p>
+    <p>end of cgi tests</p>
+  </body>
 </html>

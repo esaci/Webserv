@@ -7,15 +7,15 @@ int main (int ac, char *av[]){
 	if (!ac || ac > 2)
 		return (print_return("Need 1 argument, the config file", 1));
 	if (ac == 1)
-		file.open("config_file/default.conf", std::fstream::in);
+		file.open("config_file/lala.conf", std::fstream::in);
 	else
 		file.open(av[1], std::fstream::in);
 	if (!file.is_open())
 		return (print_return("Echec lecture fichier config", 1));
 	
 	server_data	*serv = new server_data(file);
-
-	serv->_server();
+	if (serv->error_conf == 0)
+		serv->_server();
 	delete serv;
 	return (0);
 }

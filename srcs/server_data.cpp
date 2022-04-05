@@ -1,7 +1,19 @@
 #include "../include/w_library.hpp"
+#include "../include/P_server.hpp"
+#include "../include/Parser.hpp"
 
-server_data::server_data(std::fstream &file){
-	(void)file;
+
+server_data::server_data(std::fstream &file): error_conf(0){
+	{
+		Parser	p(file);
+		if (p.error == 1)
+		{
+			this->error_conf = 1;
+			return ;
+		}
+		this->servs_conf.reserve(p.serv.size() + 1);
+		this->servs_conf = p.serv;
+	}
 	_code_init();
 	_content_type();
 	serverfd = -1;

@@ -70,6 +70,7 @@ int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 		{
 			tab_request[files_to_clients[it->fd]].r_buffer.insert(tab_request[files_to_clients[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + 1);
 			return (0);
+
 		}
 		tab_request[files_to_clients[it->fd]].responding = 3;
 		files_to_clients[it->fd] = 0;

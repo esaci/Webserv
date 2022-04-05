@@ -9,6 +9,8 @@ HEADER =	include/ClassParsingClientRequest.hpp \
 			include/server_data.hpp \
 			include/w_defines.hpp \
 			include/w_library.hpp \
+			include/P_server.hpp \
+			include/Parser.hpp
 
 SRC = 	main.cpp \
 		server.cpp \
@@ -22,12 +24,15 @@ SRC = 	main.cpp \
 		entity.cpp	\
 		post_response.cpp \
 		get_response.cpp \
-		time.cpp	\
-		utils.cpp	\
-		setup.cpp	\
-		set.cpp		\
+		time.cpp \
+		utils.cpp \
+		setup.cpp \
+		set.cpp \
 		send_response.cpp \
 		cgi.cpp \
+		Parser.cpp \
+		P_server.cpp \
+		delete.cpp \
 
 SRCS_DIR = ./srcs/
 OBJS_DIR = ./objects/
