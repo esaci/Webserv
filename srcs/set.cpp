@@ -5,7 +5,7 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f)
 	struct stat st;
 
 	tmp_i.assign(ressource.begin(), ressource.end());
-	tmp_i.insert(tmp_i.end(), tmp_f->d_name, tmp_f->d_name + std::strlen(tmp_f->d_name));
+	tmp_i.insert(--tmp_i.end(), tmp_f->d_name, tmp_f->d_name + std::strlen(tmp_f->d_name));
 	if (stat(tmp_i.c_str(), &st) == 0)
 	{
 		std::stringstream ss;
@@ -52,7 +52,7 @@ int	RP15::_set_folder(DIR	*folder)
 	ressource.push_back('\0');
 	r_buffer = _data_init("<html>\n<head><title>Index of ");
 	_data_end(r_buffer, (char*)retire_root(ressource).begin().base());
-	_data_end(r_buffer, "</title></head>\n<body>\n<h1>Index of ");
+	_data_end(r_buffer, "</title></head>\n<body>\n<h1>Webserv/1.0 Index of ");
 	_data_end(r_buffer, (char*)retire_root(ressource).begin().base());
 	_data_end(r_buffer, "</h1><hr><pre>\n");
 	ressource.pop_back();

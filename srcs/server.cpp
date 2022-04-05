@@ -32,11 +32,12 @@ int	server_data::_server( void ){
 	if (serverfd < 0)
 		return (1);
 	_table_poll_init();
-		std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n" << std::endl;
+	std::cout << "Waiting for a connection on Port " << SERVER_PORT << "\n" << std::endl;
 	while (1){
 		_time_maj();
 		len = tab_poll.size();
 		pos = 0;
+		std::cout << "On a " << len << " Clients connectes !\n";
 		if ( !(n = poll(tab_poll.begin().base(), tab_poll.size(), TIMEOUT)) )
 			return (print_return("TIMEOUT: poll", 1));
 		if (n < 0)
