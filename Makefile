@@ -27,6 +27,7 @@ SRC = 	main.cpp \
 		set.cpp		\
 		send_response.cpp \
 		cgi.cpp \
+		delete.cpp \
 
 SRCS_DIR = ./srcs/
 OBJS_DIR = ./objects/

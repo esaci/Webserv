@@ -59,6 +59,7 @@ class RP15
 		int		_set_folder(DIR	*folder);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f);
 		int		_post_cgi(server_data *d_s, int clientfd);
+		int 	delete_request(server_data *d_s, int clientfd);
 
 	private:
 		RP15	(const DATA &arg);

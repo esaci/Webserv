@@ -80,6 +80,8 @@ char    **RP15::set_cgi_env(void){
 }
 
 int RP15::basic_cgi(server_data *s, int fd){
+
+    //important checker l'histoire des fds de la correction avec select //elias
 	int		ret = 1;
 	pid_t	pid = fork();
     int     status;
@@ -91,8 +93,8 @@ int RP15::basic_cgi(server_data *s, int fd){
 		return (print_return("error: fork", 1));
 
     char **args = (char **)malloc(sizeof(char *) * 3);
-	args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng  
-	args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
+	args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng raph
+	args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VALUE SENT BY RAPH /BIN/CGI ETC
     args[2] = NULL;
 	if (!pid)
 	{
