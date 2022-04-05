@@ -94,7 +94,8 @@
 		"stdexcept": "cpp",
 		"streambuf": "cpp",
 		"typeinfo": "cpp",
-		"set": "cpp"
+		"set": "cpp",
+		"ctime": "cpp"
 	}
 >>>>>>> 83b0bf93b9cf33d20d4d19214a7bc8bdcb80e048
 }

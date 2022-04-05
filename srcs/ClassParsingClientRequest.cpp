@@ -61,7 +61,7 @@ void	RP15::clear_ressource( void ){
 		if (pos_protocol == 2 && (it + 1) < ressource.end() && *(it + 1) == '/')
 		{
 			ressource.erase(ressource.begin() + pos_method, it + 1);
-			if (!pos_ressource)
+			if (!pos_ressource && !return_error)
 				return_error = 400;
 			return (clear_ressource());
 		}

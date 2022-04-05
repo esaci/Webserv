@@ -2,6 +2,7 @@
 #include "../include/P_server.hpp"
 #include "../include/Parser.hpp"
 
+
 server_data::server_data(std::fstream &file): error_conf(0){
 	{
 		Parser	p(file);
@@ -195,3 +196,4 @@ void	server_data::_content_type( void ){
 	ctypes.insert(std::pair<std::string, std::string>(std::string("wmv"),std::string("video/x-ms-wmv")));
 	ctypes.insert(std::pair<std::string, std::string>(std::string("avi"),std::string("video/x-msvideo")));
 }
+

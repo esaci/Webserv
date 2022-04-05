@@ -5,7 +5,7 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f)
 	struct stat st;
 
 	tmp_i.assign(ressource.begin(), ressource.end());
-	tmp_i.insert(tmp_i.end(), tmp_f->d_name, tmp_f->d_name + std::strlen(tmp_f->d_name));
+	tmp_i.insert(--tmp_i.end(), tmp_f->d_name, tmp_f->d_name + std::strlen(tmp_f->d_name));
 	if (stat(tmp_i.c_str(), &st) == 0)
 	{
 		std::stringstream ss;
@@ -37,6 +37,10 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f)
 
 int	RP15::_set_folder(DIR	*folder)
 {
+	if (!AUTOINDEX)
+	{
+		return (fill_request(400));
+	}
 	if (*(ressource.end() - 2) != '/')
 	{
 		return_error = 301;
@@ -52,7 +56,7 @@ int	RP15::_set_folder(DIR	*folder)
 	ressource.push_back('\0');
 	r_buffer = _data_init("<html>\n<head><title>Index of ");
 	_data_end(r_buffer, (char*)retire_root(ressource).begin().base());
-	_data_end(r_buffer, "</title></head>\n<body>\n<h1>Index of ");
+	_data_end(r_buffer, "</title></head>\n<body>\n<h1>Webserv/1.0 Index of ");
 	_data_end(r_buffer, (char*)retire_root(ressource).begin().base());
 	_data_end(r_buffer, "</h1><hr><pre>\n");
 	ressource.pop_back();
@@ -95,7 +99,13 @@ int	server_data::_set_file(int clientfd){
 		filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 	tab_request[clientfd].ressource.pop_back();
 	if (filefd < 0)
+	{
+		tab_request[clientfd].return_error = 404;
 		return (1);
+	}
+	if (!tab_request[clientfd].return_error)
+		tab_request[filefd].time_client = tab_request[clientfd].time_client;
+	tab_request[clientfd].r_buffer.clear();
 	files_to_clients[filefd] = clientfd;
 	client_poll.fd = filefd;
 	client_poll.events = POLLIN;
@@ -104,4 +114,3 @@ int	server_data::_set_file(int clientfd){
 	tab_request[clientfd].responding = 2;
 	return (0);
 }
-

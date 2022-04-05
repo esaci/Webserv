@@ -5,7 +5,9 @@
 #	define MAXLINE 100
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
-#	define TIMEOUT_CLIENT	5
+#	define TIMEOUT_CLIENT	2
+#	define ADR	"127.0.0.1"
+
 #	define ROOT "./files_test"
 #	define TMPINDEX "/index.html"
 #	define TMPFAVICO "./files_test/favicon.ico"
@@ -16,7 +18,7 @@
 #	define FILE_CGI	"./files_system/file_cgi.html"
 #	define METHOD	"GET"
 #	define TARGET	"/"
-#	define AUTOINDEX	0
+#	define AUTOINDEX	1
 #	define SA		struct sockaddr
 #	define SA_IN	struct sockaddr_in
 #	define DATA		std::vector<unsigned char>

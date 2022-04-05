@@ -84,6 +84,7 @@ int RP15::basic_cgi(server_data *s, int fd){
     //important checker l'histoire des fds de la correction avec select //elias
 	int		ret = 1;
 	pid_t	pid = fork();
+
     int     status;
 
     std::cout << "\nTEST CGI\n\n";
