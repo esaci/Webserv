@@ -21,7 +21,7 @@ int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 	
 	if (!(it < tab_poll.end()) || !(it->revents & POLLIN) || tab_request[it->fd].responding || files_to_clients[it->fd])
 		return (0);
-	if (tab_request[it->fd].method.size())
+	if (tab_request[it->fd].method == _data_init("POST"))
 		n = _post_server_read(it);
 	else
 		n = _server_read(it);

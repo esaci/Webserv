@@ -79,5 +79,5 @@ int	server_data::_get_error_408(int clientfd){
 			return (print_return("ERROR OPEN DU FICHIER _GET_ERROR 404", 1));
 		return (0);
 	}
-	return (_send(clientfd, 404));
+	return (_send(clientfd, 408));
 }

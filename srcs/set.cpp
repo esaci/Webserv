@@ -100,7 +100,9 @@ int	server_data::_set_file(int clientfd){
 		tab_request[clientfd].return_error = 404;
 		return (1);
 	}
-	tab_request[filefd]._time_init();
+	if (!tab_request[clientfd].return_error)
+		tab_request[filefd].time_client = tab_request[clientfd].time_client;
+	tab_request[clientfd].r_buffer.clear();
 	files_to_clients[filefd] = clientfd;
 	client_poll.fd = filefd;
 	client_poll.events = POLLIN;
@@ -109,4 +111,3 @@ int	server_data::_set_file(int clientfd){
 	tab_request[clientfd].responding = 2;
 	return (0);
 }
-

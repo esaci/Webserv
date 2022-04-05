@@ -13,33 +13,35 @@ int		RP15::_time_init( void ){
 
 int			server_data::_time_stop_client(std::vector<struct pollfd>::iterator it)
 {
-	if (tab_request[it->fd].return_error || (files_to_clients[it->fd] && tab_request[files_to_clients[it->fd]].return_error))
+	if (tab_request[it->fd].return_error)
 		return (0);
 	size_t	fd = it->fd;
 	if (files_to_clients[it->fd])
 	{
 		fd = files_to_clients[it->fd];
+		files_to_clients[it->fd] = 0;
 		close(it->fd);
 		std::cout << "TIMEOUT DE LECTURE D'UN FICHIER " << it->fd << "\n";
-		files_to_clients[it->fd] = 0;
 		tab_request.erase(it->fd);
 		tab_poll.erase(it);
+		tab_request[fd].responding = 1;
+		tab_request[fd].fill_request(408);
 	}
-	tab_request[fd]._time_init();
-	tab_request[fd].return_error = 408;
-	// tab_request[fd].ressource = _data_init(ERRORFILE_408);
-	tab_request[fd].responding = 1;
+	if (tab_request[fd].responding >= 3 || !tab_request[fd].responding)
+	{
+		tab_request[fd].responding = 1;
+		tab_request[fd].fill_request(408);
+	}
 	std::cout << "TIMEOUT D'UN CLIENT, Il va recevoir 408\n";
 	return (0);
 }
 
 int		server_data::_time_maj( void )
 {
-	return (0);
 	// char	buf[200];
 	double	diff_time = 0;
 	size_t	i = 0, j = 0;
-	static int c = 0;
+	static size_t c = tab_poll.size();
 
 	// std::cout << "--------TIME CALLED-------\n";
 	time_server = std::time(0);
@@ -61,6 +63,10 @@ int		server_data::_time_maj( void )
 			i += _time_stop_client(tab_poll.begin() + i);
 		}
 	}
+	if (c != tab_poll.size())
+	{
+		c = tab_poll.size();
+		std::cout << "--------" << c << " MAX TIME SEEN "<< j << " -------\n";
+	}
 	return (0);
-	std::cout << "--------" << ++c << " MAX TIME SEEN "<< j << " -------\n";
 }

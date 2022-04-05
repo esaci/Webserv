@@ -5,5 +5,8 @@ int		RP15::fill_request(int code){
 
 	return_error = code;
 	parse_data.assign(tab, tab + std::strlen((char*)tab));
+	// r_buffer.clear();
+	// r_body_buffer.clear();
+	method.clear();
 	return (-10);
 }
