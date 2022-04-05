@@ -52,10 +52,10 @@ char    **RP15::set_cgi_env(void){
     script_namev += cgipath;
     env.push_back((char *)script_namev.c_str());
     std::string query_stringv("QUERY_STRING=");
-    // query_stringv += ;                               // var par elias
+    query_stringv += "pseudo=sh";                               // var par elias
     env.push_back((char *)query_stringv.c_str());
     std::string content_typev("CONTENT_TYPE=");
-    // content_typev += ;                                // var par elias
+    content_typev += "application/x-www-form-urlencoded" ;             // var par elias
     env.push_back((char *)content_typev.c_str());
 
 
@@ -90,8 +90,9 @@ int RP15::basic_cgi(server_data *s, int fd){
 
     char **args = (char **)malloc(sizeof(char *) * 3);
 	args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng  
-	args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
-	args[2] = NULL;
+	// args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
+	args[1] = strdup("/home/user42/Bureau/webserv/files_test/testcgi1.php"); 
+    args[2] = NULL;
 	if (!pid)
 	{
 		dup2(fd, STDOUT_FILENO);
