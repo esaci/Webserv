@@ -5,7 +5,7 @@
   </head>
   <body>
     <?php
-      echo '<strong>Hello World !</strong>';
+      echo '<strong>LE CGI FONCTIONNE  !</strong>';
     ?>
   </body>
 </html>

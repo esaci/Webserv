@@ -43,16 +43,17 @@ char    **RP15::set_cgi_env(void){
     methodv += methodenv;
     env.push_back((char *)methodv.c_str());
     std::string path_infov("PATH_INFO=");
-    path_infov += cgipath;
+    path_infov += cgipath; //est ce le bout de l url apres ?
     env.push_back((char *)path_infov.c_str());
     std::string path_translatedv("PATH_TRANSLATED=");
-    path_translatedv += cgipath;
+    path_translatedv += cgipath; //all path
     env.push_back((char *)path_translatedv.c_str());
     std::string script_namev("SCRIPT_NAME=");
-    script_namev += cgipath;
+    // script_namev += cgipath; // a commencer par un /
+    script_namev += "/home/user42/Bureau/webserv/files_test/testcgi1.php"; // A REMPLACER PAR LE PATH DE RAPH
     env.push_back((char *)script_namev.c_str());
     std::string query_stringv("QUERY_STRING=");
-    query_stringv += "pseudo=sh";                               // var par elias
+    query_stringv += "pseudo=sh";       //est ce le bout de l url apres ?  ou le  body // var par elias
     env.push_back((char *)query_stringv.c_str());
     std::string content_typev("CONTENT_TYPE=");
     content_typev += "application/x-www-form-urlencoded" ;             // var par elias
@@ -65,7 +66,7 @@ char    **RP15::set_cgi_env(void){
         std::cout << ev[i] << "\n";
     }
     return ev;
-    // std::cout << &ev[0];
+
     /* optionnal:
     // "SERVER_PORT=" // a remplir parse port from host          : TCP port (decimal).
     // "REMOTE_HOST="               
@@ -74,6 +75,7 @@ char    **RP15::set_cgi_env(void){
     // "REMOTE_USER=" 
     // "REMOTE_IDENT="                             
     // "HTTP_COOKIE="
+    request uri
     */               
 }
 
@@ -90,14 +92,13 @@ int RP15::basic_cgi(server_data *s, int fd){
 
     char **args = (char **)malloc(sizeof(char *) * 3);
 	args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng  
-	// args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
-	args[1] = strdup("/home/user42/Bureau/webserv/files_test/testcgi1.php"); 
+	args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VAUE SENT BY RAPH /BIN/CGI ETC
     args[2] = NULL;
 	if (!pid)
 	{
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		ret = execve(args[0], args, set_cgi_env());
+		ret = execve(args[0], args, NULL);
 		delete s;
 		for(int i = 0; i < 3 && args[i]; i++)
 			free(args[i]);
