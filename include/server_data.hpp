@@ -57,8 +57,6 @@
 			int								setup_read_files(std::vector<struct pollfd>::iterator it);
 			int								_set_file(int clientfd);
 			int								_time_maj( void );
-			void							erase_poll_fd(int fd);
-			void							pollout_poll_fd(int fd);
 			int								_time_stop_client(std::vector<struct pollfd>::iterator it);
 		private:
 			server_data( void );

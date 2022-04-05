@@ -37,7 +37,7 @@ int	server_data::_server( void ){
 		_time_maj();
 		len = tab_poll.size();
 		pos = 0;
-		std::cout << "On a " << len << " Clients connectes !\n";
+		// std::cout << "On a " << len << " Clients connectes !\n";
 		if ( !(n = poll(tab_poll.begin().base(), tab_poll.size(), TIMEOUT)) )
 			return (print_return("TIMEOUT: poll", 1));
 		if (n < 0)

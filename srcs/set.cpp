@@ -37,6 +37,10 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f)
 
 int	RP15::_set_folder(DIR	*folder)
 {
+	if (!AUTOINDEX)
+	{
+		return (fill_request(400));
+	}
 	if (*(ressource.end() - 2) != '/')
 	{
 		return_error = 301;
@@ -89,7 +93,6 @@ int	server_data::_set_file(int clientfd){
 	DIR *folder;
 
 	tab_request[clientfd].ressource.push_back('\0');
-	std::cout << "Comment ca j'ouvre ce fichier " << tab_request[clientfd].ressource << std::endl;
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
 		return (tab_request[clientfd]._set_folder(folder));
 	else

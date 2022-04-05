@@ -2,12 +2,7 @@
 
 
 int		RP15::_time_init( void ){
-	char buf[200];
-	
 	time_client = std::time(0);
-	std::tm* now = std::localtime(&time_client);
-	strftime(buf, sizeof(buf), "%d-%b-%Y %H:%M", now);
-	// std::cout << "La request a ete lance a " << buf << std::endl;
 	return (0);
 }
 
@@ -16,6 +11,7 @@ int			server_data::_time_stop_client(std::vector<struct pollfd>::iterator it)
 	if (tab_request[it->fd].return_error)
 		return (0);
 	size_t	fd = it->fd;
+	int		i = 0;
 	if (files_to_clients[it->fd])
 	{
 		fd = files_to_clients[it->fd];
@@ -25,14 +21,14 @@ int			server_data::_time_stop_client(std::vector<struct pollfd>::iterator it)
 		tab_poll.erase(it);
 		tab_request[fd].responding = 1;
 		tab_request[fd].fill_request(408);
+		i = -1;
 	}
 	if (tab_request[fd].responding >= 3 || !tab_request[fd].responding)
 	{
 		tab_request[fd].responding = 1;
 		tab_request[fd].fill_request(408);
 	}
-	std::cout << "TIMEOUT D'UN CLIENT, Il va recevoir 408\n";
-	return (0);
+	return (print_return("TIMEOUT D'UN CLIENT, Il va recevoir 408", i));
 }
 
 int		server_data::_time_maj( void )
