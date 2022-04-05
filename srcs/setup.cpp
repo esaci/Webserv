@@ -74,9 +74,9 @@ int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 		tab_request[files_to_clients[it->fd]].responding = 3;
 		files_to_clients[it->fd] = 0;
 		close(it->fd);
+		tab_request.erase(it->fd);
 		tab_poll.erase(it);
 		pos--;
-		tab_request.erase(it->fd);
 	}
 	// }
 	return (0);

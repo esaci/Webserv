@@ -4,6 +4,7 @@
 int main (int ac, char *av[]){
 	std::fstream	file;
 	
+	signal(SIGPIPE, SIG_IGN);
 	if (!ac || ac > 2)
 	{
 		std::cout << "Need 1 argument, the config file\n";
