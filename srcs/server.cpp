@@ -17,7 +17,7 @@ int	init_socket( void ){
 			return (print_return("ERROR: Setsockopt", -1));
 	servaddr.sin_family = AF_INET;
 	//Prend n'importe quel adress
-	servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	servaddr.sin_addr.s_addr = inet_addr("127.0.0.1");
 	servaddr.sin_port = htons(SERVER_PORT);
 	if ((bind(serverfd, (SA *) &servaddr, sizeof(servaddr))) < 0)
 		print_return("Error: Bind", -1);

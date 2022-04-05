@@ -96,7 +96,10 @@ int	server_data::_set_file(int clientfd){
 		filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 	tab_request[clientfd].ressource.pop_back();
 	if (filefd < 0)
+	{
+		tab_request[clientfd].return_error = 404;
 		return (1);
+	}
 	tab_request[filefd]._time_init();
 	files_to_clients[filefd] = clientfd;
 	client_poll.fd = filefd;
