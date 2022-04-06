@@ -50,6 +50,7 @@
 			int								_get_error_400(int clientfd);
 			int								_get_error_404(int clientfd);
 			int								_get_error_408(int clientfd);
+			int								_get_error_403(int clientfd);
 			void							_entity(int code_n, int clientfd);
 			void							_entity_no_accept(int code_n, int clientfd);
 			std::string						_entity_ctype(int clientfd);
@@ -61,6 +62,7 @@
 			int								_set_file(int clientfd);
 			int								_time_maj( void );
 			int								_time_stop_client(std::vector<struct pollfd>::iterator it);
+			int								delete_request(int clientfd);
 
 		private:
 			server_data( void );

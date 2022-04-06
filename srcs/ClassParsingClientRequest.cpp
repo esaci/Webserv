@@ -94,7 +94,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg)
 }
 int ClassParsingClientRequest::request_ready(void)
 {
-	std::cout <<"hello" << parse_data << "\nlol\n";
+	std::cout << parse_data << "\nlol\n";
 	size_t line = 0, i = 0, p = 0;
 	std::vector<DATA> tab;
 
@@ -295,6 +295,7 @@ std::ostream &operator<<(std::ostream &ostream, std::vector<unsigned char> const
 
 void ClassParsingClientRequest::display_cpcr(void)
 {
+	return ;
 	std::cout << "method: |" << method << "|" << std::endl;
 	std::cout << "ressource: |" << ressource << "|" << std::endl;
 	std::cout << "protocol: |" << protocol << "|" << std::endl;

@@ -2,21 +2,41 @@
 #include "../include/w_library.hpp"
 
 //elias run ce test
-// curl -X DELETE http://localhost:1818/prout -H "Accept: application/json"
+// curl -X DELETE http://localhost:18000/prout -H "Accept: application/json"
 
-int RP15::delete_request(server_data *d_s, int clientfd){
-    (void)d_s;
-    (void)clientfd;
+int server_data::delete_request(int clientfd){
+	int filefd;
+
     std::cout << "\n\nthis is delete test\n";
+	tab_request[clientfd].ressource = _link_root_init(ROOT, tab_request[clientfd].ressource);
+	tab_request[clientfd].ressource.push_back('\0');
+	std::cout << "ON SUPPRIME " << tab_request[clientfd].ressource << std::endl;
+	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
+	tab_request[clientfd].ressource.pop_back();
+	if (1)
+	{
+		tab_request[clientfd].r_buffer.clear();
+		tab_request[clientfd].responding = 3;
+		return (_send(clientfd, 200));
+	}
+	if (1)
+	{
+		tab_request[clientfd].return_error = 403;
+		_get_error_403(clientfd);
+	}
     // char *pathtodelete = "./todelete"
-
     // //if exists
     // std::remove(path)
 
     // else
     //     404
-
-
+	
+	if (1)
+	{
+		tab_request[clientfd].return_error = 404;
+		_get_error_404(clientfd);
+	}
+	
     //verifier que le psth existe
     //si le path est moins que / return 403
     //try to resolve url
@@ -26,13 +46,13 @@ int RP15::delete_request(server_data *d_s, int clientfd){
             //revoie 403 forbiden // av oir avec l'autorisation
     // si le path existe pas
         //on retourne 404
-    if (this->responding < 2)
-	{
-		if (d_s->_set_file(clientfd))
-			return (d_s->_get_error_404(clientfd));
-		return (0);
-	}
-	return (d_s->_send(clientfd, 200));
+    // if (this->responding < 2)
+	// {
+		// if (_set_file(clientfd))
+			// return (_get_error_404(clientfd));
+		// return (0);
+	// }
+	// return (_send(clientfd, 200));
     return 0;
 
 }

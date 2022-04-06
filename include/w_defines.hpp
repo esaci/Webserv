@@ -14,6 +14,7 @@
 #	define ERRORFILE_400 "./files_system/Bad_Request.html"
 #	define ERRORFILE_301 "./files_system/Moved_Permanently.html"
 #	define ERRORFILE_404 "./files_system/Not_Found.html"
+#	define ERRORFILE_403 "./files_system/Forbidden.html"
 #	define ERRORFILE_408 "./files_system/Request_Timeout.html"
 #	define FILE_CGI	"./files_system/file_cgi.html"
 #	define METHOD	"GET"
