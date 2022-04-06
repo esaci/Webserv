@@ -12,7 +12,7 @@
 
 char    **RP15::set_cgi_env(void){
     std::vector<char *> env;
-    std::string cgipath("/usr/bin/php-cgi");                // mettre a jour avec parsing raph
+    std::string cgipath(CGI);                // mettre a jour avec parsing raph
     std::string content_lengthenv(this->content_length.begin(), this->content_length.end());
     std::string hostenv(this->host.begin(), this->host.end());
     std::string acceptenv(this->accept.begin(), this->accept.end());
@@ -80,8 +80,19 @@ char    **RP15::set_cgi_env(void){
 }
 
 int RP15::basic_cgi(server_data *s, int fd){
-
+	ressource = _link_root_init(ROOT, ressource);
+	std::cout << "\n" << ressource << std::endl;
+	std::cout << "BODY " << r_body_buffer << "|\n";
     //important checker l'histoire des fds de la correction avec select //elias
+	// REMPLACER CONTENT TYPE content_type
+	/*
+	if (FICHIER PAS OUVERT)
+	{
+		tab_request[clientfd].return_error = 404;
+		_get_error_404(clientfd);
+	} 
+	 */
+	// POUR GET CA SERA r_body_get, linput apres le ?
 	int		ret = 1;
 	pid_t	pid = fork();
 
@@ -94,7 +105,7 @@ int RP15::basic_cgi(server_data *s, int fd){
 		return (print_return("error: fork", 1));
 
     char **args = (char **)malloc(sizeof(char *) * 3);
-	args[0] = strdup("/usr/bin/php-cgi"); //CHECK WITH PARSIng raph
+	args[0] = strdup(CGI); //CHECK WITH PARSIng raph
 	args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VALUE SENT BY RAPH /BIN/CGI ETC
     args[2] = NULL;
 	if (!pid)

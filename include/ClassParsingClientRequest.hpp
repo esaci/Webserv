@@ -19,6 +19,7 @@ class RP15
 		std::time_t	time_client;
 		DATA		redirection;
 		DATA		r_buffer;
+		DATA		r_body_get;
 		DATA		r_body_buffer;
 		DATA		parse_data;
 		DATA		method;
@@ -40,6 +41,7 @@ class RP15
 		DATA		accept_language;
 		DATA		referer;
 		DATA		content_length;
+		DATA		content_type;
 		DATA		transfer_encoding;
 		DATA		tmp_data;
 		DATA		tmp_compare;
@@ -56,13 +58,13 @@ class RP15
 		void	display_cpcr( void );
 		int		fill_request(int code);
 		int		basic_cgi(server_data *s, int fd);
-		char    **set_cgi_env(void);
+		char	**set_cgi_env(void);
 		int		_set_folder(DIR	*folder);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f);
 		int		_post_cgi(server_data *d_s, int clientfd);
 		int		_time_init( void );
-		int 	delete_request(server_data *d_s, int clientfd);
-
+		int		delete_request(server_data *d_s, int clientfd);
+		bool	_cgi_extensions( void );
 	private:
 		RP15	(const DATA &arg);
 		char 	*ev[15];

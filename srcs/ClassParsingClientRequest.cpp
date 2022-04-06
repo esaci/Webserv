@@ -74,7 +74,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg)
 	size_t pos_ressource;
 	size_t pos_protocol;
 
-	std::cout << "ll\n" << arg << "\nlol\n";
+	// std::cout << "ll\n" << arg << "\nlol\n";
 	arg.push_back('\0');
 
 	pos_method = until_space(arg.begin());
@@ -117,6 +117,7 @@ int ClassParsingClientRequest::request_ready(void)
 	tab.push_back(_data_init("Accept-Language: "));
 	tab.push_back(_data_init("Content-Length: "));
 	tab.push_back(_data_init("Transfer_Encoding: "));
+	tab.push_back(_data_init("Content-Type: "));
 	for (DATA::iterator it = parse_data.begin(); it < parse_data.end(); it++, line++)
 	{
 		tmp_data.clear();
@@ -206,6 +207,9 @@ int ClassParsingClientRequest::request_ready(void)
 		case 15:
 			transfer_encoding.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
 			break;
+		 case 16:
+		   content_type.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
+		   break;
 		//  case x:
 		//    referer.assign(tmp_data.begin() + tab[i].size(), tmp_data.end());
 		//    break;
@@ -246,6 +250,7 @@ RP15::ClassParsingClientRequest(const RP15 &arg)
 	accept_encoding = arg.accept_encoding;
 	accept_language = arg.accept_language;
 	referer = arg.referer;
+	content_type = arg.content_type;
 	content_length = arg.content_length;
 	transfer_encoding = arg.transfer_encoding;
 	tmp_data = arg.tmp_data;
@@ -279,6 +284,7 @@ RP15 RP15::operator=(const RP15 &arg)
 	accept_encoding = arg.accept_encoding;
 	accept_language = arg.accept_language;
 	referer = arg.referer;
+	content_type = arg.content_type;
 	content_length = arg.content_length;
 	transfer_encoding = arg.transfer_encoding;
 	tmp_data = arg.tmp_data;
@@ -295,7 +301,7 @@ std::ostream &operator<<(std::ostream &ostream, std::vector<unsigned char> const
 
 void ClassParsingClientRequest::display_cpcr(void)
 {
-	return ;
+	// return ;
 	std::cout << "method: |" << method << "|" << std::endl;
 	std::cout << "ressource: |" << ressource << "|" << std::endl;
 	std::cout << "protocol: |" << protocol << "|" << std::endl;
@@ -315,6 +321,7 @@ void ClassParsingClientRequest::display_cpcr(void)
 	std::cout << "Accept-Language: |" << accept_language << "|" << std::endl;
 	std::cout << "Content_Length: |" << content_length << "|" << std::endl;
 	std::cout << "Transfer_Encoding: |" << transfer_encoding << "|" << std::endl;
+	std::cout << "Content_Type: |" << content_type << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;
 	// std::cout << "Accept-Language: |"<< accept_language << "|" << std::endl;

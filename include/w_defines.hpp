@@ -5,7 +5,7 @@
 #	define MAXLINE 100
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
-#	define TIMEOUT_CLIENT	2
+#	define TIMEOUT_CLIENT	10
 #	define ADR	"127.0.0.1"
 
 #	define ROOT "./files_test"
@@ -28,7 +28,8 @@
 #	define R_DATA	std::map<int, RP15>
 #	define RP15 ClassParsingClientRequest
 // sudo apt-get install -y php-cgi
-#	define CGI "/usr/lib/cgi-bin/php" 
+#	define CGI "/usr/bin/php-cgi" 
+#	define CGI_TYPES ".php"
 
 
 # define _ERRORP        std::map<int, std::string>
