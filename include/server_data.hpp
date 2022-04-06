@@ -14,6 +14,7 @@
 
 	class server_data{
 		public:
+			std::vector<P_server>		servs_conf;
 			bool						error_conf; // savoir si il y a une erreur dans le fichier .conf
 			C_DATA						codes;
 			CT_DATA						ctypes;
@@ -27,7 +28,6 @@
 			std::time_t					time_server;
 			struct pollfd				client_poll;
 			DATA						recvline;
-    std::vector<P_server>		servs_conf;
 		public:
 			server_data(std::fstream &file);
 			~server_data( void );
