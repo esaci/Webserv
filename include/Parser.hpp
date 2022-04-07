@@ -19,6 +19,7 @@ class Parser
         bool        autoindex; // Context:	http, server, location                                      9 Activer ou désactiver le listing des répertoires
         bool        error;     // if error == 0; il n'y pas d'erreur;
         std::vector<P_server> serv;
+        std::vector<std::pair<std::string, int> >   tab_ap;
 
         _INDEX      index;    // http, server, location                                                 10 Set un fichier par défaut comme réponse si la requête est un répertoire.
         //  setter  //
@@ -33,6 +34,9 @@ class Parser
         bool        check_error_bracket_end(bool &, bool &);
         std::string new_location(std::string &);
         bool        check_if_error_parsing(std::vector<P_server> &);
+
+        
+        std::vector<std::pair<std::string, int> > get_all_addr_port(void);// getter pour avoir tous les hosts et port qui se situe dans un serveur;
 };
 #endif
 

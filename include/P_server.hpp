@@ -9,6 +9,7 @@
 # include <cctype>
 # include <arpa/inet.h>
 # include <sstream>
+# include <utility>
 
 # define _ERRORP        std::map<int, std::string>
 # define _MAP_ERRORP    std::map<std::string, _ERRORP>
@@ -44,6 +45,9 @@ class P_server
         _MAP_CGI_EXT    map_cgi_ext;    // context: location pour l'instant : sert a voir l'enssemble des extntion que le cgi peut executer a l'interieur d'une location;
         _MAP_CGI_DIR    map_cgi_dir;    // context: location pour l'instant : l'endroit ou est executer le cgi; 
         _MAP_REDIRECT   map_redirect;   // context: server location;                            7 Définir une redirection HTTP.
+
+        std::vector<std::pair<std::string, int> >                   tab_ap;
+        std::vector<std::pair<std::pair<std::string, int>, int> >   tab_tab_ap;
         // std::vector<P_location> loc; // tab class location;
         // // setter //
         bool    set_error_page(std::string &, std::string &);
