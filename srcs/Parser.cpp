@@ -1,13 +1,18 @@
 #include "../include/Parser.hpp"
 
-Parser::Parser(std::fstream &file)
+//////////////////////////////////////////////////////////////////
+//  La class Parser vas parser l'enssemble du fichier et renvoyer les differentes infos dans un tableau de classe serveur
+//  Quelques gestion d'erreur se fait aussi a l'interieur si une erreur se produit alors le parsing s'arrete et renvoie une erreur.
+//  Le fichier parser est un fichier de type nginx. et donc le parsing en est inspirer (mais ce n'est pas le meme).
+/////////////////////////////////////////////////////////////////
+Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un fichier comme argument.
 {
-    this->error = 0;
-    std::string line;
+    this->error = 0;    // variable qui servira plus tard si une erreur est intervenue lors du parsing.
+    std::string line;   // string qui permet d'avoir chaque ligne du fichier
     bool    in_s = 0;   // pour savoir si je suis dans une directive de block server
     bool    in_l = 0;   // pour savoir si je suis dans une directive de block location
-    std::string loc = ""; // me sert a la location par deafaut;
-    this->size_cmb = 1; // default size ajouter;
+    std::string loc = ""; // me sert a la location par defaut;
+    this->size_cmb = 1; // sera la size par defaut de la variable size_cmb qui est le client_max_boody;
     // ajout des pages d'erreur de client et de serveur par defaut
     // client error responses //
     
@@ -55,16 +60,16 @@ Parser::Parser(std::fstream &file)
     this->error_p[511] = "a remplir";
 
     //////////////////////////////////////////////////////////////////
-    while (std::getline(file, line))
+    while (std::getline(file, line)) // temp qu il y a des lignes dans le fichier.
     {
         int     i = 0; // sert a enlever les premiers ' ' ainsi que tab horizontal de chaque ligne
-        for (; line[i] == ' ' || line[i] == 9; i++){}
-        line = line.substr(i);
-        if (line.length() != 0 && line[0] != '#')
+        for (; line[i] == ' ' || line[i] == 9; i++){} // iteration sur toute la ligne jusqu'a qu'il y est plus d'espace et de '\t'
+        line = line.substr(i);   // ligne prend la valeur de ligne a partir de la position de i;                     
+        if (line.length() > 0 && line[0] != '#') // si la taille de ligne est superieur a 0 et le priemier charactere de la ligne est '#' rentrer dans la fonction  
         {
-            if (!((*(line.end() - 1) == ';' || *(line.end() - 1) == '{' || *(line.end() - 1) == '}')))
+            if (!((*(line.end() - 1) == ';' || *(line.end() - 1) == '{' || *(line.end() - 1) == '}'))) // si la fin de la ligne est ';' ou '{' ou '}' renvoyer une erreur et arreter le programme
             {
-                _ERR_FILE;
+                _ERR_FILE;       // le fichier renvoie une erreur 
                 this->error = 1;
                 return;
             }
@@ -254,7 +259,8 @@ Parser::Parser(std::fstream &file)
         /////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////
     }
-    this->tab_ap = get_all_addr_port();
+   /* this->tab_ap = get_all_addr_port();
+    std::cout << this->tab_ap.size() << std::endl;*/ 
 }
 
 Parser::~Parser(){}
@@ -396,7 +402,9 @@ bool    Parser::check_if_error_parsing(std::vector<P_server> &servs)
 std::set<std::pair<std::string, int> > Parser::get_all_addr_port(void)
 {
     std::set<std::pair<std::string, int> >   lala;
-    std::set<std::pair<std::pair<std::string, int>, int> >    lalab;
+    std::vector<P_server>   n_serv;
+
+    this->tab_tab_ap.clear();
     for (size_t nb = 0; nb < this->serv.size(); nb++)
     {
         for (_MAP_ADDR_PORT::iterator it = this->serv[nb].tab_addr_port.begin(); it != this->serv[nb].tab_addr_port.end(); it++)
@@ -404,11 +412,20 @@ std::set<std::pair<std::string, int> > Parser::get_all_addr_port(void)
             for (std::vector<std::string>::iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
             {
                 std::pair<std::string, int> lala2 (*it2, it->first);
-                std::pair<std::pair<std::string, int>, int>    lalab2 (lala2, nb);
                 std::pair<std::set<std::pair<std::string, int> >::iterator, bool > ret;
                 ret = lala.insert(lala2);
                 if (ret.second == 1)
-                    lalab.insert(lalab2);
+                {   
+                    std::pair<std::pair<std::string, int>, std::vector<P_server> > lalab2 (lala2, n_serv);
+                    this->tab_tab_ap.insert(lalab2);
+                    this->tab_tab_ap[lala2].push_back(this->serv[nb]);
+                }
+                else
+                {
+                    std::map<std::pair<std::string, int>, std::vector<P_server> >::iterator ot = this->tab_tab_ap.find(lala2);
+                    if (ot != this->tab_tab_ap.end())
+                        ot->second.push_back(this->serv[nb]);
+                }
             }
         }
     }
@@ -417,7 +434,13 @@ std::set<std::pair<std::string, int> > Parser::get_all_addr_port(void)
     /*
     for (std::set<std::pair<std::string, int> >::iterator it = lala.begin(); it != lala.end(); it++)
         std::cout << "addresse: " << it->first << "  port: " << it->second << std::endl;
-    */
+    std::cout << "////////////////////////////////////////////////////////" << std::endl;
+    for (std::map<std::pair<std::string, int>, std::vector<P_server> >::iterator it = this->tab_tab_ap.begin(); it != this->tab_tab_ap.end(); it++)
+    {
+        std::cout << "adresse: " << it->first.first << " port: " << it->first.second << std::endl;
+        for (std::vector<P_server>::iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
+            std::cout << "root "  << it2->get_root("/") << std::endl;
+    } */
     /*
     for (std::set<std::pair<std::pair<std::string, int>, int> >::iterator it = lalab.begin(); it != lalab.end(); it++)
         std::cout << "address: "  << it->first.first << " port: " << it->first.second << " nb_serv: " << it->second << std::endl;

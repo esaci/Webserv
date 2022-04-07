@@ -20,6 +20,7 @@ class Parser
         bool        error;     // if error == 0; il n'y pas d'erreur;
         std::vector<P_server> serv;
         std::set<std::pair<std::string, int> >   tab_ap;
+        std::map<std::pair<std::string, int>, std::vector<P_server> >   tab_tab_ap;
 
         _INDEX      index;    // http, server, location                                                 10 Set un fichier par défaut comme réponse si la requête est un répertoire.
         //  setter  //
