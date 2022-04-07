@@ -6,8 +6,9 @@ int	server_data::_get_index(int clientfd){
 
 	if (tab_request[clientfd].responding < 2)
 	{
-		root = tab_tab_ap[*tab_ap.find(sockets_to_hosts[tab_request[clientfd].serverfd])][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
-		tab_request[clientfd].ressource = _data_init(tab_tab_ap[*tab_ap.find(sockets_to_hosts[tab_request[clientfd].serverfd])][0].get_all_index((char*)tab_request[clientfd].ressource.begin().base())[0]);
+		tab_request[clientfd].ressource.push_back('\0');
+		root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
+		tab_request[clientfd].ressource = _data_init(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_all_index((char*)tab_request[clientfd].ressource.begin().base())[0]);
 		tab_request[clientfd].ressource = _link_root_init(root, tab_request[clientfd].ressource);
 		if (_set_file(clientfd))
 			return (_get_error_404(clientfd));
@@ -21,7 +22,8 @@ int	server_data::_get(int clientfd){
 
 	if (tab_request[clientfd].responding < 2)
 	{
-		root = tab_tab_ap[*tab_ap.find(sockets_to_hosts[tab_request[clientfd].serverfd])][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
+		tab_request[clientfd].ressource.push_back('\0');
+		root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
 		tab_request[clientfd].ressource = _link_root_init(root, tab_request[clientfd].ressource);
 		if (_set_file(clientfd))
 			return (_get_error_404(clientfd));
