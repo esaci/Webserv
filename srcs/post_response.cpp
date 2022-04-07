@@ -28,9 +28,12 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 	return (d_s->_send(clientfd, 200));
 }
 
+
 int	server_data::_post_upload(int clientfd)
 {
 	(void)clientfd;
+	// TOUTE LES INFOS DU CLIENT SONT SUR tab_request[clientfd]
+	// Pour avoir ladresse et le port du client, sockets_to_hosts[clientfd]
 	// if (responding < 2)
 	// {
 // 

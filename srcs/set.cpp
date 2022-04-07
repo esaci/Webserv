@@ -95,6 +95,8 @@ int	server_data::_set_file(int clientfd){
 
 	tab_request[clientfd].ressource.push_back('\0');
 	std::string root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
+	std::cout << root << "\n" <<  tab_request[clientfd].ressource << std::endl;
+	
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
 		return (tab_request[clientfd]._set_folder(folder, root));
 	else
