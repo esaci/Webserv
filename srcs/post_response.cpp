@@ -27,3 +27,13 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 	}
 	return (d_s->_send(clientfd, 200));
 }
+
+int	server_data::_post_upload(int clientfd)
+{
+	(void)clientfd;
+	// if (responding < 2)
+	// {
+// 
+	// }
+	return (_send(clientfd, 200));
+}

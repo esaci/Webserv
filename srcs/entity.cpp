@@ -10,12 +10,7 @@ void	server_data::_entity(int code_n, int clientfd){
 		out << "Content-Type: " << content_type << "\r\n";
 	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\r\n";
 	if (code_n == 301)
-	{
-		if (!tab_request[clientfd].host.size())
-			out << "Location: " << "http://127.0.0.1:" << SERVER_PORT << tab_request[clientfd].redirection << " \r\n";
-		else
-			out << "Location: " << "http://" << tab_request[clientfd].host << tab_request[clientfd].redirection << " \r\n";
-	}
+		out << "Location: " << sockets_to_hosts[tab_request[clientfd].serverfd].first << sockets_to_hosts[tab_request[clientfd].serverfd].second << tab_request[clientfd].redirection << " \r\n";
 	out << "Connection: close\r\n";
 	if (code_n != 301)
 		out << "Accept-Ranges: bytes\r\n";
@@ -33,12 +28,7 @@ void	server_data::_entity_no_accept(int code_n, int clientfd){
 		out << "Content-Type: " << content_type << "\r\n";
 	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\r\n";
 	if (code_n == 301)
-	{
-		if (!tab_request[clientfd].host.size())
-			out << "Location: " << "http://127.0.0.1:" << SERVER_PORT << tab_request[clientfd].redirection << " \r\n";
-		else
-			out << "Location: " << tab_request[clientfd].host << tab_request[clientfd].redirection << " \r\n";
-	}
+		out << "Location: " << sockets_to_hosts[tab_request[clientfd].serverfd].first << sockets_to_hosts[tab_request[clientfd].serverfd].second << tab_request[clientfd].redirection << " \r\n";
 	out << "Connection: close\r\n";
 	out << "\r\n";
 	_data_begin(tab_request[clientfd].r_buffer, out.str());

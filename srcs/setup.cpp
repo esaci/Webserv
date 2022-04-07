@@ -5,14 +5,17 @@
 int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 	if (!(it < tab_poll.end()))
 		return (0);
-	if (listening && it->revents && !(it->revents & POLLIN) && !(it->revents & POLLOUT))
+	if (!tab_ap.size() && it->revents && !(it->revents & POLLIN) && !(it->revents & POLLOUT))
 		return (print_return("Revents chelou\n\n\n", 1));
-	if (!listening && it->fd == serverfd)
-	{
-		if ((listen(serverfd, NBRCLIENTMAX)) < 0)
+	if (!tab_ap.size())
+		return (0);
+	if (sockets_to_hosts.find(it->fd) == sockets_to_hosts.end())
+		return (0);
+	if (tab_ap.find(sockets_to_hosts.find(it->fd)->second) == tab_ap.end())
+		return (0);
+	if ((listen(sockets_to_hosts.find(it->fd)->first, NBRCLIENTMAX)) < 0)
 			return (print_return("Error: Listen", 1));
-		listening = true;
-	}
+	tab_ap.erase(sockets_to_hosts.find(it->fd)->second);
 	return (0);
 }
 
@@ -26,7 +29,11 @@ int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 	else
 		n = _server_read(it);
 	if (n == -10)
+	{
 		it->events = POLLOUT;
+		if (!tab_request[it->fd].host.size() && tab_request[it->fd].protocol == _data_init("HTTP/1.1"))
+			tab_request[it->fd].fill_request(400, it);
+	}
 	else if (n)
 		return(1);
 	return(0);
@@ -40,7 +47,6 @@ int		server_data::setup_response(std::vector<struct pollfd>::iterator it){
 	n = _response(it->fd);
 	if (n == -10)
 	{
-		// std::cout << "Connection " << it->fd << " Closed !\n";
 		tab_request.erase(it->fd);
 		close(it->fd);
 		tab_poll.erase(it);

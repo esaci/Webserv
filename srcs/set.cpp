@@ -39,7 +39,8 @@ int	RP15::_set_folder(DIR	*folder)
 {
 	if (!AUTOINDEX)
 	{
-		return (fill_request(400));
+		return_error = 400;
+		return (0);
 	}
 	if (*(ressource.end() - 2) != '/')
 	{

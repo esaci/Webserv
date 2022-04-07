@@ -19,14 +19,14 @@ int			server_data::_time_stop_client(std::vector<struct pollfd>::iterator it)
 		close(it->fd);
 		tab_request.erase(it->fd);
 		tab_poll.erase(it);
-		tab_request[fd].responding = 1;
-		tab_request[fd].fill_request(408);
+		// tab_request[fd].responding = 1;
+		tab_request[fd].fill_request(408, it);
 		i = -1;
 	}
 	if (tab_request[fd].responding >= 3 || !tab_request[fd].responding)
 	{
-		tab_request[fd].responding = 1;
-		tab_request[fd].fill_request(408);
+		// tab_request[fd].responding = 1;
+		tab_request[fd].fill_request(408, it);
 	}
 	return (print_return("TIMEOUT D'UN CLIENT, Il va recevoir 408", i));
 }
@@ -40,7 +40,7 @@ int		server_data::_time_maj( void )
 	time_server = std::time(0);
 	for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && i < tab_poll.size(); ++i, it = tab_poll.begin() + i)
 	{
-		if (it->fd == serverfd)
+		if (sockets_to_hosts.find(it->fd) != sockets_to_hosts.end())
 			continue ;
 		diff_time = difftime(time_server, tab_request[it->fd].time_client);
 		if (diff_time > TIMEOUT_CLIENT)

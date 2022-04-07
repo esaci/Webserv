@@ -18,24 +18,24 @@ server_data::server_data(std::fstream &file): error_conf(0){
 	}
 	_code_init();
 	_content_type();
-	serverfd = -1;
 	recvline.resize(MAXLINE + 10);
 	listening = false;
 }
 server_data::~server_data( void ){
-	if (serverfd >= 0 || serverfd == -2)
-		close(serverfd);
+	for (S_A_P::iterator it = sockets_to_hosts.begin(); it != sockets_to_hosts.end(); it++)
+		close(it->first);
 }
 
 
 void	server_data::_table_poll_init( void ){
 	tab_poll.clear();
-	if (serverfd < 0)
-		return ;
-	client_poll.fd = serverfd;
-	client_poll.events = POLLIN;
-	client_poll.revents = 0;
-	tab_poll.push_back(client_poll);
+	for (S_A_P::iterator it = sockets_to_hosts.begin(); it != sockets_to_hosts.end(); it++)
+	{
+		client_poll.fd = it->first;
+		client_poll.events = POLLIN;
+		client_poll.revents = 0;
+		tab_poll.push_back(client_poll);
+	}
 }
 
 void	server_data::_code_init( void ){
