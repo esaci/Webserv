@@ -43,6 +43,7 @@
 			int								_post_server_read(std::vector<pollfd>::iterator it);
 			int								_post_read_cl(std::vector<pollfd>::iterator it);
 			int								_post_read_ch(std::vector<pollfd>::iterator it);
+			int								_post_upload(int clientfd);
 			int								_response(int clientfd);
 			void							_code_init( void );
 			void							_content_type( void );
