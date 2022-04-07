@@ -94,8 +94,7 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg)
 }
 int ClassParsingClientRequest::request_ready(void)
 {
-	std::cout << parse_data << "\n";
-	exit(1);
+	// std::cout << parse_data << "\n";
 	size_t line = 0, i = 0, p = 0;
 	std::vector<DATA> tab;
 

@@ -13,10 +13,8 @@
 
 	class server_data{
 		public:
-			//	donner que raph vient d'ajouter
 			std::set<A_P>					tab_ap;      // pair address, port;
 			std::map<std::pair<std::string, int>, std::vector<P_server> >   tab_tab_ap;	 // pair pair addres, port, numero serv;	
-			//////////////////////////////////////
 			std::vector<P_server>		servs_conf;
 			bool						error_conf; // savoir si il y a une erreur dans le fichier .conf
 			C_DATA						codes;
@@ -24,7 +22,7 @@
 			R_DATA						tab_request;
 			std::map<int, int>			files_to_clients;
 			std::vector<struct pollfd>	tab_poll;
-			S_A_P			sockets_to_hosts;
+			S_A_P						sockets_to_hosts;
 			size_t						pos;
 			bool						listening;
 //			VARIABLES MODIFIES REGULIEREMENT

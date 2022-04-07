@@ -27,7 +27,7 @@
 #	define RP15 ClassParsingClientRequest
 #	define A_P	std::pair<std::string, int>
 #	define S_A_P	std::map<int, A_P>
-// sudo apt-get install -y php-cgi
+//	sudo apt-get install -y php-cgi
 #	define CGI "/usr/bin/php-cgi" 
 #	define CGI_TYPES ".php"
 
