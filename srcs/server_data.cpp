@@ -14,6 +14,10 @@ server_data::server_data(std::fstream &file): error_conf(0){
 		this->servs_conf.reserve(p.serv.size() + 1);
 		this->servs_conf = p.serv;
 	}
+	// donner que raphael vient d'ajouter
+	this->tab_ap = this->servs_conf[0].tab_ap;
+	this->tab_tab_ap = this->servs_conf[0].tab_tab_ap;
+	/////////////////////////////////
 	_code_init();
 	_content_type();
 	serverfd = -1;

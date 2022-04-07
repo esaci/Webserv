@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include <vector>
+# include <set>
 # include <map>
 # include <fstream>
 # include <cstdlib>
@@ -46,8 +47,8 @@ class P_server
         _MAP_CGI_DIR    map_cgi_dir;    // context: location pour l'instant : l'endroit ou est executer le cgi; 
         _MAP_REDIRECT   map_redirect;   // context: server location;                            7 Définir une redirection HTTP.
 
-        std::vector<std::pair<std::string, int> >                   tab_ap;
-        std::vector<std::pair<std::pair<std::string, int>, int> >   tab_tab_ap;
+        std::set<std::pair<std::string, int> >                   tab_ap;
+        std::set<std::pair<std::pair<std::string, int>, int> >   tab_tab_ap;
         // std::vector<P_location> loc; // tab class location;
         // // setter //
         bool    set_error_page(std::string &, std::string &);

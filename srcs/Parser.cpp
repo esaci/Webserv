@@ -393,10 +393,10 @@ bool    Parser::check_if_error_parsing(std::vector<P_server> &servs)
     return (0);
 }
 
-std::vector<std::pair<std::string, int> > Parser::get_all_addr_port(void)
+std::set<std::pair<std::string, int> > Parser::get_all_addr_port(void)
 {
-    std::vector<std::pair<std::string, int> >   lala;
-    std::vector<std::pair<std::pair<std::string, int>, int> >    lalab;
+    std::set<std::pair<std::string, int> >   lala;
+    std::set<std::pair<std::pair<std::string, int>, int> >    lalab;
     for (size_t nb = 0; nb < this->serv.size(); nb++)
     {
         for (_MAP_ADDR_PORT::iterator it = this->serv[nb].tab_addr_port.begin(); it != this->serv[nb].tab_addr_port.end(); it++)
@@ -405,17 +405,21 @@ std::vector<std::pair<std::string, int> > Parser::get_all_addr_port(void)
             {
                 std::pair<std::string, int> lala2 (*it2, it->first);
                 std::pair<std::pair<std::string, int>, int>    lalab2 (lala2, nb);
-                lala.push_back(lala2);
-                lalab.push_back(lalab2);
+                std::pair<std::set<std::pair<std::string, int> >::iterator, bool > ret;
+                ret = lala.insert(lala2);
+                if (ret.second == 1)
+                    lalab.insert(lalab2);
             }
         }
     }
     this->serv[0].tab_ap = lala;
     // imprimer tout ce qui se trouve dans lala pour etre sur de ce que je renvoie;
-    /*for (std::vector<std::pair<std::string, int> >::iterator it = lala.begin(); it != lala.end(); it++)
-        std::cout << "addresse: " << it->first << "  port: " << it->second << std::endl;*/
     /*
-    for (std::vector<std::pair<std::pair<std::string, int>, int> >::iterator it = lalab.begin(); it != lalab.end(); it++)
+    for (std::set<std::pair<std::string, int> >::iterator it = lala.begin(); it != lala.end(); it++)
+        std::cout << "addresse: " << it->first << "  port: " << it->second << std::endl;
+    */
+    /*
+    for (std::set<std::pair<std::pair<std::string, int>, int> >::iterator it = lalab.begin(); it != lalab.end(); it++)
         std::cout << "address: "  << it->first.first << " port: " << it->first.second << " nb_serv: " << it->second << std::endl;
     */
     return (lala);
