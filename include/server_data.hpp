@@ -16,7 +16,7 @@
 		public:
 			//	donner que raph vient d'ajouter
 			std::set<std::pair<std::string, int> >					tab_ap;      // pair address, port;
-			std::set<std::pair<std::pair<std::string, int>, int> >	tab_tab_ap;	 // pair pair addres, port, numero serv;	
+			std::map<std::pair<std::string, int>, std::vector<P_server> >   tab_tab_ap;	 // pair pair addres, port, numero serv;	
 			//////////////////////////////////////
 			std::vector<P_server>		servs_conf;
 			bool						error_conf; // savoir si il y a une erreur dans le fichier .conf
