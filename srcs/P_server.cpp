@@ -126,6 +126,8 @@ void    P_server::set_root(std::string &line, std::string &loc)
 {
     line = line.substr(5);
     line = line.substr(0, line.length() - 1);
+    if (line.size() > 0 && line[line.size() - 1] == '/')
+        line = line.substr(0, line.length() - 1);
     this->map_root[loc] = line;
 }
 
@@ -234,6 +236,8 @@ std::string P_server::get_root(std::string loc)
         //return ("no find elem");// soit renvoyer une erreur;
         return (it->second);    // soit renvoyer le chemin par defaut;
     }
+    if (loc.size() > 0 && loc[loc.size() - 1] == '/')
+        loc = loc.substr(0, loc.length() - 1);
     return (it->second + loc);
 }
 
@@ -317,4 +321,32 @@ std::vector<std::string>    P_server::get_addresses(int port)
         //////////////////////////////////////////
     }
     return (it->second);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////function en dehors de P_server mais lier //
+/////////////////////////////////////////////////////////////////////////////////////
+
+std::string get_root(std::vector<P_server> tab, std::string name, std::pair<std::string, int> ap, std::string loc)
+{
+    for (std::vector<P_server>::iterator it = tab.begin(); it != tab.end(); it++)
+    {
+        if (it->s_name == name)
+        {
+            for (_MAP_ADDR_PORT::iterator it2 = it->tab_addr_port.begin(); it2 != it->tab_addr_port.end(); it2++)
+            {
+                if (it2->first == ap.second)
+                {
+                    for (std::vector<std::string>::iterator it3 = it2->second.begin(); it3 != it2->second.end(); it3++)
+                    {
+                        if (*it3 == ap.first)
+                            return (it->get_root(loc));
+                    }
+                }
+            }
+        }
+    }
+    std::vector<P_server>::iterator it = tab.begin();
+    return it->get_root(loc);
 }

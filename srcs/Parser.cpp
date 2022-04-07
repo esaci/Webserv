@@ -359,6 +359,8 @@ void    Parser::set_root(std::string &line)
 {
     line = line.substr(5);
     line = line.substr(0, line.length() - 1);
+    if (line.size() > 0 && line[line.size() - 1] == '/')
+        line = line.substr(0, line.length() - 1);
     this->root = line;
 }
 

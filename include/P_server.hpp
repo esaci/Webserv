@@ -72,4 +72,6 @@ class P_server
         std::vector<std::string>    get_all_index(std::string); // envoie la location et renvoie tous les index indiquer en fonction de la localisation; 
 };
 
+std::string get_root(std::vector<P_server>, std::string, std::pair<std::string, int>, std::string);
+
 #endif
