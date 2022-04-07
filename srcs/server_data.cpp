@@ -14,6 +14,7 @@ server_data::server_data(std::fstream &file): error_conf(0){
 		this->servs_conf.reserve(p.serv.size() + 1);
 		this->servs_conf = p.serv;
 		this->tab_ap = p.get_all_addr_port();
+		this->tab_tab_ap = p.tab_tab_ap;
 	}
 	_code_init();
 	_content_type();

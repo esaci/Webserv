@@ -19,6 +19,8 @@ P_server &  P_server::operator=(const P_server &copie)
     this->map_cgi_ext = copie.map_cgi_ext;
     this->map_cgi_dir = copie.map_cgi_dir;
     this->map_redirect = copie.map_redirect;
+    this->tab_ap = copie.tab_ap;
+
     return (*this);
 }
 
