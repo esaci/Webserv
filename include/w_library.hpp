@@ -46,6 +46,6 @@ DATA			_link_root_init(std::string root, DATA &ressource);
 size_t			hexa_to_dec(DATA &buff);
 void			dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value);
 bool			compare_size_cl(size_t len, DATA &buff);
-DATA			retire_root(DATA &buff);
+DATA			retire_root(DATA &buff, std::string &root);
 
 # endif

@@ -41,10 +41,10 @@ void	dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value)
 	buff.insert(it, res.begin(), res.end());
 }
 
-DATA	retire_root(DATA &buff){
-	if (buff.size() < strlen(ROOT))
+DATA	retire_root(DATA &buff, std::string &root){
+	if (buff.size() < root.size())
 		return (buff);
-	DATA tmp(buff.begin() + std::strlen(ROOT), buff.end());
+	DATA tmp(buff.begin() + root.size(), buff.end());
 	tmp.pop_back();
 	return (tmp);
 }

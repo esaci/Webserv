@@ -35,7 +35,7 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f)
 	tmp_i.push_back('\n');
 }
 
-int	RP15::_set_folder(DIR	*folder)
+int	RP15::_set_folder(DIR	*folder, std::string &root)
 {
 	if (!AUTOINDEX)
 	{
@@ -46,7 +46,7 @@ int	RP15::_set_folder(DIR	*folder)
 	{
 		return_error = 301;
 		redirection.reserve(ressource.size() + 2);
-		redirection = retire_root(ressource);
+		redirection = retire_root(ressource, root);
 		redirection.push_back('/');
 		return (0);
 	}
@@ -56,9 +56,9 @@ int	RP15::_set_folder(DIR	*folder)
 
 	ressource.push_back('\0');
 	r_buffer = _data_init("<html>\n<head><title>Index of ");
-	_data_end(r_buffer, (char*)retire_root(ressource).begin().base());
+	_data_end(r_buffer, (char*)retire_root(ressource, root).begin().base());
 	_data_end(r_buffer, "</title></head>\n<body>\n<h1>Webserv/1.0 Index of ");
-	_data_end(r_buffer, (char*)retire_root(ressource).begin().base());
+	_data_end(r_buffer, (char*)retire_root(ressource, root).begin().base());
 	_data_end(r_buffer, "</h1><hr><pre>\n");
 	ressource.pop_back();
 	for	(struct dirent	*tmp_f = readdir(folder); tmp_f; tmp_f = readdir(folder))
@@ -92,10 +92,11 @@ int	RP15::_set_folder(DIR	*folder)
 int	server_data::_set_file(int clientfd){
 	int filefd;
 	DIR *folder;
+	std::string root = tab_tab_ap[*tab_ap.find(sockets_to_hosts[tab_request[clientfd].serverfd])][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
 
 	tab_request[clientfd].ressource.push_back('\0');
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
-		return (tab_request[clientfd]._set_folder(folder));
+		return (tab_request[clientfd]._set_folder(folder, root));
 	else
 		filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 	tab_request[clientfd].ressource.pop_back();

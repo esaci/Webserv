@@ -6,7 +6,6 @@
 #	define TIMEOUT 100000
 #	define TIMEOUT_CLIENT	4
 
-#	define ROOT "./files_test"
 #	define TMPINDEX "/index.html"
 #	define TMPFAVICO "./files_test/favicon.ico"
 #	define ERRORFILE_400 "./files_system/Bad_Request.html"
