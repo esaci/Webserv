@@ -19,6 +19,8 @@ char    **RP15::set_cgi_env(void){
     std::string accept_languageenv(this->accept_language.begin(), this->accept_language.end());
     std::string user_agentenv(this->user_agent.begin(), this->user_agent.end());
     std::string methodenv(this->method.begin(), this->method.end());
+    std::string content_typeenv(this->content_type.begin(), this->content_type.end());
+    std::string r_body_bufferenv(this->r_body_buffer.begin(), this->r_body_buffer.end());
     
     env.push_back((char *)"SERVER_SOFTWARE=webserv1.0");
     env.push_back((char*)"GATEWAY_INTERFACE=CGI/1.1");
@@ -50,13 +52,13 @@ char    **RP15::set_cgi_env(void){
     env.push_back((char *)path_translatedv.c_str());
     std::string script_namev("SCRIPT_NAME=");
     // script_namev += cgipath; // a commencer par un /
-    script_namev += "/home/user42/Bureau/webserv/files_test/testcgi1.php"; // A REMPLACER PAR LE PATH DE RAPH
+    script_namev += r_body_bufferenv; // A REMPLACER PAR LE PATH DE RAPH
     env.push_back((char *)script_namev.c_str());
     std::string query_stringv("QUERY_STRING=");
-    query_stringv += "pseudo=sh";       //est ce le bout de l url apres ?  ou le  body // var par elias
+    query_stringv += r_body_bufferenv;       //check avec post et get
     env.push_back((char *)query_stringv.c_str());
     std::string content_typev("CONTENT_TYPE=");
-    content_typev += "application/x-www-form-urlencoded" ;             // var par elias
+    content_typev += content_typeenv; 
     env.push_back((char *)content_typev.c_str());
 
 
@@ -93,26 +95,25 @@ int RP15::basic_cgi(server_data *s, int fd){
 	} 
 	 */
 	// POUR GET CA SERA r_body_get, linput apres le ?
+    std::cout << "caca" << r_body_buffer << "lol" << CGI;
 	int		ret = 1;
 	pid_t	pid = fork();
 
     int     status;
 
     std::cout << "\nTEST CGI\n\n";
-    set_cgi_env();
-
 	if (pid < 0)
 		return (print_return("error: fork", 1));
 
     char **args = (char **)malloc(sizeof(char *) * 3);
-	args[0] = strdup(CGI); //CHECK WITH PARSIng raph
-	args[1] = strdup("./files_test/testcgi1.php"); //REPLACE WITH FILE VALUE SENT BY RAPH /BIN/CGI ETC
+	args[0] = strdup(CGI);
+	args[1] = strdup(set_cgi_env()[13]);
     args[2] = NULL;
 	if (!pid)
 	{
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		ret = execve(args[0], args, NULL);
+		ret = execve(args[0], args, set_cgi_env());
 		delete s;
 		for(int i = 0; i < 3 && args[i]; i++)
 			free(args[i]);
