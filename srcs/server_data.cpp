@@ -16,6 +16,8 @@ server_data::server_data(std::fstream &file): error_conf(0){
 		this->tab_ap = p.get_all_addr_port();
 		this->tab_tab_ap = p.tab_tab_ap;
 	}
+
+	//std::cout << get_root(this->servs_conf, "_", std::make_pair("127.0.0.1", 18000), "/image/") << std::endl;
 	_code_init();
 	_content_type();
 	serverfd = -1;
