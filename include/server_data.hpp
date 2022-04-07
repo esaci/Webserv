@@ -4,7 +4,6 @@
 #	include "w_defines.hpp"
 #	include "P_server.hpp"
 // Modif Fichier de config
-// serverfd va etre un set_serverfd
 	// ca proc new_client que si il fait parti du set
 // listening deviendra un tableau de bool, chacun initialise a 0,
 	// Listen proc par chac bool
@@ -15,8 +14,8 @@
 	class server_data{
 		public:
 			//	donner que raph vient d'ajouter
-			std::set<std::pair<std::string, int> >					tab_ap;      // pair address, port;
-			std::set<std::pair<std::pair<std::string, int>, int> >	tab_tab_ap;	 // pair pair addres, port, numero serv;	
+			std::set<A_P>					tab_ap;      // pair address, port;
+			std::set<std::pair<A_P, int> >	tab_tab_ap;	 // pair pair addres, port, numero serv;	
 			//////////////////////////////////////
 			std::vector<P_server>		servs_conf;
 			bool						error_conf; // savoir si il y a une erreur dans le fichier .conf
@@ -25,7 +24,7 @@
 			R_DATA						tab_request;
 			std::map<int, int>			files_to_clients;
 			std::vector<struct pollfd>	tab_poll;
-			int							serverfd;
+			S_A_P			sockets_to_hosts;
 			size_t						pos;
 			bool						listening;
 //			VARIABLES MODIFIES REGULIEREMENT

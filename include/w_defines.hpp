@@ -1,12 +1,10 @@
 #ifndef W_DEFINES_HPP
 # define W_DEFINES_HPP
 
-#	define SERVER_PORT 18000
 #	define MAXLINE 100
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
-#	define TIMEOUT_CLIENT	10
-#	define ADR	"127.0.0.1"
+#	define TIMEOUT_CLIENT	4
 
 #	define ROOT "./files_test"
 #	define TMPINDEX "/index.html"
@@ -27,6 +25,8 @@
 #	define CT_DATA	std::map<std::string, std::string>
 #	define R_DATA	std::map<int, RP15>
 #	define RP15 ClassParsingClientRequest
+#	define A_P	std::pair<std::string, int>
+#	define S_A_P	std::map<int, A_P>
 // sudo apt-get install -y php-cgi
 #	define CGI "/usr/bin/php-cgi" 
 #	define CGI_TYPES ".php"

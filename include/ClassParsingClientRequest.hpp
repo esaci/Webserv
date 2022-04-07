@@ -15,6 +15,7 @@ class RP15
 	public:
 		int			responding;
 		int			return_error;
+		int			serverfd;
 		bool		r_l_v;
 		std::time_t	time_client;
 		DATA		redirection;
@@ -56,7 +57,7 @@ class RP15
 		bool	is_ready( void );
 		size_t	extract_body_check( void );
 		void	display_cpcr( void );
-		int		fill_request(int code);
+		int		fill_request(int code, std::vector<struct pollfd>::iterator &it);
 		int		basic_cgi(server_data *s, int fd);
 		char	**set_cgi_env(void);
 		int		_set_folder(DIR	*folder);
