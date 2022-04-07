@@ -29,7 +29,11 @@ int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 	else
 		n = _server_read(it);
 	if (n == -10)
+	{
 		it->events = POLLOUT;
+		if (!tab_request[it->fd].host.size() && tab_request[it->fd].protocol == _data_init("HTTP/1.1"))
+			tab_request[it->fd].fill_request(400, it);
+	}
 	else if (n)
 		return(1);
 	return(0);
