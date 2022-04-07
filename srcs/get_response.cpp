@@ -2,10 +2,14 @@
 
 int	server_data::_get_index(int clientfd){
 	// std::cout << TMPINDEX << " est l'endroit ou jvais chercher lindex\n";
+	std::string root;
+
 	if (tab_request[clientfd].responding < 2)
 	{
-		tab_request[clientfd].ressource = _data_init(TMPINDEX);
-		tab_request[clientfd].ressource = _link_root_init(ROOT, tab_request[clientfd].ressource);
+		tab_request[clientfd].ressource.push_back('\0');
+		root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
+		tab_request[clientfd].ressource = _data_init(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_all_index((char*)tab_request[clientfd].ressource.begin().base())[0]);
+		tab_request[clientfd].ressource = _link_root_init(root, tab_request[clientfd].ressource);
 		if (_set_file(clientfd))
 			return (_get_error_404(clientfd));
 		return (0);
@@ -14,9 +18,13 @@ int	server_data::_get_index(int clientfd){
 }
 
 int	server_data::_get(int clientfd){
+	std::string root;
+
 	if (tab_request[clientfd].responding < 2)
 	{
-		tab_request[clientfd].ressource = _link_root_init(ROOT, tab_request[clientfd].ressource);
+		tab_request[clientfd].ressource.push_back('\0');
+		root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
+		tab_request[clientfd].ressource = _link_root_init(root, tab_request[clientfd].ressource);
 		if (_set_file(clientfd))
 			return (_get_error_404(clientfd));
 		return (0);

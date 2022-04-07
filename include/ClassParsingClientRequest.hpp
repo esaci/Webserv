@@ -60,7 +60,7 @@ class RP15
 		int		fill_request(int code, std::vector<struct pollfd>::iterator &it);
 		int		basic_cgi(server_data *s, int fd);
 		char	**set_cgi_env(void);
-		int		_set_folder(DIR	*folder);
+		int		_set_folder(DIR	*folder, std::string &root);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f);
 		int		_post_cgi(server_data *d_s, int clientfd);
 		int		_time_init( void );

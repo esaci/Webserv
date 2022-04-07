@@ -6,9 +6,11 @@
 
 int server_data::delete_request(int clientfd){
 	int filefd;
+	std::string root;
 
-    std::cout << "\n\nthis is delete test\n";
-	tab_request[clientfd].ressource = _link_root_init(ROOT, tab_request[clientfd].ressource);
+	std::cout << "\n\nthis is delete test\n";
+	root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
+	tab_request[clientfd].ressource = _link_root_init(root, tab_request[clientfd].ressource);
 	tab_request[clientfd].ressource.push_back('\0');
 	std::cout << "ON SUPPRIME " << tab_request[clientfd].ressource << std::endl;
 	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);

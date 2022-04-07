@@ -8,10 +8,10 @@ int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 	if (clientfd < 0)
 		return (print_return("Error: accept", 1));	
 	client_poll.fd = clientfd;
+	tab_request[clientfd].serverfd = it->fd;
 	client_poll.events = POLLIN;
 	client_poll.revents = 0;
-	tab_poll.insert(tab_poll.end() , client_poll);
-	tab_request[clientfd].serverfd = it->fd;
+	tab_poll.push_back(client_poll);
 	return (0);
 }
 int	server_data::handle_line_request(std::vector<struct pollfd>::iterator it, size_t n){

@@ -80,7 +80,7 @@ char    **RP15::set_cgi_env(void){
 }
 
 int RP15::basic_cgi(server_data *s, int fd){
-	ressource = _link_root_init(ROOT, ressource);
+	ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)ressource.begin().base()), ressource);
 	std::cout << "\n" << ressource << std::endl;
 	std::cout << "BODY " << r_body_buffer << "|\n";
     //important checker l'histoire des fds de la correction avec select //elias
