@@ -4,20 +4,20 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="upload.css">
     <title>Document</title>
 </head>
+
 <body>
-    <form method="post" enctype="multipart/form-data"></form>
+
+  <form  method="post" enctype="multipart/form-data">
+    <div id="formulaire">
+      <label for="profile_pic">Sélectionnez le fichier à utiliser</label>
+      <input type="file" id="profile_pic" name="profile_pic" accept=".jpg, .jpeg, .png, .txt, .html">
+    </div>
     <div>
-        <label for="image_uploads">Sélectionner des images à uploader (PNG, JPG)</label>
-        <input type="file" id="image_uploads" name="image_uploads" accept=".jpg, .jpeg, .png" multiple>
-      </div>
-      <div>
-        <p>Aucun fichier sélectionné pour le moment</p>
-      </div>
-      <div>
-        <button>Envoyer</button>
-      </div>
-    </form>
+      <button>Envoyer</button>
+    </div>
+  </form>
 </body>
 </html>
