@@ -1,0 +1,49 @@
+==33555== Memcheck, a memory error detector
+==33555== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==33555== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==33555== Command: ./webserv
+==33555== 
+==33555== Invalid read of size 8
+==33555==    at 0x14894C: std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > > >::size() const (stl_tree.h:1048)
+==33555==    by 0x14E70B: std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > > >::size() const (stl_map.h:469)
+==33555==    by 0x14D185: P_server::get_error_page(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int) (P_server.cpp:248)
+==33555==    by 0x133629: server_data::_get_error_404(int) (get_response.cpp:69)
+==33555==    by 0x132B29: server_data::_get(int) (get_response.cpp:28)
+==33555==    by 0x114BD3: server_data::_response(int) (response.cpp:36)
+==33555==    by 0x138A11: server_data::setup_response(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (setup.cpp:47)
+==33555==    by 0x10D918: server_data::_server() (server.cpp:51)
+==33555==    by 0x10D1B7: main (main.cpp:18)
+==33555==  Address 0x48 is not stack'd, malloc'd or (recently) free'd
+==33555== 
+==33555== 
+==33555== Process terminating with default action of signal 11 (SIGSEGV)
+==33555==  Access not within mapped region at address 0x48
+==33555==    at 0x14894C: std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > > >::size() const (stl_tree.h:1048)
+==33555==    by 0x14E70B: std::map<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::map<int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::less<int>, std::allocator<std::pair<int const, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > > > >::size() const (stl_map.h:469)
+==33555==    by 0x14D185: P_server::get_error_page(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, int) (P_server.cpp:248)
+==33555==    by 0x133629: server_data::_get_error_404(int) (get_response.cpp:69)
+==33555==    by 0x132B29: server_data::_get(int) (get_response.cpp:28)
+==33555==    by 0x114BD3: server_data::_response(int) (response.cpp:36)
+==33555==    by 0x138A11: server_data::setup_response(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (setup.cpp:47)
+==33555==    by 0x10D918: server_data::_server() (server.cpp:51)
+==33555==    by 0x10D1B7: main (main.cpp:18)
+==33555==  If you believe this happened as a result of a stack
+==33555==  overflow in your program's main thread (unlikely but
+==33555==  possible), you can try to increase the size of the
+==33555==  main thread stack using the --main-stacksize= flag.
+==33555==  The main thread stack size used in this run was 8388608.
+==33555== 
+==33555== HEAP SUMMARY:
+==33555==     in use at exit: 62,278 bytes in 726 blocks
+==33555==   total heap usage: 1,897 allocs, 1,171 frees, 200,712 bytes allocated
+==33555== 
+==33555== LEAK SUMMARY:
+==33555==    definitely lost: 0 bytes in 0 blocks
+==33555==    indirectly lost: 0 bytes in 0 blocks
+==33555==      possibly lost: 0 bytes in 0 blocks
+==33555==    still reachable: 62,278 bytes in 726 blocks
+==33555==         suppressed: 0 bytes in 0 blocks
+==33555== Rerun with --leak-check=full to see details of leaked memory
+==33555== 
+==33555== For lists of detected and suppressed errors, rerun with: -s
+==33555== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)

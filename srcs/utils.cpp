@@ -28,7 +28,8 @@ int	print_return(std::string ptr, int value)
 }
 
 DATA	_link_root_init(std::string root, DATA &ressource){
-	root.push_back('/');
+	if (*ressource.begin() != '/')
+		ressource.insert(ressource.begin(), '/');
 	ressource.insert(ressource.begin(), root.begin(), root.end());
 	return (ressource);
 }

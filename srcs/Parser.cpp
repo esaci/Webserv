@@ -16,15 +16,16 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
     // ajout des pages d'erreur de client et de serveur par defaut
     // client error responses //
     
+    this->error_p[301] = "./files_system/Moved_Permanently.html";
     this->error_p[400] = "./files_system/Bad_Request.html";
     this->error_p[401] = "a remplir";
     this->error_p[402] = "a remplir";
-    this->error_p[403] = "a remplir";
+    this->error_p[403] = "./files_system/Forbidden.html";
     this->error_p[404] = "./files_system/Not_Found.html";
     this->error_p[405] = "a remplir";
     this->error_p[406] = "a remplir";
     this->error_p[407] = "a remplir";
-    this->error_p[408] = "a remplir";
+    this->error_p[408] = "./files_system/Request_Timeout.html";
     this->error_p[409] = "a remplir";
     this->error_p[410] = "a remplir";
     this->error_p[411] = "a remplir";

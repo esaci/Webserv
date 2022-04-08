@@ -13,7 +13,6 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 			// faire ++it si it != ressource.end(), pour ne pas avoir ?, OSCAR
 			r_body_get.assign(it, ressource.end());
 			ressource.erase(it, ressource.end());
-			std::cout << ressource << std::endl;
 		}
 		temp = _data_init(FILE_CGI);
 		temp.push_back('\0');
