@@ -36,6 +36,7 @@ class P_server
         _MAP_CGI_DIR    map_cgi_dir;    // context: location pour l'instant : l'endroit ou est executer le cgi; 
         _MAP_REDIRECT   map_redirect;   // context: server location;                            7 Définir une redirection HTTP.
 
+
         std::set<std::pair<std::string, int> >                   tab_ap;
         // std::vector<P_location> loc; // tab class location;
         // // setter //

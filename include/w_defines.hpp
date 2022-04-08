@@ -17,7 +17,7 @@
 #	define FILE_CGI	"./files_system/file_cgi.html"
 #	define METHOD	"GET"
 #	define TARGET	"/"
-#	define AUTOINDEX	1
+// #	define AUTOINDEX	1
 #	define SA		struct sockaddr
 #	define SA_IN	struct sockaddr_in
 #	define DATA		std::vector<unsigned char>

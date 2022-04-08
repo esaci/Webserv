@@ -304,7 +304,7 @@ std::ostream &operator<<(std::ostream &ostream, std::vector<unsigned char> const
 
 void ClassParsingClientRequest::display_cpcr(void)
 {
-	// return ;
+	return ;
 	std::cout << "method: |" << method << "|" << std::endl;
 	std::cout << "ressource: |" << ressource << "|" << std::endl;
 	std::cout << "protocol: |" << protocol << "|" << std::endl;
