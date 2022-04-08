@@ -31,7 +31,7 @@ int	server_data::_response(int clientfd)
 	{
 		if (tab_request[clientfd]._cgi_extensions())
 			return (tab_request[clientfd]._post_cgi(this, clientfd));
-		if ((_data_init("/") == tab_request[clientfd].ressource) || (_data_init(TMPINDEX) == tab_request[clientfd].ressource))
+		if ((_data_init("/") == tab_request[clientfd].ressource))
 			return (_get_index(clientfd));
 		return (_get(clientfd));
 	}
