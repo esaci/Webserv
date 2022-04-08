@@ -27,15 +27,23 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 	return (d_s->_send(clientfd, 200));
 }
 
+void	parse_body_buff(DATA &buff)
+{
+	(void)buff;
+}
 
 int	server_data::_post_upload(int clientfd)
 {
 	(void)clientfd;
+	std::string root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].ressource.begin().base());
+	std::cout << root << std::endl;
+	std::cout << "this is upload test" << std::endl;
+	parse_body_buff(tab_request[clientfd].r_body_buffer);
 	// TOUTE LES INFOS DU CLIENT SONT SUR tab_request[clientfd]
 	// Pour avoir ladresse et le port du client, sockets_to_hosts[clientfd]
 	// if (responding < 2)
 	// {
-// 
+	//
 	// }
 	return (_send(clientfd, 200));
 }

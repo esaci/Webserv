@@ -206,6 +206,16 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     return ;
                 }
             }
+            /*
+            if (line.compare(0, 13, "upload_store ") == 0 && in_s == 1 && in_l == 1)
+            {
+                if (this->serv[this->serv.size() - 1].set_path_upload_dir(line, loc) == 1)
+                {
+                    this->error = 1;
+                    return ;
+                }
+            }
+            */
         }
     }
     if (this->serv.size() == 0)

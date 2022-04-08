@@ -35,6 +35,7 @@ class P_server
         _MAP_CGI_EXT    map_cgi_ext;    // context: location pour l'instant : sert a voir l'enssemble des extntion que le cgi peut executer a l'interieur d'une location;
         _MAP_CGI_DIR    map_cgi_dir;    // context: location pour l'instant : l'endroit ou est executer le cgi; 
         _MAP_REDIRECT   map_redirect;   // context: server location;                            7 Définir une redirection HTTP.
+        std::string     path_upload_dir; // context: location upload;
 
 
         std::set<std::pair<std::string, int> >                   tab_ap;
@@ -51,6 +52,7 @@ class P_server
         void    set_cgi_ext(std::string &, std::string &);
         void    set_cgi_dir(std::string &, std::string &);
         bool    set_redirect(std::string &, std::string &);
+        bool    set_path_upload_dir(std::string &, std::string &);
 
         // getter pour different elements //
         // pas besoin pour le server name car il est le meme pour tout le server du coup il faut juste aller le chercher dans sa string.

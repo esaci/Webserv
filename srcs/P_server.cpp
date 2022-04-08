@@ -220,7 +220,21 @@ bool    P_server::set_redirect(std::string &line, std::string &loc)
     }
     return (1);
 }
-
+/*
+bool    P_server::set_path_upload_dir(std::string &line, std::string &loc)
+{
+    if (loc != "/upload/")
+    {
+        std::cerr << "\e[0;31m" << "upload_store doit etre dans la location /upload/" << "\e[0m" << std::endl;
+        return (1);
+    }
+    
+    line = line.substr(13);
+    line = line.substr(0, line.length() - 1);
+    //this->path_upload_dir = line;
+    return (0);
+}
+*/
 std::string P_server::get_root(std::string loc)
 {
     _MAP_ROOT::iterator it;
