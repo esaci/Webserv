@@ -132,6 +132,9 @@ int ClassParsingClientRequest::request_ready(void)
 		if (!line)
 		{
 			parse_request_line(tmp_data);
+			u_ressource.reserve(ressource.size() + 2);
+			u_ressource = ressource;
+			u_ressource.push_back('\0');
 			continue;
 		}
 		if (p && p <= line)

@@ -25,6 +25,7 @@ class RP15
 		DATA		parse_data;
 		DATA		method;
 		DATA		ressource;
+		DATA		u_ressource;
 		DATA		protocol;
 		DATA		host;
 		DATA		cache_control;

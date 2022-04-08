@@ -12,19 +12,8 @@
 # include <sstream>
 # include <utility>
 
-# define _ERRORP        std::map<int, std::string>
-# define _MAP_ERRORP    std::map<std::string, _ERRORP>
-# define _INDEX         std::vector<std::string>
-# define _MAP_ADDR_PORT std::map<int, std::vector<std::string> >
-# define _MAP_ROOT      std::map<std::string, std::string>
-# define _MAP_L_EXEPT   std::map<std::string, std::vector<std::string> >
-# define _MAP_AUTO_I    std::map<std::string, bool>
-# define _CMBS          std::map<std::string, size_t> // client max size;
-# define _MAP_INDEX     std::map<std::string, _INDEX>
-# define _MAP_CGI_EXT   std::map<std::string, std::vector<std::string> >
-# define _MAP_CGI_DIR   std::map<std::string, std::string>
-# define _MAP_REDIRECT  std::map<std::string, std::map<std::string, std::string> >
-# define _ERR_FILE      std::cout << "\e[0;31m" << "error_file" << "\e[0m" << std::endl
+# include "w_defines.hpp"
+
 class P_server
 {
     private:
