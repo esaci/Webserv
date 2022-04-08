@@ -245,8 +245,6 @@ std::string P_server::get_error_page(std::string loc, int err)
 {
     _MAP_ERRORP::iterator it;
 
-    std::cout << map_error_p.size() << " je ne comprends pas\n";
-    exit(1);
     it = this->map_error_p.find(loc);
     if (it == this->map_error_p.end())
     {
