@@ -224,7 +224,15 @@ bool    P_server::set_redirect(std::string &line, std::string &loc)
 std::string P_server::get_root(std::string loc)
 {
     _MAP_ROOT::iterator it;
-    it = this->map_root.find(loc);
+    std::string new_loc;
+    std::string::iterator b;
+
+    new_loc = loc;
+    for (b = --new_loc.end(); b >= new_loc.begin() && *b != '/'; b--)
+        ;
+    new_loc.erase(++b, new_loc.end());
+    std::cout << "LOC VAUT : |" << new_loc << "|" << std::endl; 
+    it = this->map_root.find(new_loc);
     if (it == this->map_root.end())
     {
         it = this->map_root.find("/");
@@ -236,9 +244,7 @@ std::string P_server::get_root(std::string loc)
         //return ("no find elem");// soit renvoyer une erreur;
         return (it->second);    // soit renvoyer le chemin par defaut;
     }
-    if (loc.size() > 0 && loc[loc.size() - 1] == '/')
-        loc = loc.substr(0, loc.length() - 1);
-    return (it->second + loc);
+    return (it->second);
 }
 
 std::string P_server::get_error_page(std::string loc, int err)

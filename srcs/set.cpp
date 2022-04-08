@@ -1,11 +1,14 @@
 #include "../include/w_library.hpp"
 
-void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f)
+void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f, std::string &root)
 {
 	struct stat st;
 
-	tmp_i.assign(ressource.begin(), ressource.end());
+	tmp_i = root;
+	tmp_i.insert(tmp_i.end(), u_ressource.begin(), u_ressource.end());
 	tmp_i.insert(--tmp_i.end(), tmp_f->d_name, tmp_f->d_name + std::strlen(tmp_f->d_name));
+	tmp_i.push_back('\0');
+	std::cout << tmp_i.c_str() << " comment ca" << std::endl;
 	if (stat(tmp_i.c_str(), &st) == 0)
 	{
 		std::stringstream ss;
@@ -35,18 +38,19 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f)
 	tmp_i.push_back('\n');
 }
 
-int	RP15::_set_folder(DIR	*folder, std::string &root)
+int	RP15::_set_folder(DIR	*folder, std::string &root, bool autoindex)
 {
-	if (!AUTOINDEX)
+	if (!autoindex)
 	{
 		return_error = 400;
 		return (0);
 	}
-	if (*(ressource.end() - 2) != '/')
+	if (*(u_ressource.end() - 2) != '/')
 	{
 		return_error = 301;
 		redirection.reserve(ressource.size() + 2);
-		redirection = retire_root(ressource, root);
+		redirection = retire_root(u_ressource, root);
+		redirection.pop_back();
 		redirection.push_back('/');
 		return (0);
 	}
@@ -69,7 +73,7 @@ int	RP15::_set_folder(DIR	*folder, std::string &root)
 		if (tmp_f->d_type == DT_DIR)
 			tmp_s.push_back('/');
 		ordering.insert(tmp_s);
-		_set_info(tmp_s.size(), tmp_i, tmp_f);
+		_set_info(tmp_s.size(), tmp_i, tmp_f, root);
 		date_taille.insert(std::pair<std::string, std::string>(tmp_s, tmp_i));
 	}
 	for(std::set<std::string>::iterator it = ordering.begin(); it != ordering.end(); it++)
@@ -92,13 +96,15 @@ int	RP15::_set_folder(DIR	*folder, std::string &root)
 int	server_data::_set_file(int clientfd){
 	int filefd;
 	DIR *folder;
+	std::string root;
+	static int i = 0;
 
 	tab_request[clientfd].ressource.push_back('\0');
-	std::string root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].u_ressource.begin().base());
-	std::cout << root << " le root \n" <<  tab_request[clientfd].ressource << " la ressource " << std::endl;
+	root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].u_ressource.begin().base());
+	std::cout << root << " le root \n" << i++ << "\n" <<  tab_request[clientfd].ressource << " la ressource " << std::endl;
 	
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
-		return (tab_request[clientfd]._set_folder(folder, root));
+		return (tab_request[clientfd]._set_folder(folder, root, tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_autoindex((char*)tab_request[clientfd].u_ressource.begin().base())));
 	else
 		filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 	tab_request[clientfd].ressource.pop_back();
