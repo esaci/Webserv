@@ -54,8 +54,6 @@ char    **RP15::set_cgi_env(void){
     path_translatedv += cgipath; //all path
     env.push_back((char *)path_translatedv.c_str());
     std::string script_namev("SCRIPT_NAME=");
-    // script_namev += cgipath; // a commencer par un /
-    std::string mabite(r_body_bufferenv);
     if(methodenv == "POST")
         script_namev += r_body_bufferenv; // A REMPLACER PAR LE PATH DE RAPH
     else if (methodenv == "GET")
@@ -63,15 +61,13 @@ char    **RP15::set_cgi_env(void){
     env.push_back((char *)script_namev.c_str());
 
     std::string query_stringv("QUERY_STRING=");
-    // query_stringv += r_body_bufferenv;       //check avec post et get
-
-    std::cout << r_body_bufferenv << "MES COULLES\n";
+    // std::cout << r_body_bufferenv << "MES COULLES\n";
 
     
-    // if(methodenv == "POST")
-        query_stringv += mabite; // A REMPLACER PAR LE PATH DE RAPH
-    // else if (methodenv == "GET")
-    //     query_stringv += r_body_getenv;
+    if(methodenv == "POST")
+        query_stringv += r_body_bufferenv; // probleme valgrind
+    else if (methodenv == "GET")
+        query_stringv += r_body_getenv;
     env.push_back((char *)query_stringv.c_str());
 
     std::string content_typev("CONTENT_TYPE=");
@@ -136,9 +132,6 @@ int RP15::basic_cgi(server_data *s, int fd){
 		close(fd);
 		ret = execve(CGI, args, NULL);
 		delete s;
-        // for(int i = 0; i < 15; i++)
-        //     delete ev[i];
-		// for(int i = 0; i < 3; i++)
         if(args[0])
 		    free(args[0]);
 		if(args)
