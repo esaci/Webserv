@@ -220,11 +220,32 @@ bool    P_server::set_redirect(std::string &line, std::string &loc)
     }
     return (1);
 }
-
+/*
+bool    P_server::set_path_upload_dir(std::string &line, std::string &loc)
+{
+    if (loc != "/upload/")
+    {
+        std::cerr << "\e[0;31m" << "upload_store doit etre dans la location /upload/" << "\e[0m" << std::endl;
+        return (1);
+    }
+    
+    line = line.substr(13);
+    line = line.substr(0, line.length() - 1);
+    //this->path_upload_dir = line;
+    return (0);
+}
+*/
 std::string P_server::get_root(std::string loc)
 {
     _MAP_ROOT::iterator it;
-    it = this->map_root.find(loc);
+    std::string::iterator b;
+    std::string new_loc;
+    new_loc = loc;
+    for (b = --new_loc.end(); b >= new_loc.begin() && *b != '/'; b--)
+        ;
+    new_loc.erase(++b, new_loc.end());
+    //std::cout << "LOC VAUT : |" << new_loc << "|" << std::endl; 
+    it = this->map_root.find(new_loc);
     if (it == this->map_root.end())
     {
         it = this->map_root.find("/");
@@ -236,14 +257,18 @@ std::string P_server::get_root(std::string loc)
         //return ("no find elem");// soit renvoyer une erreur;
         return (it->second);    // soit renvoyer le chemin par defaut;
     }
-    if (loc.size() > 0 && loc[loc.size() - 1] == '/')
-        loc = loc.substr(0, loc.length() - 1);
-    return (it->second + loc);
+    return (it->second);
 }
 
 std::string P_server::get_error_page(std::string loc, int err)
 {
     _MAP_ERRORP::iterator it;
+    ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
+    std::string::iterator b;
+    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+        ;
+    loc.erase(++b, loc.end());
+    ///////////////////////////////////////////////////////////////////////
     it = this->map_error_p.find(loc);
     if (it == this->map_error_p.end())
     {
@@ -261,6 +286,12 @@ std::string P_server::get_error_page(std::string loc, int err)
 bool    P_server::get_autoindex(std::string loc)
 {
     _MAP_AUTO_I::iterator it;
+    ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
+    std::string::iterator b;
+    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+        ;
+    loc.erase(++b, loc.end());
+    ///////////////////////////////////////////////////////////////////////
     it = this->map_autoindex.find(loc);
     if (it == this->map_autoindex.end())
     {
@@ -278,6 +309,12 @@ bool    P_server::get_autoindex(std::string loc)
 size_t  P_server::get_client_max_body(std::string loc)
 {
     _CMBS::iterator it;
+    ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
+    std::string::iterator b;
+    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+        ;
+    loc.erase(++b, loc.end());
+    ///////////////////////////////////////////////////////////////////////
     it = this->map_size_cmb.find(loc);
     if (it == this->map_size_cmb.end())
     {
@@ -295,6 +332,12 @@ size_t  P_server::get_client_max_body(std::string loc)
 std::vector<std::string>    P_server::get_all_index(std::string loc)
 {
     _MAP_INDEX::iterator it;
+    ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
+    std::string::iterator b;
+    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+        ;
+    loc.erase(++b, loc.end());
+    ///////////////////////////////////////////////////////////////////////
     it = this->map_index.find(loc);
     if (it == this->map_index.end())
     {
