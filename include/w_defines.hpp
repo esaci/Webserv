@@ -1,10 +1,10 @@
 #ifndef W_DEFINES_HPP
 # define W_DEFINES_HPP
 
-#	define MAXLINE 100
+#	define MAXLINE 10000000
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
-#	define TIMEOUT_CLIENT	4
+#	define TIMEOUT_CLIENT	50000
 
 // #	define ROOT "./files_test"
 // #	define TMPINDEX "/index.html"

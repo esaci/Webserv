@@ -15,7 +15,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
     this->size_cmb = 1; // sera la size par defaut de la variable size_cmb qui est le client_max_boody;
     // ajout des pages d'erreur de client et de serveur par defaut
     // client error responses //
-    
+    this->error_p[200]  = "./files_system/Ok.html";
     this->error_p[301] = "./files_system/Moved_Permanently.html";
     this->error_p[400] = "./files_system/Bad_Request.html";
     this->error_p[401] = "a remplir";
@@ -208,16 +208,14 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     return ;
                 }
             }
-            /*
-            if (line.compare(0, 13, "upload_store ") == 0 && in_s == 1 && in_l == 1)
+            if (line.compare(0, 13, "upload_store ") == 0 && in_s == 1)
             {
-                if (this->serv[this->serv.size() - 1].set_path_upload_dir(line, loc) == 1)
+                if ((this->serv[this->serv.size() - 1].set_path_upload_dir(line)) == 1)
                 {
                     this->error = 1;
                     return ;
                 }
             }
-            */
         }
     }
     if (this->serv.size() == 0)

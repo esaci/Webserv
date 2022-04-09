@@ -14,6 +14,7 @@ int server_data::delete_request(int clientfd){
 	tab_request[clientfd].ressource.push_back('\0');
 	std::cout << "ON SUPPRIME " << tab_request[clientfd].ressource << std::endl;
 	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
+	fcntl(filefd, F_SETFL, O_NONBLOCK);
 	tab_request[clientfd].ressource.pop_back();
 	if (1)
 	{

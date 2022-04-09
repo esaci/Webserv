@@ -20,7 +20,7 @@ P_server &  P_server::operator=(const P_server &copie)
     this->map_cgi_dir = copie.map_cgi_dir;
     this->map_redirect = copie.map_redirect;
     this->tab_ap = copie.tab_ap;
-
+    this->path_upload_dir = copie.path_upload_dir;
     return (*this);
 }
 
@@ -220,32 +220,27 @@ bool    P_server::set_redirect(std::string &line, std::string &loc)
     }
     return (1);
 }
-/*
-bool    P_server::set_path_upload_dir(std::string &line, std::string &loc)
+
+bool    P_server::set_path_upload_dir(std::string &line)
 {
-    if (loc != "/upload/")
-    {
-        std::cerr << "\e[0;31m" << "upload_store doit etre dans la location /upload/" << "\e[0m" << std::endl;
-        return (1);
-    }
-    
     line = line.substr(13);
     line = line.substr(0, line.length() - 1);
-    //this->path_upload_dir = line;
+    if (line.size() > 0 && *(--line.end()) != '/')
+        line.append("/");
+    this->path_upload_dir = line;
     return (0);
 }
-*/
+
 std::string P_server::get_root(std::string loc)
 {
     _MAP_ROOT::iterator it;
     std::string::iterator b;
-    std::string new_loc;
-    new_loc = loc;
-    for (b = --new_loc.end(); b >= new_loc.begin() && *b != '/'; b--)
+
+    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
         ;
-    new_loc.erase(++b, new_loc.end());
-    //std::cout << "LOC VAUT : |" << new_loc << "|" << std::endl; 
-    it = this->map_root.find(new_loc);
+    loc.erase(++b, loc.end());
+    //std::cout << "LOC VAUT : |" << loc << "|" << std::endl; 
+    it = this->map_root.find(loc);
     if (it == this->map_root.end())
     {
         it = this->map_root.find("/");
