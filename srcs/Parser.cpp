@@ -95,6 +95,8 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                 if (check_error_bracket(in_s, in_l, 1) == 1) return ;
                 in_l = 1;
                 loc = this->new_location(line);
+                if (loc.size() > 1 && *(loc.end() - 1) != '/')
+                    loc.append("/");
                 // faire une verif si le loc est ok
                 this->serv[this->serv.size() - 1].map_error_p[loc] = this->serv[this->serv.size() - 1].map_error_p[""];
                 this->serv[this->serv.size() - 1].map_size_cmb[loc] = this->serv[this->serv.size() - 1].map_size_cmb[""];
