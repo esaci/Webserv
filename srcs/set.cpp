@@ -8,7 +8,6 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f, std::
 	tmp_i.insert(tmp_i.end(), u_ressource.begin(), u_ressource.end());
 	tmp_i.insert(--tmp_i.end(), tmp_f->d_name, tmp_f->d_name + std::strlen(tmp_f->d_name));
 	tmp_i.push_back('\0');
-	std::cout << tmp_i.c_str() << " comment ca" << std::endl;
 	if (stat(tmp_i.c_str(), &st) == 0)
 	{
 		std::stringstream ss;

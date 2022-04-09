@@ -101,3 +101,13 @@ std::vector<struct pollfd>::iterator _return_it_poll(int clientfd, std::vector<s
 		;
 	return (it);
 }
+void	_erase_location(DATA &ressource, _MAP_ROOT &map_root, std::string &root)
+{
+	_MAP_ROOT::iterator it;
+
+	for (it = map_root.begin(); it != map_root.end() && it->second != root; it++)
+		;
+	if (it != map_root.end() && it->first.size() > 1)
+		ressource.erase(ressource.begin(), ressource.begin() + it->first.size() - 1);
+	_link_root_init(root, ressource);
+}

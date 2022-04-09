@@ -7,7 +7,9 @@
 
 /*
 	php-cgi testcgi1.php //working test
-	php-cgi lol.php //404 test 
+	php-cgi lol.php //404 test
+    siege -c10 -r20 127.0.0.1:18000
+    stress test is 10 users 20 requests running on vm only 
 */
 
 char    **RP15::set_cgi_env(void){
@@ -95,13 +97,13 @@ int RP15::basic_cgi(server_data *s, int fd){
 	} 
 	 */
 	// POUR GET CA SERA r_body_get, linput apres le ?
-    std::cout << "caca" << r_body_buffer << "lol" << CGI;
+    // std::cout << "caca" << r_body_buffer << "lol" << CGI;
 	int		ret = 1;
 	pid_t	pid = fork();
 
     int     status;
 
-    std::cout << "\nTEST CGI\n\n";
+    // std::cout << "\nTEST CGI\n\n";
 	if (pid < 0)
 		return (print_return("error: fork", 1));
 
