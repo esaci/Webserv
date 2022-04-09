@@ -56,6 +56,8 @@ int	server_data::_server( void ){
 				break ;
 			if (setup_read_files(tab_poll.begin() + pos))
 				return (print_return("SOUCIS VIENT DE read_files ",1));			
+			if (setup_write_files(tab_poll.begin() + pos))
+				return (print_return("SOUCIS VIENT DE write_files", 1));
 		}
 	}
 	return (0);

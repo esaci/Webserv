@@ -10,11 +10,7 @@ void	server_data::_entity(int code_n, int clientfd){
 		out << "Content-Type: " << content_type << "\r\n";
 	out << "Content-Length: " << tab_request[clientfd].r_buffer.size() << "\r\n";
 	if (code_n == 301)
-	{
 		out << "Location: " << "http://" << sockets_to_hosts[tab_request[clientfd].serverfd].first << ":" << sockets_to_hosts[tab_request[clientfd].serverfd].second << tab_request[clientfd].redirection << " \r\n";
-		// std::cout << sockets_to_hosts[tab_request[clientfd].serverfd].first << ":" << sockets_to_hosts[tab_request[clientfd].serverfd].second << tab_request[clientfd].redirection << "\n est la redir\n\n";
-		// exit(1);
-	}
 	out << "Connection: close\r\n";
 	if (code_n != 301)
 		out << "Accept-Ranges: bytes\r\n";

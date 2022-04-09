@@ -88,3 +88,28 @@ int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 	// }
 	return (0);
 }
+
+int		server_data::setup_write_files(std::vector<struct pollfd>::iterator it){
+	if (it >= tab_poll.end() || !(it->revents & POLLOUT) || !files_to_clients[it->fd] || tab_request[files_to_clients[it->fd]].responding != 2)
+		return (0);
+	int n = MAXLINE;
+
+	if (MAXLINE > tab_request[files_to_clients[it->fd]].r_body_buffer.size())
+		n = tab_request[files_to_clients[it->fd]].r_body_buffer.size();
+	if (tab_request[files_to_clients[it->fd]].r_body_buffer.size())
+		n = write(it->fd, tab_request[files_to_clients[it->fd]].r_body_buffer.begin().base(), n);
+	if (n < 0)
+		return (0);
+	if (n)
+		tab_request[files_to_clients[it->fd]].r_body_buffer.erase(tab_request[files_to_clients[it->fd]].r_body_buffer.begin(), tab_request[files_to_clients[it->fd]].r_body_buffer.begin() + n);
+	if (!tab_request[files_to_clients[it->fd]].r_body_buffer.size())
+	{
+		tab_request[files_to_clients[it->fd]].responding = 3;
+		files_to_clients[it->fd] = 0;
+		close(it->fd);
+		tab_request.erase(it->fd);
+		tab_poll.erase(it);
+		pos--;
+	}
+	return (0);
+}

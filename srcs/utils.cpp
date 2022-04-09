@@ -80,3 +80,34 @@ bool indexcomp::operator()(const std::string& lhs, const std::string& rhs) const
 	std::less<std::string> comp;
 	return (comp(lhs, rhs));
 }
+
+void	retire_tiret(DATA &buff){
+	for (DATA::iterator it = buff.begin(); it < buff.end();)
+	{
+		if (*it == '-' || *it == '\0' || *it == '\n')
+			buff.erase(it);
+		else
+			++it;
+	}
+	buff.pop_back();
+	buff.push_back('\0');
+}
+
+std::vector<struct pollfd>::iterator _return_it_poll(int clientfd, std::vector<struct pollfd> &tab_poll)
+{
+	std::vector<struct pollfd>::iterator it;
+
+	for (it = tab_poll.begin(); it < tab_poll.end() && it->fd != clientfd; it++)
+		;
+	return (it);
+}
+void	_erase_location(DATA &ressource, _MAP_ROOT &map_root, std::string &root)
+{
+	_MAP_ROOT::iterator it;
+
+	for (it = map_root.begin(); it != map_root.end() && it->second != root; it++)
+		;
+	if (it != map_root.end() && it->first.size() > 1)
+		ressource.erase(ressource.begin(), ressource.begin() + it->first.size() - 1);
+	_link_root_init(root, ressource);
+}
