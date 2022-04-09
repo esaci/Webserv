@@ -10,6 +10,17 @@
 <ul>
 	<li><img src="test.png" alt="salut elias"></li>
 </ul>
+<form action = "vfirst_test_php.php" method = "get">
+	First Name: <input type = "text" name = "first_name">  <br />
+  
+	Last Name: <input type = "text" name = "last_name" />
+	<input type = "submit" value = "Submit" />
+</form>
+<form action="upload.php" method="post" enctype="multipart/form-data">
+	<input type="file" name="fichier" id="fichier">
+	<input type="submit" value="Upload" name="submit">
+</form>
+
 </body>
     </style>
     <script>
@@ -45,7 +56,7 @@
       <br></br>
       <br></br>
     <p>cgi with post</p>
-      <form method="post" action="testcgi1.php">
+      <form method="post" action="testci1.php">
         <p><input type="text" name="pseudo" /></p>
          <p>testcgi1.php</p>
       </form>
