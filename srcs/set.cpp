@@ -8,7 +8,6 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f, std::
 	tmp_i.insert(tmp_i.end(), u_ressource.begin(), u_ressource.end());
 	tmp_i.insert(--tmp_i.end(), tmp_f->d_name, tmp_f->d_name + std::strlen(tmp_f->d_name));
 	tmp_i.push_back('\0');
-	std::cout << tmp_i.c_str() << " comment ca" << std::endl;
 	if (stat(tmp_i.c_str(), &st) == 0)
 	{
 		std::stringstream ss;
@@ -102,7 +101,6 @@ int	server_data::_set_file(int clientfd){
 	tab_request[clientfd].ressource.push_back('\0');
 	root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].u_ressource.begin().base());
 	std::cout << root << " le root \n" << i++ << "\n" <<  tab_request[clientfd].ressource << " la ressource " << std::endl;
-	
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
 		return (tab_request[clientfd]._set_folder(folder, root, tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_autoindex((char*)tab_request[clientfd].u_ressource.begin().base())));
 	else
