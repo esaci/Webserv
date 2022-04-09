@@ -23,7 +23,7 @@ int	server_data::_get(int clientfd){
 	{
 		tab_request[clientfd].ressource.push_back('\0');
 		root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].u_ressource.begin().base());
-		tab_request[clientfd].ressource = _link_root_init(root, tab_request[clientfd].ressource);
+		_erase_location(tab_request[clientfd].ressource, tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].map_root, root);
 		if (_set_file(clientfd))
 			return (_get_error_404(clientfd));
 		return (0);
