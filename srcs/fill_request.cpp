@@ -1,6 +1,6 @@
 #include "../include/w_library.hpp"
 
-int		RP15::fill_request(int code, std::vector<struct pollfd>::iterator &it){
+int		RP15::fill_request(int code, std::vector<struct pollfd>::iterator it){
 	DATA::value_type tab[] = "GET / HTTP/1.0\r\n\r\n";
 
 	if (!return_error)

@@ -47,5 +47,6 @@ size_t			hexa_to_dec(DATA &buff);
 void			dec_to_hexa(DATA &buff, DATA::iterator it, size_t decimal_value);
 bool			compare_size_cl(size_t len, DATA &buff);
 DATA			retire_root(DATA &buff, std::string &root);
-
+void	        retire_tiret(DATA &buff);
+std::vector<struct pollfd>::iterator    _return_it_poll(int clientfd, std::vector<struct pollfd> &tab_poll);
 # endif

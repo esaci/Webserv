@@ -58,7 +58,7 @@ class RP15
 		bool	is_ready( void );
 		size_t	extract_body_check( void );
 		void	display_cpcr( void );
-		int		fill_request(int code, std::vector<struct pollfd>::iterator &it);
+		int		fill_request(int code, std::vector<struct pollfd>::iterator it);
 		int		basic_cgi(server_data *s, int fd);
 		char	**set_cgi_env(void);
 		int		_set_folder(DIR	*folder, std::string &root, bool index);

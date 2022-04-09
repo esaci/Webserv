@@ -61,10 +61,12 @@
 			int								setup_read(std::vector<struct pollfd>::iterator it);
 			int								setup_response(std::vector<struct pollfd>::iterator it);
 			int								setup_read_files(std::vector<struct pollfd>::iterator it);
+			int								setup_write_files(std::vector<struct pollfd>::iterator it);
 			int								_set_file(int clientfd);
 			int								_time_maj( void );
 			int								_time_stop_client(std::vector<struct pollfd>::iterator it);
 			int								delete_request(int clientfd);
+			bool							open_file_upload(int clientfd, std::string &file);
 
 		private:
 			server_data( void );

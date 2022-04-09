@@ -38,7 +38,6 @@ int	server_data::_response(int clientfd)
 	else if (tab_request[clientfd].method == _data_init("POST")){
 		if (tab_request[clientfd]._cgi_extensions())
 			return (tab_request[clientfd]._post_cgi(this, clientfd));
-		std::cout << "POST NON GERE SANS CGI\n";
 		return (_post_upload(clientfd));
 	}
 	else if (tab_request[clientfd].method == _data_init("DELETE")){
