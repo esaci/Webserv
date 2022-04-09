@@ -3,7 +3,6 @@
 int	server_data::_send(int clientfd, int code){
 	if (tab_request[clientfd].responding == 3)
 	{
-		std::cout << "Je passe par la " << tab_request[clientfd].ressource << "\n";
 		_entity(code, clientfd);
 		tab_request[clientfd].responding = 4;
 	}

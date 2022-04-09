@@ -96,11 +96,9 @@ int	server_data::_set_file(int clientfd){
 	int filefd;
 	DIR *folder;
 	std::string root;
-	static int i = 0;
 
 	tab_request[clientfd].ressource.push_back('\0');
 	root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].u_ressource.begin().base());
-	std::cout << root << " le root \n" << i++ << "\n" <<  tab_request[clientfd].ressource << " la ressource " << std::endl;
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
 		return (tab_request[clientfd]._set_folder(folder, root, tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_autoindex((char*)tab_request[clientfd].u_ressource.begin().base())));
 	else
