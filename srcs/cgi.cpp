@@ -55,6 +55,7 @@ char    **RP15::set_cgi_env(void){
     env.push_back((char *)path_translatedv.c_str());
     std::string script_namev("SCRIPT_NAME=");
     // script_namev += cgipath; // a commencer par un /
+    std::string mabite(r_body_bufferenv);
     if(methodenv == "POST")
         script_namev += r_body_bufferenv; // A REMPLACER PAR LE PATH DE RAPH
     else if (methodenv == "GET")
@@ -63,12 +64,16 @@ char    **RP15::set_cgi_env(void){
 
     std::string query_stringv("QUERY_STRING=");
     // query_stringv += r_body_bufferenv;       //check avec post et get
-    if(methodenv == "POST")
-        query_stringv += r_body_bufferenv; // A REMPLACER PAR LE PATH DE RAPH
-    else if (methodenv == "GET")
-        query_stringv += r_body_getenv;
-    env.push_back((char *)query_stringv.c_str());
+
+    std::cout << r_body_bufferenv << "MES COULLES\n";
+
     
+    // if(methodenv == "POST")
+        query_stringv += mabite; // A REMPLACER PAR LE PATH DE RAPH
+    // else if (methodenv == "GET")
+    //     query_stringv += r_body_getenv;
+    env.push_back((char *)query_stringv.c_str());
+
     std::string content_typev("CONTENT_TYPE=");
     content_typev += content_typeenv; 
     env.push_back((char *)content_typev.c_str());
@@ -94,11 +99,9 @@ char    **RP15::set_cgi_env(void){
 }
 
 int RP15::basic_cgi(server_data *s, int fd){
-	ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)ressource.begin().base()), ressource);
+	ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)u_ressource.begin().base()), ressource);
 	std::cout << "\n" << ressource << std::endl;
 	std::cout << "BODY " << r_body_buffer << "|\n";
-    //important checker l'histoire des fds de la correction avec select //elias
-	// REMPLACER CONTENT TYPE content_type
 	/*
 	if (FICHIER PAS OUVERT)
 	{
@@ -112,35 +115,38 @@ int RP15::basic_cgi(server_data *s, int fd){
 	pid_t	pid = fork();
 
     int     status;
+
     // int fdtest = open(set_cgi_env()[13], O_RDONLY);
     // if(fdtest < 0){
     //     return print_return("error: cgi file not ok", 1);}
     // std::cout << "\nTEST CGI\n\n";
+
 	if (pid < 0)
 		return (print_return("error: fork", 1));
 
-    char **args = (char **)malloc(sizeof(char *) * 3);
-	args[0] = strdup(CGI);
-	args[1] = strdup(set_cgi_env()[13]);
-    args[2] = NULL;
 	if (!pid)
 	{
+        char **args = (char **)malloc(sizeof(char *) * 3);
+	    args[0] = strdup(CGI);
+	    args[1] = set_cgi_env()[13];
+        // args[1] = NULL;
+        args[2] = NULL;
+
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
-		ret = execve(args[0], args, set_cgi_env());
+		ret = execve(CGI, args, NULL);
 		delete s;
-		for(int i = 0; i < 3 && args[i]; i++)
-			free(args[i]);
+        // for(int i = 0; i < 15; i++)
+        //     delete ev[i];
+		// for(int i = 0; i < 3; i++)
+        if(args[0])
+		    free(args[0]);
 		if(args)
 			free(args);
 		exit(ret);
 	}
     else{
         waitpid(pid, &status, 0);
-	    for(int i = 0; i < 3 && args[i]; i++)
-		    free(args[i]);
-	    if(args)
-		    free(args);
     }
 	if(fd != -1)
 		close(fd);
