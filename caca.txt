@@ -1,0 +1,15 @@
+==364861== Memcheck, a memory error detector
+==364861== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==364861== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==364861== Command: ./webserv
+==364861== Parent PID: 312950
+==364861== 
+==364861== 
+==364861== HEAP SUMMARY:
+==364861==     in use at exit: 0 bytes in 0 blocks
+==364861==   total heap usage: 2,056 allocs, 2,056 frees, 10,214,046 bytes allocated
+==364861== 
+==364861== All heap blocks were freed -- no leaks are possible
+==364861== 
+==364861== For lists of detected and suppressed errors, rerun with: -s
+==364861== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

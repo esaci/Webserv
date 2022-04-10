@@ -1,6 +1,11 @@
 #include "../include/w_library.hpp"
 
 RP15::ClassParsingClientRequest(void) : responding(0), return_error(0), r_l_v(false) {
+	// for (size_t i = 0; i < 16; i++)
+	// {
+	// 	ev[i] = NULL;
+	// }
+	
 	_time_init();
 }
 

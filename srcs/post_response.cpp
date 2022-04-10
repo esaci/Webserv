@@ -5,15 +5,15 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 	{
 		DATA	temp;
 		int fd;
-		if (method == _data_init("GET"))
-		{
-			DATA::iterator it;
-			for (it = ressource.begin(); it < ressource.end() && *it != '?'; it++)
-				;
-			// faire ++it si it != ressource.end(), pour ne pas avoir ?, OSCAR
-			r_body_get.assign(it, ressource.end());
-			ressource.erase(it, ressource.end());
-		}
+		ressource = u_ressource;
+	if (method == _data_init("GET"))
+        {
+            DATA::iterator it;
+            for (it = ressource.begin(); it < ressource.end() && *it != '?'; it++)
+                ;
+            r_body_get.assign(it, ressource.end());
+            ressource.erase(it, ressource.end());
+        }
 		temp = _data_init(FILE_CGI);
 		temp.push_back('\0');
 		fd = open((char*)temp.begin().base(), O_RDWR | O_CREAT | O_TRUNC, 0666);

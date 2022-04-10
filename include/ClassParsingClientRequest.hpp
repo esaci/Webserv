@@ -60,16 +60,18 @@ class RP15
 		void	display_cpcr( void );
 		int		fill_request(int code, std::vector<struct pollfd>::iterator it);
 		int		basic_cgi(server_data *s, int fd);
-		char	**set_cgi_env(void);
+		int	set_cgi_env(server_data *s, int fd);
 		int		_set_folder(DIR	*folder, std::string &root, bool index);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f, std::string &root);
 		int		_post_cgi(server_data *d_s, int clientfd);
 		int		_time_init( void );
 		int		delete_request(server_data *d_s, int clientfd);
 		bool	_cgi_extensions( void );
+
+		void test(void);
 	private:
 		RP15	(const DATA &arg);
-		char 	*ev[15];
+		char 	**ev;
 };
 
 std::ostream & operator<<(std::ostream & ostream, DATA const &i);
