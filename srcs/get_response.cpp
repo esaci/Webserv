@@ -40,7 +40,6 @@ int	server_data::_get_error(int clientfd){
 		else
 		{
 			tab_request[clientfd].return_error = 400;
-			std::cout << tab_request[clientfd].u_ressource << " est bien def, comprend pas\n\n";
 			tab_request[clientfd].ressource = _data_init(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_error_page((char*)tab_request[clientfd].u_ressource.begin().base(), 400));
 		}
 		if (tab_request[clientfd].return_error < 0)

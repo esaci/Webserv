@@ -8,7 +8,6 @@ int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
 		return (print_return("Error: accept", 1));	
 	fcntl(clientfd, F_SETFL, O_NONBLOCK);
 	client_poll.fd = clientfd;
-	tab_request[clientfd].my_fd = clientfd;
 	tab_request[clientfd].serverfd = it->fd;
 	client_poll.events = POLLIN;
 	client_poll.revents = 0;
