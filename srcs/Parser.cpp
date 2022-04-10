@@ -22,7 +22,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
     this->error_p[402] = "a remplir";
     this->error_p[403] = "./files_system/Forbidden.html";
     this->error_p[404] = "./files_system/Not_Found.html";
-    this->error_p[405] = "a remplir";
+    this->error_p[405] = "./files_system/Not_allowed.html";
     this->error_p[406] = "a remplir";
     this->error_p[407] = "a remplir";
     this->error_p[408] = "./files_system/Request_Timeout.html";
@@ -89,6 +89,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                 this->serv[this->serv.size() - 1].map_limit_exept[loc] = lala3;
                 this->serv[this->serv.size() - 1].map_autoindex[loc] = this->autoindex;
                 this->serv[this->serv.size() - 1].map_index[loc] = this->index;
+                continue;
             }
             if (line.compare(0, 9,"location ") == 0 && (*(line.end() - 1)) == '{')
             {
@@ -104,9 +105,14 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                 this->serv[this->serv.size() - 1].map_limit_exept[loc] = this->serv[this->serv.size() - 1].map_limit_exept[""];
                 this->serv[this->serv.size() - 1].map_autoindex[loc] = this->serv[this->serv.size() - 1].map_autoindex[""];
                 this->serv[this->serv.size() - 1].map_index[loc] = this->serv[this->serv.size() - 1].map_index[""];
+                continue;
             }
-            if (line == "}" && check_error_bracket_end(in_s, in_l) == 1)
-                return ;
+            if (line == "}")
+            {
+                if (check_error_bracket_end(in_s, in_l) == 1)
+                    return ;
+                continue;
+            }
             if (line.compare(0,7, "listen ") == 0 && in_s == 1 && in_l == 0)
             {
                 if (this->serv[this->serv.size() - 1].set_new_port(line) == 1)
@@ -115,9 +121,13 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
-            if (line.compare(0, 12, "server_name") == 0 && in_s == 1 && in_l == 0)
+            if (line.compare(0, 12, "server_name ") == 0 && in_s == 1 && in_l == 0)
+            {
                 this->serv[this->serv.size() - 1].set_s_name(line);
+                continue;
+            }
             if (line.compare(0, 11, "error_page ") == 0 && in_s == 0)
             {
                 if (this->serv.size() > 0)
@@ -132,6 +142,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 11, "error_page ") == 0 && in_s == 1)
             {
@@ -141,6 +152,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 21, "client_max_body_size ") == 0 && in_s == 0)
             {
@@ -150,6 +162,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 21, "client_max_body_size ") == 0 && in_s == 1)
             {
@@ -159,11 +172,18 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 5, "root ") == 0 && in_s == 0)
+            {
                 this->set_root(line);
+                continue;
+            }
             if (line.compare(0, 5, "root ") == 0 && in_s == 1)
+            {
                 this->serv[this->serv.size() - 1].set_root(line, loc);
+                continue;
+            }
             if (line.compare(0, 13, "limit_except ") == 0 && in_s == 1 && in_l == 1)
             {
                 if (this->serv[this->serv.size() - 1].set_limit_exept(line, loc) == 1)
@@ -172,6 +192,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 10, "autoindex ") == 0 && in_s == 0)
             {
@@ -181,6 +202,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 10, "autoindex ") == 0 && in_s == 1)
             {
@@ -190,15 +212,32 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 6, "index ") == 0 && in_s == 0)
+            {
                 this->set_index(line);
+                continue;
+            }
             if (line.compare(0, 6, "index ") == 0 && in_s == 1)
+            {
                 this->serv[this->serv.size() - 1].set_index(line, loc);
-            if (line.compare(0, 8, "cgi_ext ") == 0 && in_s == 1 && in_l == 1)
-                this->serv[this->serv.size() - 1].set_cgi_ext(line, loc);
-            if (line.compare(0, 8, "cgi_dir ") == 0 && in_s == 1 && in_l == 1)
-                this->serv[this->serv.size() - 1].set_cgi_dir(line, loc);
+                continue;
+            }
+            if (line.compare(0, 8, "cgi_ext ") == 0 && in_s == 1)
+            {
+                if (this->serv[this->serv.size() - 1].set_cgi_ext(line) == 1)
+                {
+                    this->error = 1;
+                    return;
+                }
+                continue;
+            }
+            if (line.compare(0, 8, "cgi_dir ") == 0 && in_s == 1)
+            {
+                this->serv[this->serv.size() - 1].set_cgi_dir(line);
+                continue;
+            }
             if (line.compare(0, 8, "rewrite ") == 0 && in_s == 1)
             {
                 if (this->serv[this->serv.size() - 1].set_redirect(line, loc) == 1)
@@ -207,6 +246,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 13, "upload_store ") == 0 && in_s == 1)
             {
@@ -215,7 +255,11 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
+            std::cerr << "\e[0;31m" << "error ligne:" << line << " :not well configured:" <<"\e[0m" << std::endl;
+            this->error = 1;
+            return ;
         }
     }
     if (this->serv.size() == 0)
@@ -269,9 +313,36 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
         //////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////
-    }
+        // for (_MAP_L_EXEPT::iterator it = this->serv[nb].map_limit_exept.begin(); it != this->serv[nb].map_limit_exept.end(); it++)
+        // {
+        //     std::cout << "loc :" << it->first; 
+        //     for (std::vector<std::string>::iterator ot = it->second.begin(); ot != it->second.end(); ot++)
+        //     {
+        //         std::cout << " " << *ot;
+        //     }
+        //     std::cout << std::endl;
+        // }
+        // for (_MAP_REDIRECT::iterator it = this->serv[nb].map_redirect.begin(); it != this->serv[nb].map_redirect.end(); it++)
+        // {
+        //     std::cout << "loc :" << it->first; 
+        //     for (std::map<std::string, std::string>::iterator ot = it->second.begin(); ot != it->second.end(); ot++)
+        //     {
+        //         std::cout << "first :" << ot->first << " " <<"second :" << ot->second;
+        //     }
+        //     std::cout << std::endl;
+        // }
+        // std::cout << ":\"\":" << this->serv[nb].get_redirect("", "index.html") << ":" << std::endl;
+        // std::cout << ":/:" << this->serv[nb].get_redirect("/", "index.html") << ":" << std::endl;
+        // std::cout << ":/batman/:" << this->serv[nb].get_redirect("/batman/", "index.html") << ":" << std::endl;
+        std::cout << "extention";
+        for (_VEC_CGI_EXT::iterator it = this->serv[nb].tab_cgi_ext.begin(); it != this->serv[nb].tab_cgi_ext.end(); it++)
+            std::cout << " " << *it;
+        std::cout << std::endl;
+        std::cout << "l'extention .php est elle autorise? " << this->serv[nb].ext_cgi_a(".py") << std::endl;
+    }   
    /* this->tab_ap = get_all_addr_port();
-    std::cout << this->tab_ap.size() << std::endl;*/ 
+    std::cout << this->tab_ap.size() << std::endl;*/
+
 }
 
 Parser::~Parser(){}
@@ -442,7 +513,7 @@ std::set<std::pair<std::string, int> > Parser::get_all_addr_port(void)
             }
         }
     }
-    this->serv[0].tab_ap = lala;
+    //this->serv[0].tab_ap = lala;
     // imprimer tout ce qui se trouve dans lala pour etre sur de ce que je renvoie;
     /*
     for (std::set<std::pair<std::string, int> >::iterator it = lala.begin(); it != lala.end(); it++)

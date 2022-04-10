@@ -41,7 +41,7 @@
 # define _MAP_AUTO_I    std::map<std::string, bool>
 # define _CMBS          std::map<std::string, size_t> // client max size;
 # define _MAP_INDEX     std::map<std::string, _INDEX>
-# define _MAP_CGI_EXT   std::map<std::string, std::vector<std::string> >
+# define _VEC_CGI_EXT   std::vector<std::string>
 # define _MAP_CGI_DIR   std::map<std::string, std::string>
 # define _MAP_REDIRECT  std::map<std::string, std::map<std::string, std::string> >
 # define _ERR_FILE      std::cout << "\e[0;31m" << "error_file" << "\e[0m" << std::endl
