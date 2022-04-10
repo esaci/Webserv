@@ -31,9 +31,36 @@ int			server_data::_post_read_cl(std::vector<pollfd>::iterator it){
 	return (0);
 }
 
+int			RP15::_post_first_body(DATA::iterator it){
+	for (; it < parse_data.end() && (*it == '\n' || *it == '\r'); it++)
+		;
+	r_body_buffer.assign(it, parse_data.end());
+	parse_data.clear();
+	if (transfer_encoding == _data_init("chunked")){
+		return (print_return("Ca passe bien par la", 0));
+	}
+	if (compare_size_cl(r_body_buffer.size(), content_length))
+	{
+		responding = 1;
+		display_cpcr();
+		return (0);
+	}
+	return (1);
+}
+
 int			server_data::_post_read_ch(std::vector<pollfd>::iterator it){
-	return (print_return("POST CHUNKED PAS ENCORE IMPLEMENTE", -10));
-	(void)it;
+	int n;
+	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
+		tab_request[it->fd].r_body_buffer.insert(tab_request[it->fd].r_body_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
+	if (0)
+	{
+		tab_request[it->fd].responding = 1;
+		tab_request[it->fd].display_cpcr();
+		return (-10);
+	}
+	std::cout << tab_request[it->fd].r_body_buffer;
+	exit(1);
+	return (0);
 }
 
 int			server_data::_post_server_read(std::vector<pollfd>::iterator it){

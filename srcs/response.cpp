@@ -38,6 +38,11 @@ int	server_data::_response(int clientfd)
 	else if (tab_request[clientfd].method == _data_init("POST")){
 		if (tab_request[clientfd]._cgi_extensions())
 			return (tab_request[clientfd]._post_cgi(this, clientfd));
+		if (tab_request[clientfd].transfer_encoding == _data_init("chunked"))
+		{
+			tab_request[clientfd].return_error = 100;
+			return(_get_error(clientfd));
+		}
 		return (_post_upload(clientfd));
 	}
 	else if (tab_request[clientfd].method == _data_init("DELETE")){
