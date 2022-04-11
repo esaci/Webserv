@@ -5,12 +5,13 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 	{
 		DATA	temp;
 		int fd;
+		ressource = u_ressource;
 		if (method == _data_init("GET"))
 		{
 			DATA::iterator it;
+
 			for (it = ressource.begin(); it < ressource.end() && *it != '?'; it++)
 				;
-			// faire ++it si it != ressource.end(), pour ne pas avoir ?, OSCAR
 			r_body_get.assign(it, ressource.end());
 			ressource.erase(it, ressource.end());
 		}
@@ -108,9 +109,9 @@ int	server_data::_post_upload(int clientfd)
 		std::string root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].u_ressource.begin().base());
 
 		if (check_bad_inf(tab_request[clientfd].content_type, tab_request[clientfd].r_body_buffer, file))
-			return (print_return("Error: Upload post bad format", -10));
-		if (open_file_upload(clientfd, file))
-			return(print_return("Error: Open file uploaded", -10));
+			tab_request[clientfd].fill_request(400, _return_it_poll(clientfd, tab_poll));
+		else if (open_file_upload(clientfd, file))
+			tab_request[clientfd].fill_request(400, _return_it_poll(clientfd, tab_poll));
 		return (0);
 	}
 	if (tab_request[clientfd].responding == 3)
