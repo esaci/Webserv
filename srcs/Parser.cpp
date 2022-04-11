@@ -19,47 +19,51 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
     this->error_p[200]  = "./files_system/Ok.html";
     this->error_p[301] = "./files_system/Moved_Permanently.html";
     this->error_p[400] = "./files_system/Bad_Request.html";
-    this->error_p[401] = "a remplir";
-    this->error_p[402] = "a remplir";
+    this->error_p[401] = "./files_system/Unauthorized.html";
+    this->error_p[402] = "./files_system/Payment_required";
     this->error_p[403] = "./files_system/Forbidden.html";
     this->error_p[404] = "./files_system/Not_Found.html";
-    this->error_p[405] = "a remplir";
-    this->error_p[406] = "a remplir";
-    this->error_p[407] = "a remplir";
+    this->error_p[405] = "./files_system/Not_allowed.html";
+    this->error_p[406] = "./files_system/Not_acceptable";
+    this->error_p[407] = "./files_system/Proxy_authentication_required.html";
     this->error_p[408] = "./files_system/Request_Timeout.html";
-    this->error_p[409] = "a remplir";
-    this->error_p[410] = "a remplir";
-    this->error_p[411] = "a remplir";
-    this->error_p[412] = "a remplir";
-    this->error_p[413] = "a remplir";
-    this->error_p[414] = "a remplir";
-    this->error_p[415] = "a remplir";
-    this->error_p[416] = "a remplir";
-    this->error_p[417] = "a remplir";
-    this->error_p[418] = "a remplir";
-    this->error_p[421] = "a remplir";
-    this->error_p[422] = "a remplir";
-    this->error_p[423] = "a remplir";
-    this->error_p[424] = "a remplir";
-    this->error_p[425] = "a remplir";
-    this->error_p[426] = "a remplir";
-    this->error_p[428] = "a remplir";
-    this->error_p[429] = "a remplir";
-    this->error_p[431] = "a remplir";
-    this->error_p[451] = "a remplir";
+    this->error_p[409] = "./files_system/Conflict.html";
+    this->error_p[410] = "./files_system/Gone.html";
+    this->error_p[411] = "./files_system/Length_required.html";
+    this->error_p[412] = "./files_system/Precondition_failed.html";
+    this->error_p[413] = "./files_system/Payload_too_large.html";
+    this->error_p[414] = "./files_system/Uri_too_long.html";
+    this->error_p[415] = "./files_system/Unsupported_media_type.html";
+    this->error_p[416] = "./files_system/Range_not_satisfiable.html";
+    this->error_p[417] = "./files_system/Expectation_failed.html";
+    this->error_p[418] = "./files_system/I_m_a_teapot.html";
+    this->error_p[421] = "./files_system/Misdirected_request.html";
+    this->error_p[422] = "./files_system/Unprocessable_entity.html";
+    this->error_p[423] = "./files_system/Locked.html";
+    this->error_p[424] = "./files_system/Failed_dependency.html";
+    this->error_p[425] = "./files_system/Too_early.html";
+    this->error_p[426] = "./files_system/Upgrade_required.html";
+    this->error_p[428] = "./files_system/Precondition_required.html";
+    this->error_p[429] = "./files_system/Too_many_requests.html";
+    this->error_p[431] = "./files_system/Request_header_fields_too_large.html";
+    this->error_p[451] = "./files_system/Unavailable_for_legal_reasons.html";
 
     //Server error responses
-    this->error_p[500] = "a remplir";
-    this->error_p[501] = "a remplir";
-    this->error_p[502] = "a remplir";
-    this->error_p[503] = "a remplir";
-    this->error_p[504] = "a remplir";
-    this->error_p[505] = "a remplir";
-    this->error_p[506] = "a remplir";
-    this->error_p[507] = "a remplir";
-    this->error_p[508] = "a remplir";
-    this->error_p[510] = "a remplir";
-    this->error_p[511] = "a remplir";
+    this->error_p[500] = "./files_system/Internal_server_error.html";
+    this->error_p[501] = "./files_system/Not_implemented.html";
+    this->error_p[502] = "./files_system/Bad_gateway.html";
+    this->error_p[503] = "./files_system/Service_unavailable.html";
+    this->error_p[504] = "./files_system/Gateway_timeout.html";
+    this->error_p[505] = "./files_system/Http_version_not_supported.html";
+    this->error_p[506] = "./files_system/Variant_also_negotiates.html";
+    this->error_p[507] = "./files_system/Insufficient_storage.html";
+    this->error_p[508] = "./files_system/Loop_detected.html";
+    this->error_p[510] = "./files_system/Not_extended.html";
+    this->error_p[511] = "./files_system/Network_authentication_required.html";
+
+    // autoindex by default //
+    this->autoindex = 1;
+    /////////////////////////
 
     //////////////////////////////////////////////////////////////////
     while (std::getline(file, line)) // temp qu il y a des lignes dans le fichier.
@@ -90,6 +94,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                 this->serv[this->serv.size() - 1].map_limit_exept[loc] = lala3;
                 this->serv[this->serv.size() - 1].map_autoindex[loc] = this->autoindex;
                 this->serv[this->serv.size() - 1].map_index[loc] = this->index;
+                continue;
             }
             if (line.compare(0, 9,"location ") == 0 && (*(line.end() - 1)) == '{')
             {
@@ -105,9 +110,15 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                 this->serv[this->serv.size() - 1].map_limit_exept[loc] = this->serv[this->serv.size() - 1].map_limit_exept[""];
                 this->serv[this->serv.size() - 1].map_autoindex[loc] = this->serv[this->serv.size() - 1].map_autoindex[""];
                 this->serv[this->serv.size() - 1].map_index[loc] = this->serv[this->serv.size() - 1].map_index[""];
+                continue;
             }
-            if (line == "}" && check_error_bracket_end(in_s, in_l) == 1)
-                return ;
+            if (line == "}")
+            {
+                loc = "";
+                if (check_error_bracket_end(in_s, in_l) == 1)
+                    return ;
+                continue;
+            }
             if (line.compare(0,7, "listen ") == 0 && in_s == 1 && in_l == 0)
             {
                 if (this->serv[this->serv.size() - 1].set_new_port(line) == 1)
@@ -116,55 +127,102 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
-            if (line.compare(0, 12, "server_name") == 0 && in_s == 1 && in_l == 0)
+            if (line.compare(0, 12, "server_name ") == 0 && in_s == 1 && in_l == 0)
+            {
                 this->serv[this->serv.size() - 1].set_s_name(line);
+                continue;
+            }
             if (line.compare(0, 11, "error_page ") == 0 && in_s == 0)
             {
                 if (this->serv.size() > 0)
                 {
-                    std::cerr << "\e[0;31m" << "you have to put value before location" << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "error_page not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
                 if (this->set_error_page(line) == 1)
                 {
-                     std::cerr << "\e[0;31m" << "error page not well configured exemple: error_page 404 www/error_page_404.html;" << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "error page not well configured exemple: error_page 404 www/error_page_404.html;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 11, "error_page ") == 0 && in_s == 1)
             {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_error_p.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error can't put page after in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 if (this->serv[this->serv.size() - 1].set_error_page(line, loc) == 1)
                 {
                     std::cerr << "\e[0;31m" << "error page not well configured exemple: error_page 404 www/error_page_404.html;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 21, "client_max_body_size ") == 0 && in_s == 0)
             {
+                if (this->serv.size() > 0)
+                {
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "client_max_body_size not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return ;
+                }
                 if (this->set_client_max_body(line) == 1)
                 {
                     std::cerr << "\e[0;31m" << "client_max_body_size not well configured exemple: client_max_body_size 100;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 21, "client_max_body_size ") == 0 && in_s == 1)
             {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_size_cmb.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error write in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 if (this->serv[this->serv.size() - 1].set_client_max_body(line, loc) == 1)
                 {
                     std::cerr << "\e[0;31m" << "client_max_body_size not well configured exemple: client_max_body_size 100;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 5, "root ") == 0 && in_s == 0)
+            {
+                if (this->serv.size() > 0)
+                {
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "root not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return ;
+                }
                 this->set_root(line);
+                continue;
+            }
             if (line.compare(0, 5, "root ") == 0 && in_s == 1)
+            {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_root.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error write in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 this->serv[this->serv.size() - 1].set_root(line, loc);
+                continue;
+            }
             if (line.compare(0, 13, "limit_except ") == 0 && in_s == 1 && in_l == 1)
             {
                 if (this->serv[this->serv.size() - 1].set_limit_exept(line, loc) == 1)
@@ -173,33 +231,82 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 10, "autoindex ") == 0 && in_s == 0)
             {
+                if (this->serv.size() > 0)
+                {
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "autoindex not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return ;
+                }
                 if (this->set_autoindex(line) == 1)
                 {
                     std::cerr << "\e[0;31m" << "autoindex not well configured exemple: autoindex off;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 10, "autoindex ") == 0 && in_s == 1)
             {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_autoindex.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error write in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 if (this->serv[this->serv.size() - 1].set_autoindex(line, loc) == 1)
                 {
                     std::cerr << "\e[0;31m" << "autoindex not well configured exemple: autoindex off;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 6, "index ") == 0 && in_s == 0)
+            {
+                if (this->serv.size() > 0)
+                {
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "index not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return ;
+                }
                 this->set_index(line);
+                continue;
+            }
             if (line.compare(0, 6, "index ") == 0 && in_s == 1)
+            {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_index.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error write in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 this->serv[this->serv.size() - 1].set_index(line, loc);
-            if (line.compare(0, 8, "cgi_ext ") == 0 && in_s == 1 && in_l == 1)
-                this->serv[this->serv.size() - 1].set_cgi_ext(line, loc);
-            if (line.compare(0, 8, "cgi_dir ") == 0 && in_s == 1 && in_l == 1)
-                this->serv[this->serv.size() - 1].set_cgi_dir(line, loc);
+                continue;
+            }
+            if (line.compare(0, 8, "cgi_ext ") == 0 && in_s == 1 && in_l == 0)
+            {
+                if (this->serv[this->serv.size() - 1].set_cgi_ext(line) == 1)
+                {
+                    this->error = 1;
+                    return;
+                }
+                continue;
+            }
+            if (line.compare(0, 8, "cgi_dir ") == 0 && in_s == 1 && in_l == 0)
+            {
+                if (this->serv[this->serv.size() - 1].set_cgi_dir(line) == 1)
+                {
+                    this->error = 1;
+                    return ;
+                }
+                continue;
+            }
             if (line.compare(0, 8, "rewrite ") == 0 && in_s == 1)
             {
                 if (this->serv[this->serv.size() - 1].set_redirect(line, loc) == 1)
@@ -208,6 +315,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
             if (line.compare(0, 13, "upload_store ") == 0 && in_s == 1)
             {
@@ -216,7 +324,11 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                     this->error = 1;
                     return ;
                 }
+                continue;
             }
+            std::cerr << "\e[0;31m" << "error ligne:" << line << " :not well configured:" <<"\e[0m" << std::endl;
+            this->error = 1;
+            return ;
         }
     }
     if (this->serv.size() == 0)
@@ -231,7 +343,8 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
         if (this->serv[nb].map_root[""] == "")
         {
             this->error = 1;
-            std::cerr << "\e[0;31m" << "root empty in one server" << "\e[0m" << std::endl;
+            std::cerr << "\e[0;31m" << "root empty the file .conf have to receive a root as argument" << "\e[0m" << std::endl;
+            std::cerr << "\e[0;31m" << "exemple:root files_test;" << std::endl;
             return ;
         }
         if (this->serv[nb].tab_addr_port.size() == 0)
@@ -270,9 +383,38 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
         //////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////
         /////////////////////////////////////////////////////////////////////////////////////////////
-    }
+        // for (_MAP_L_EXEPT::iterator it = this->serv[nb].map_limit_exept.begin(); it != this->serv[nb].map_limit_exept.end(); it++)
+        // {
+        //     std::cout << "loc :" << it->first; 
+        //     for (std::vector<std::string>::iterator ot = it->second.begin(); ot != it->second.end(); ot++)
+        //     {
+        //         std::cout << " " << *ot;
+        //     }
+        //     std::cout << std::endl;
+        // }
+        // for (_MAP_REDIRECT::iterator it = this->serv[nb].map_redirect.begin(); it != this->serv[nb].map_redirect.end(); it++)
+        // {
+        //     std::cout << "loc :" << it->first; 
+        //     for (std::map<std::string, std::string>::iterator ot = it->second.begin(); ot != it->second.end(); ot++)
+        //     {
+        //         std::cout << "first :" << ot->first << " " <<"second :" << ot->second;
+        //     }
+        //     std::cout << std::endl;
+        // }
+        // std::cout << ":\"\":" << this->serv[nb].get_redirect("", "index.html") << ":" << std::endl;
+        // std::cout << ":/:" << this->serv[nb].get_redirect("/", "index.html") << ":" << std::endl;
+        // std::cout << ":/batman/:" << this->serv[nb].get_redirect("/batman/", "index.html") << ":" << std::endl;
+        // std::cout << "autoindex:" << this->serv[nb].get_autoindex("/") << std::endl;
+        // std::cout << "s_name:" << this->serv[nb].s_name << std::endl;
+        // std::cout << "extention";
+        // for (_VEC_CGI_EXT::iterator it = this->serv[nb].tab_cgi_ext.begin(); it != this->serv[nb].tab_cgi_ext.end(); it++)
+        //     std::cout << " " << *it;
+        // std::cout << std::endl;
+        // std::cout << "l'extention .php est elle autorise? " << this->serv[nb].ext_cgi_a(".py") << std::endl;
+    }   
    /* this->tab_ap = get_all_addr_port();
-    std::cout << this->tab_ap.size() << std::endl;*/ 
+    std::cout << this->tab_ap.size() << std::endl;*/
+
 }
 
 Parser::~Parser(){}
@@ -330,9 +472,19 @@ bool    Parser::set_error_page(std::string &line)
                 return (1);
         }
         int err = atoi(buff.c_str());
-        //int last = line.find_last_of (" ");
-        //std::string buff2 = line.substr(last + 1, line.size() - last);
+        if (err < 200 || (err > 200 && err < 301) || (err > 301 && err < 400) || (err > 418 && err < 421) || err == 430 || (err > 431 && err < 451) || (err > 451 && err < 500) || (err > 511))
+        {
+            std::cerr << err << " has not a good value to set an error" << std::endl;
+            return (1);
+        }
         std::string buff2 = line.substr(found + 1);
+        std::ifstream file(buff2.c_str());
+        if (!file)
+        {
+            std::cerr << "\e[0;31m" << "Error open file. The file doesn't exist." << "\e[0m" << std::endl;
+            return (1);
+        }
+        file.close();
         this->error_p[err] = buff2;
         return (0);
     }
@@ -362,7 +514,7 @@ bool    Parser::set_client_max_body(std::string &line)
     if (line.length() > 13) {return (1);}
     std::stringstream sstream(line);
     sstream >> size;
-    if (size > 8796093022207) {return (1);}
+    if (size > 8796093022207 || 1 > size) {return (1);}
     this->size_cmb = size;
     return (0);
 }
@@ -394,7 +546,8 @@ void    Parser::set_index(std::string &line)
     while (found!=std::string::npos)
     {
         std::string buff = line.substr(0, found);
-        this->index.push_back(buff);
+        if (buff.size() != 0)
+            this->index.push_back(buff);
         line = line.substr(found + 1);
         found = line.find(" ");
     }
@@ -443,21 +596,5 @@ std::set<std::pair<std::string, int> > Parser::get_all_addr_port(void)
             }
         }
     }
-    this->serv[0].tab_ap = lala;
-    // imprimer tout ce qui se trouve dans lala pour etre sur de ce que je renvoie;
-    /*
-    for (std::set<std::pair<std::string, int> >::iterator it = lala.begin(); it != lala.end(); it++)
-        std::cout << "addresse: " << it->first << "  port: " << it->second << std::endl;
-    std::cout << "////////////////////////////////////////////////////////" << std::endl;
-    for (std::map<std::pair<std::string, int>, std::vector<P_server> >::iterator it = this->tab_tab_ap.begin(); it != this->tab_tab_ap.end(); it++)
-    {
-        std::cout << "adresse: " << it->first.first << " port: " << it->first.second << std::endl;
-        for (std::vector<P_server>::iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
-            std::cout << "root "  << it2->get_root("/") << std::endl;
-    } */
-    /*
-    for (std::set<std::pair<std::pair<std::string, int>, int> >::iterator it = lalab.begin(); it != lalab.end(); it++)
-        std::cout << "address: "  << it->first.first << " port: " << it->first.second << " nb_serv: " << it->second << std::endl;
-    */
     return (lala);
 }

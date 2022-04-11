@@ -16,8 +16,8 @@ P_server &  P_server::operator=(const P_server &copie)
     this->map_limit_exept = copie.map_limit_exept;
     this->map_autoindex = copie.map_autoindex;
     this->map_index = copie.map_index;
-    this->map_cgi_ext = copie.map_cgi_ext;
-    this->map_cgi_dir = copie.map_cgi_dir;
+    this->tab_cgi_ext = copie.tab_cgi_ext;
+    this->cgi_dir = copie.cgi_dir;
     this->map_redirect = copie.map_redirect;
     this->tab_ap = copie.tab_ap;
     this->path_upload_dir = copie.path_upload_dir;
@@ -97,7 +97,19 @@ bool    P_server::set_error_page(std::string &line, std::string &loc)
                 return (1);
         }
         int err = atoi(buff.c_str());
+        if (err < 200 || (err > 200 && err < 301) || (err > 301 && err < 400) || (err > 418 && err < 421) || err == 430 || (err > 431 && err < 451) || (err > 451 && err < 500) || (err > 511))
+        {
+            std::cerr << err << " has not a good value to set an error" << std::endl;
+            return (1);
+        }
         std::string buff2 = line.substr(found + 1);
+        std::ifstream file(buff2.c_str());
+        if (!file)
+        {
+            std::cerr << "\e[0;31m" << "Error open file. The file doesn't exist." << "\e[0m" << std::endl;
+            return (1);
+        }
+        file.close();
         this->map_error_p[loc][err] = buff2;
         return (0);
     }
@@ -148,7 +160,6 @@ bool    P_server::set_limit_exept(std::string &line, std::string &loc)
         found = line.find(" ");
         size++;
     }
-    if (size == 0) {return (1);}
     lala.push_back(line);
     this->map_limit_exept[loc] = lala;
     return (0);
@@ -173,7 +184,8 @@ void    P_server::set_index(std::string &line, std::string &loc)
     while (found!=std::string::npos)
     {
         std::string buff = line.substr(0, found);
-        lala.push_back(buff);
+        if (buff.size() != 0)
+            lala.push_back(buff);
         line = line.substr(found + 1);
         found = line.find(" ");
     }
@@ -181,7 +193,7 @@ void    P_server::set_index(std::string &line, std::string &loc)
     this->map_index[loc] = lala;
 }
 
-void    P_server::set_cgi_ext(std::string &line, std::string &loc)
+bool    P_server::set_cgi_ext(std::string &line)
 {
     // quel cgi_extention accepter et renvoyer une une erreur si se n'est pas la bonne.
     std::vector<std::string>    lala;
@@ -191,19 +203,61 @@ void    P_server::set_cgi_ext(std::string &line, std::string &loc)
     while (found!=std::string::npos)
     {
         std::string buff = line.substr(0, found);
+        if (buff != ".py" && buff != ".php")
+        {
+            std::cerr << "\e[0;31m" << "cgi not well configured only .php and .py accept" << "\e[0m" << std::endl;
+            return (1);
+        }
         lala.push_back(buff);
         line = line.substr(found + 1);
         found = line.find(" ");
     }
-        lala.push_back(line);
-        this->map_cgi_ext[loc] = lala;
+    if (line != ".py" && line != ".php")
+    {
+        std::cerr << "\e[0;31m" << "cgi not well configured only .php and .py accept" << "\e[0m" << std::endl;
+        return (1);
+    }
+    lala.push_back(line);
+    this->tab_cgi_ext = lala;
+    return (0);
 }
 
-void    P_server::set_cgi_dir(std::string &line, std::string &loc)
+bool    P_server::set_cgi_dir(std::string &line)
 {
     line = line.substr(8);
     line = line.substr(0, line.length() - 1);
-    this->map_cgi_dir[loc] = line;
+    std::ifstream file(line.c_str());
+    if (!file)
+    {
+        std::cerr << "\e[0;31m" << "Error open file. The file doesn't exist." << "\e[0m" << std::endl;
+        return (1);
+    }
+    file.close();
+    std::size_t pos = line.find_last_of("py-cgi");
+    std::size_t pos2 = line.find_last_of("php-cgi");
+    if (pos != std::string::npos || pos2 != std::string::npos)
+    {
+        std::string buff;
+        if (pos != std::string::npos)
+        {
+            pos -= 6;
+            buff = line.substr(pos);
+        }
+        else
+        {
+            buff = line.substr(pos2);
+            pos -= 7;
+        }
+        if (buff != "py-cgi" && buff != "php-cgi")
+        {
+            std::cerr << "\e[0;31m" << "the file is not correct" << "\e[0m" << std::endl;
+            return (1);
+        }
+        this->cgi_dir = line;
+        return (0);
+    }
+    std::cerr << "\e[0;31m" << "extention file no correct" << "\e[0m" << std::endl;
+    return (1);
 }
 
 bool    P_server::set_redirect(std::string &line, std::string &loc)
@@ -361,6 +415,113 @@ std::vector<std::string>    P_server::get_addresses(int port)
     return (it->second);
 }
 
+std::vector<std::string>    P_server::get_limit_exept(std::string loc)
+{
+    _MAP_L_EXEPT::iterator it;
+    ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
+    std::string::iterator b;
+    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+        ;
+    loc.erase(++b, loc.end());
+    ///////////////////////////////////////////////////////////////////////
+    it = this->map_limit_exept.find(loc);
+    if (it == this->map_limit_exept.end())
+    {
+        it = this->map_limit_exept.find("/");
+        if (it == this->map_limit_exept.end())
+        {
+            it = this->map_limit_exept.find("");
+            return (it->second);
+        }
+        return (it->second);
+    }
+    return (it->second);
+}
+
+std::string                 P_server::get_redirect(std::string loc, std::string page)
+{
+    _MAP_REDIRECT::iterator                         it;
+    std::map<std::string, std::string>::iterator    ot;
+    ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
+    std::string::iterator b;
+    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+        ;
+    loc.erase(++b, loc.end());
+    ///////////////////////////////////////////////////////////////////////
+    it = this->map_redirect.find(loc);
+    if (it == this->map_redirect.end())
+    {
+        it = this->map_redirect.find("/");
+        if (it == this->map_redirect.end())
+        {
+            it = this->map_redirect.find("");
+            if (it == this->map_redirect.end())
+                return (page);
+            ot = it->second.find(page);
+            if (ot == it->second.end())
+                return (page);
+            return (ot->second);
+        }
+        ot = it->second.find(page);
+        if (ot == it->second.end())
+            return (page);
+        return (ot->second);
+    }
+    ot = it->second.find(page);
+    if (ot == it->second.end())
+        return (page);
+    return (ot->second);
+}
+
+
+// std::vector<std::string>    P_server::get_cgi_ext(std::string loc)
+// {
+//     (void)loc;
+//     std::vector<std::string> lala;
+//     return (lala);
+//     // _MAP_CGI_EXT::iterator it;
+//     // ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
+//     // std::string::iterator b;
+//     // for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+//     //     ;
+//     // loc.erase(++b, loc.end());
+//     // ///////////////////////////////////////////////////////////////////////
+//     // it = this->map_cgi_ext.find(loc);
+//     // if (it == this->map_cgi_ext.end())
+//     // {
+//     //     it = this->map_cgi_ext.find("/");
+//     //     return (it->second);
+//     // }
+//     // return (it->second);
+// }
+
+
+
+// std::string P_server::get_cgi_dir(std::string loc)
+// {
+//     _MAP_CGI_DIR::iterator it;
+//     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
+//     std::string::iterator b;
+//     for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+//         ;
+//     loc.erase(++b, loc.end());
+//     ///////////////////////////////////////////////////////////////////////
+//     it = this->map_cgi_dir.find(loc);
+//     if (it == this->map_cgi_dir.end())
+//     {
+//         it = this->map_cgi_dir.find("/");
+//         return (it->second);
+//     }
+//     return (it->second);
+// }
+
+
+bool    P_server::ext_cgi_a(std::string ext)
+{
+    for (_VEC_CGI_EXT::iterator it = this->tab_cgi_ext.begin(); it != this->tab_cgi_ext.end(); it++)
+        if (*it == ext) return (1);
+    return (0);
+}
 
 //////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////function en dehors de P_server mais lier //

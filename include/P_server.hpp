@@ -32,8 +32,8 @@ class P_server
         _MAP_ADDR_PORT  tab_addr_port;  // listen; Context: server                              1 Choisir le port et l’host de chaque "serveur".  3 (pas sur d'avoir saisit) Le premier serveur pour un host:port sera le serveur par défaut pour cet host:port (ce qui signifie qu’il répondra à toutes les requêtes qui n’appartiennent pas à un autre serveur)
         _MAP_INDEX      map_index;      // http, server, location                               10 Set un fichier par défaut comme réponse si la requête est un répertoire.
         _MAP_L_EXEPT    map_limit_exept;// Context:	location                                    6 Définir une liste de méthodes HTTP acceptées pour la route.
-        _MAP_CGI_EXT    map_cgi_ext;    // context: location pour l'instant : sert a voir l'enssemble des extntion que le cgi peut executer a l'interieur d'une location;
-        _MAP_CGI_DIR    map_cgi_dir;    // context: location pour l'instant : l'endroit ou est executer le cgi; 
+        _VEC_CGI_EXT    tab_cgi_ext;    // context: server pour l'instant : sert a voir l'enssemble des extntion que le cgi peut executer a l'interieur d'une location;
+        std::string     cgi_dir;        // context: server pour l'instant : l'endroit ou est executer le cgi; 
         _MAP_REDIRECT   map_redirect;   // context: server location;                            7 Définir une redirection HTTP.
         std::string     path_upload_dir; // context: server upload;
 
@@ -49,8 +49,8 @@ class P_server
         void    set_index(std::string &, std::string &);
         void    set_s_name(std::string &);
         bool    set_limit_exept(std::string &, std::string &);
-        void    set_cgi_ext(std::string &, std::string &);
-        void    set_cgi_dir(std::string &, std::string &);
+        bool    set_cgi_ext(std::string &);
+        bool    set_cgi_dir(std::string &);
         bool    set_redirect(std::string &, std::string &);
         bool    set_path_upload_dir(std::string &);
 
@@ -61,7 +61,13 @@ class P_server
         bool                        get_autoindex(std::string); // envoie la location et renvoie si l'autoindex est 0 ou 1;
         size_t                      get_client_max_body(std::string); // envoie la location et renvoie le client_max_body en fonction de la location;
         std::vector<std::string>    get_addresses(int port);  // envoie le port et renvoie les addresses du port sur lequelle il ecoute;
-        std::vector<std::string>    get_all_index(std::string); // envoie la location et renvoie tous les index indiquer en fonction de la localisation; 
+        std::vector<std::string>    get_all_index(std::string); // envoie la location et renvoie tous les index indiquer en fonction de la localisation;
+        std::vector<std::string>    get_limit_exept(std::string); // envoie la location et renvoie toutes les methodes autorisees;
+        std::string                 get_redirect(std::string, std::string); // envoie la loc et la page et renvoie une redirection si il y a pas de redirection renvoie la meme page;
+        //std::vector<std::string>    get_cgi_ext(std::string); // envoie la loc et renvoie toutes les extentions authorisees de la cgi.
+        std::string                 get_cgi_dir(std::string); // envoie la loc et renvoie le chemin si il y en a un. ou une ligne vide;
+
+        bool    ext_cgi_a(std::string); // envoie une extention et dis en retour si celle si est autorisee par le fichier de conf. 1: autorisee, 0: pas autorisee;
 };
 
 std::string get_root(std::vector<P_server>, std::string, std::pair<std::string, int>, std::string);

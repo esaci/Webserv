@@ -67,6 +67,7 @@
 			int								_time_stop_client(std::vector<struct pollfd>::iterator it);
 			int								delete_request(int clientfd);
 			bool							open_file_upload(int clientfd, std::string &file);
+			void							check_method(int);
 
 		private:
 			server_data( void );
