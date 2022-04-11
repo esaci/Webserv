@@ -113,3 +113,14 @@ void	_erase_location(DATA &ressource, _MAP_ROOT &map_root, std::string &root)
 		ressource.erase(ressource.begin(), ressource.begin() + it->first.size() - 1);
 	_link_root_init(root, ressource);
 }
+
+void			retire_doublon_slash(DATA &ressource){
+	for(size_t i = 0; i < (ressource.size() - 1);)
+	{
+		if (*(ressource.begin() + i) == '/' && *(ressource.begin() + i + 1) == '/')
+			ressource.erase(ressource.begin() + i + 1);
+		else
+			i++;
+	}
+}
+

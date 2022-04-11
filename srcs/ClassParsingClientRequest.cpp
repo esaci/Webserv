@@ -132,6 +132,7 @@ int ClassParsingClientRequest::request_ready(void)
 		{
 			parse_request_line(tmp_data);
 			u_ressource.reserve(ressource.size() + 2);
+			retire_doublon_slash(ressource);
 			u_ressource = ressource;
 			u_ressource.push_back('\0');
 			continue;

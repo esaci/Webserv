@@ -50,5 +50,6 @@ DATA			retire_root(DATA &buff, std::string &root);
 void	        retire_tiret(DATA &buff);
 std::vector<struct pollfd>::iterator    _return_it_poll(int clientfd, std::vector<struct pollfd> &tab_poll);
 void			_erase_location(DATA &ressource, _MAP_ROOT &map_root, std::string &root);
-
+void			retire_doublon_slash(DATA &ressource);
+P_server		&serv_host(std::vector<P_server> &tab_serv, DATA &host);
 # endif

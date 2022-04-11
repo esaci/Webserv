@@ -63,7 +63,7 @@ class P_server
         std::vector<std::string>    get_addresses(int port);  // envoie le port et renvoie les addresses du port sur lequelle il ecoute;
         std::vector<std::string>    get_all_index(std::string); // envoie la location et renvoie tous les index indiquer en fonction de la localisation;
         std::vector<std::string>    get_limit_exept(std::string); // envoie la location et renvoie toutes les methodes autorisees;
-        std::string                 get_redirect(std::string, std::string); // envoie la loc et la page et renvoie une redirection si il y a pas de redirection renvoie la meme page;
+        std::string                 get_redirect(const DATA &arg); // envoie la loc et la page et renvoie une redirection si il y a pas de redirection renvoie la meme page;
         //std::vector<std::string>    get_cgi_ext(std::string); // envoie la loc et renvoie toutes les extentions authorisees de la cgi.
         std::string                 get_cgi_dir(std::string); // envoie la loc et renvoie le chemin si il y en a un. ou une ligne vide;
 

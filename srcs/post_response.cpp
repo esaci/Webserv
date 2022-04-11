@@ -88,7 +88,7 @@ bool	server_data::open_file_upload(int clientfd, std::string &file)
 {
 	int fd;
 
-	file = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].path_upload_dir + file;
+	file = serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).path_upload_dir + file;
 	if ((fd = open(file.c_str(), O_RDWR | O_CREAT | O_TRUNC, 0666)) < 0)
 		return 1;
 	tab_request[clientfd].responding = 2;
@@ -106,7 +106,7 @@ int	server_data::_post_upload(int clientfd)
 	if (tab_request[clientfd].responding < 2)
 	{
 		std::string file;
-		std::string root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].u_ressource.begin().base());
+		std::string root = serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).get_root((char*)tab_request[clientfd].u_ressource.begin().base());
 
 		if (check_bad_inf(tab_request[clientfd].content_type, tab_request[clientfd].r_body_buffer, file))
 			tab_request[clientfd].fill_request(400, _return_it_poll(clientfd, tab_poll));
