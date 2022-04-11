@@ -62,7 +62,7 @@ void	RP15::clear_ressource( void ){
 		{
 			ressource.erase(ressource.begin() + pos_method, it + 1);
 			if (!pos_ressource && !return_error)
-				return_error = 400;
+				return_error = 403;
 			return (clear_ressource());
 		}
 	}
