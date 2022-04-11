@@ -17,7 +17,7 @@ int RP15::set_cgi_env(server_data *s, int fd){
     int		ret = 1;
 	pid_t	pid = fork();
     int     status;
-
+    
     std::vector<char *> env;
     std::string cgipath(CGI);                // mettre a jour avec parsing raph
     std::string content_lengthenv(this->content_length.begin(), this->content_length.end());
@@ -28,7 +28,7 @@ int RP15::set_cgi_env(server_data *s, int fd){
     std::string methodenv(this->method.begin(), this->method.end());
     std::string content_typeenv(this->content_type.begin(), this->content_type.end());
     std::string r_body_bufferenv(this->r_body_buffer.begin(), this->r_body_buffer.end());
-    std::string r_body_getenv(++this->r_body_get.begin(), this->r_body_get.end());
+        // std::string r_body_getenv(++this->r_body_get.begin(), this->r_body_get.end());
 
     env.push_back(const_cast<char*>("SERVER_SOFTWARE=webserv1.0"));
     env.push_back(const_cast<char*>("GATEWAY_INTERFACE=CGI/1.1"));
@@ -36,12 +36,14 @@ int RP15::set_cgi_env(server_data *s, int fd){
     env.push_back(const_cast<char*>("REDIRECT_STATUS=200"));
     std::string content_lengthv("CONTENT_LENGTH=");
     // std::cout << content_lengthenv << content_length << "lol\n";
-    if(content_lengthenv.size() == 0){
-        content_lengthv.append(content_lengthenv);}
+    // if(content_lengthenv.size() == 0){
+        content_lengthv.append(content_lengthenv);
+    // }
     env.push_back(const_cast<char*>(content_lengthv.c_str()));
-    std::string hostv("SERVER_NAME=");
-    hostv += hostenv;
+    std::string hostv("SERVER_NAME=webserv");
+    // hostv += hostenv;
     // hostv += "\0";
+    
     env.push_back(const_cast<char*>(hostv.c_str()));
     std::string acceptv("HTTP_ACCEPT=");
     acceptv += acceptenv;
@@ -60,11 +62,13 @@ int RP15::set_cgi_env(server_data *s, int fd){
 std::string ressourceenv(ressource.begin(), ressource.end());
     std::string path_infov("PATH_INFO=");
     // path_infov += cgipath; //est ce le bout de l url apres ?
-    path_infov += ressourceenv;
+    // path_infov += ressourceenv;
     env.push_back(const_cast<char*>(path_infov.c_str()));
     std::string path_translatedv("PATH_TRANSLATED=");
     // path_translatedv += cgipath; //all path
-    path_translatedv += ressourceenv;
+    std::string path("/goinfre/ogenser/Webserv/files_test/vfirst_test_php.php");
+    path_translatedv += path;
+    // path_translatedv += ressourceenv;
     env.push_back(const_cast<char*>(path_translatedv.c_str()));
     std::string script_namev("SCRIPT_NAME=");
     script_namev += ressourceenv;
@@ -80,13 +84,22 @@ std::string ressourceenv(ressource.begin(), ressource.end());
     
     if(methodenv == "POST")
         query_stringv += r_body_bufferenv; // probleme valgrind
-    else if (methodenv == "GET")
+    else if (methodenv == "GET"){
+        std::string r_body_getenv(++this->r_body_get.begin(), this->r_body_get.end());
         query_stringv += r_body_getenv;
+    }
     env.push_back(const_cast<char*>(query_stringv.c_str()));
 
     std::string content_typev("CONTENT_TYPE=");
     content_typev += content_typeenv; 
     env.push_back(const_cast<char*>(content_typev.c_str()));
+
+
+    std::string server_portv("SERVER_PORT=0");
+    env.push_back(const_cast<char*>(server_portv.c_str()));
+
+    std::string remote_addrv("REMOTE_ADDR=0.0.0.0");
+    env.push_back(const_cast<char*>(remote_addrv.c_str()));
 
     env.push_back(NULL);
     // int i = 0;
@@ -106,10 +119,10 @@ std::string ressourceenv(ressource.begin(), ressource.end());
 
 
     // execve(CGI, args, ev);
-    for (size_t i = 0; i < 15; i++){
-        // ev[i][1] = '\0'; 
-        std::cout << ev[i] << "\n";
-    }
+    // for (size_t i = 0; i < 17; i++){
+    //     // ev[i][1] = '\0'; 
+    //     std::cout << ev[i] << "\n";
+    // }
     // exit(0);
 
 
@@ -118,12 +131,23 @@ std::string ressourceenv(ressource.begin(), ressource.end());
 
 	if (!pid)
 	{
+         for (size_t i = 0; i < 17; i++){
+        // ev[i][1] = '\0'; 
+        std::cout << i << " "<< ev[i] << "\n";
+        if(ev[i] == NULL)
+            std::cout << "C NULLLL\n";
+    }
+        ev[16] = NULL;
         char **args = (char **)malloc(sizeof(char *) * 3);
 	    args[0] = strdup(CGI);
 	    args[1] = (char *)ressourceenv.c_str();
         args[2] = NULL;
-		dup2(fd, STDOUT_FILENO);
-		close(fd);
+        std::cout << "C NULLLL\n";
+        for (size_t i = 0; i < 3; i++){
+            std::cout << args[i] << "\n";
+        }
+		dup2(fd, 1);
+		// close(fd);
 		ret = execve(CGI, args, ev);
 
           for (size_t i = 0; i < 15; i++){
@@ -171,7 +195,7 @@ int RP15::basic_cgi(server_data *s, int fd){
 	ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)u_ressource.begin().base()), ressource);
 	std::cout << "\n" << ressource << std::endl;
 	std::cout << "BODY " << r_body_buffer << "|\n";
-
+    
 	/*
 	if (FICHIER PAS OUVERT)
 	{
@@ -193,6 +217,7 @@ int RP15::basic_cgi(server_data *s, int fd){
     //     //     std::cout << "NULL" << i << "\n";
     // }
     // std::cout << test() << "\n";
+   
    set_cgi_env(s, fd);
    std::cout << "hello\n" << "\n";
    

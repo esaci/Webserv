@@ -13,6 +13,7 @@ RP15::~RP15(void) {}
 
 bool RP15::is_ready(void)
 {
+	std::cout << parse_data << "\n";
 	if (parse_data.size() < 4)
 		return (0);
 	if (parse_data[0] == 'P')
