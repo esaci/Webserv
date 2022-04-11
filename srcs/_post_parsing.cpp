@@ -50,7 +50,7 @@ int			RP15::_post_first_body(DATA::iterator it){
 }
 
 int			RP15::_delete_number( void ){
-	if ((r_body_buffer.size() + last_remove - last_step) < last_size)
+	if ((r_body_buffer.size() - last_step) < last_size)
 		return (0);
 	DATA::iterator it, it2;
 
