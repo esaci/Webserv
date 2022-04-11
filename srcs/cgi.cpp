@@ -23,7 +23,8 @@ char    **RP15::set_cgi_env(void){
     std::string methodenv(this->method.begin(), this->method.end());
     std::string content_typeenv(this->content_type.begin(), this->content_type.end());
     std::string r_body_bufferenv(this->r_body_buffer.begin(), this->r_body_buffer.end());
-    
+    std::string r_body_getenv(this->r_body_get.begin(), this->r_body_get.end());
+
     env.push_back((char *)"SERVER_SOFTWARE=webserv1.0");
     env.push_back((char*)"GATEWAY_INTERFACE=CGI/1.1");
     env.push_back((char*)"SERVER_PROTOCOL=HTTP/1.1");
@@ -54,11 +55,20 @@ char    **RP15::set_cgi_env(void){
     env.push_back((char *)path_translatedv.c_str());
     std::string script_namev("SCRIPT_NAME=");
     // script_namev += cgipath; // a commencer par un /
-    script_namev += r_body_bufferenv; // A REMPLACER PAR LE PATH DE RAPH
+    if(methodenv == "POST")
+        script_namev += r_body_bufferenv; // A REMPLACER PAR LE PATH DE RAPH
+    else if (methodenv == "GET")
+        script_namev += r_body_getenv;
     env.push_back((char *)script_namev.c_str());
+
     std::string query_stringv("QUERY_STRING=");
-    query_stringv += r_body_bufferenv;       //check avec post et get
+    // query_stringv += r_body_bufferenv;       //check avec post et get
+    if(methodenv == "POST")
+        query_stringv += r_body_bufferenv; // A REMPLACER PAR LE PATH DE RAPH
+    else if (methodenv == "GET")
+        query_stringv += r_body_getenv;
     env.push_back((char *)query_stringv.c_str());
+    
     std::string content_typev("CONTENT_TYPE=");
     content_typev += content_typeenv; 
     env.push_back((char *)content_typev.c_str());
@@ -84,7 +94,7 @@ char    **RP15::set_cgi_env(void){
 }
 
 int RP15::basic_cgi(server_data *s, int fd){
-	ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)ressource.begin().base()), ressource);
+	ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)u_ressource.begin().base()), ressource);
 	std::cout << "\n" << ressource << std::endl;
 	std::cout << "BODY " << r_body_buffer << "|\n";
     //important checker l'histoire des fds de la correction avec select //elias
@@ -102,7 +112,9 @@ int RP15::basic_cgi(server_data *s, int fd){
 	pid_t	pid = fork();
 
     int     status;
-
+    // int fdtest = open(set_cgi_env()[13], O_RDONLY);
+    // if(fdtest < 0){
+    //     return print_return("error: cgi file not ok", 1);}
     // std::cout << "\nTEST CGI\n\n";
 	if (pid < 0)
 		return (print_return("error: fork", 1));

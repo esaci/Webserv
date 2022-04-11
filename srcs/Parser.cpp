@@ -15,6 +15,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
     this->size_cmb = 1; // sera la size par defaut de la variable size_cmb qui est le client_max_boody;
     // ajout des pages d'erreur de client et de serveur par defaut
     // client error responses //
+    this->error_p[100]  = "./files_system/Continue.html";
     this->error_p[200]  = "./files_system/Ok.html";
     this->error_p[301] = "./files_system/Moved_Permanently.html";
     this->error_p[400] = "./files_system/Bad_Request.html";

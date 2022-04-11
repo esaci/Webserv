@@ -103,6 +103,7 @@ int	server_data::_set_file(int clientfd){
 		return (tab_request[clientfd]._set_folder(folder, root, tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_autoindex((char*)tab_request[clientfd].u_ressource.begin().base())));
 	else
 		filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
+	fcntl(filefd, F_SETFL, O_NONBLOCK);
 	tab_request[clientfd].ressource.pop_back();
 	if (filefd < 0)
 	{
