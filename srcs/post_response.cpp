@@ -6,7 +6,7 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 		DATA	temp;
 		int fd;
 		ressource = u_ressource;
-	if (method == _data_init("GET"))
+		if (method == _data_init("GET"))
         {
             DATA::iterator it;
             for (it = ressource.begin(); it < ressource.end() && *it != '?'; it++)
@@ -21,6 +21,8 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 			return (print_return("FILE_CGI pas dispo !", -10));
 		fcntl(fd, F_SETFL, O_NONBLOCK);
 		basic_cgi(d_s, fd);
+		u_ressource = _data_init(FILE_CGI);
+		ressource = u_ressource;
 		if (d_s->_set_file(clientfd))
 			return (d_s->_get_error_404(clientfd));
 		return (0);
