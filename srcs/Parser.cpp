@@ -60,6 +60,10 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
     this->error_p[510] = "./files_system/Not_extended.html";
     this->error_p[511] = "./files_system/Network_authentication_required.html";
 
+    // autoindex by default //
+    this->autoindex = 1;
+    /////////////////////////
+
     //////////////////////////////////////////////////////////////////
     while (std::getline(file, line)) // temp qu il y a des lignes dans le fichier.
     {
@@ -109,6 +113,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             }
             if (line == "}")
             {
+                loc = "";
                 if (check_error_bracket_end(in_s, in_l) == 1)
                     return ;
                 continue;
@@ -132,13 +137,14 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             {
                 if (this->serv.size() > 0)
                 {
-                    std::cerr << "\e[0;31m" << "you have to put value before location" << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "error_page not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
                 if (this->set_error_page(line) == 1)
                 {
-                     std::cerr << "\e[0;31m" << "error page not well configured exemple: error_page 404 www/error_page_404.html;" << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "error page not well configured exemple: error_page 404 www/error_page_404.html;" << "\e[0m" << std::endl;
                     this->error = 1;
                     return ;
                 }
@@ -146,6 +152,12 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             }
             if (line.compare(0, 11, "error_page ") == 0 && in_s == 1)
             {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_error_p.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error can't put page after in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 if (this->serv[this->serv.size() - 1].set_error_page(line, loc) == 1)
                 {
                     std::cerr << "\e[0;31m" << "error page not well configured exemple: error_page 404 www/error_page_404.html;" << "\e[0m" << std::endl;
@@ -156,6 +168,13 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             }
             if (line.compare(0, 21, "client_max_body_size ") == 0 && in_s == 0)
             {
+                if (this->serv.size() > 0)
+                {
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "client_max_body_size not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return ;
+                }
                 if (this->set_client_max_body(line) == 1)
                 {
                     std::cerr << "\e[0;31m" << "client_max_body_size not well configured exemple: client_max_body_size 100;" << "\e[0m" << std::endl;
@@ -166,6 +185,12 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             }
             if (line.compare(0, 21, "client_max_body_size ") == 0 && in_s == 1)
             {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_size_cmb.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error write in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 if (this->serv[this->serv.size() - 1].set_client_max_body(line, loc) == 1)
                 {
                     std::cerr << "\e[0;31m" << "client_max_body_size not well configured exemple: client_max_body_size 100;" << "\e[0m" << std::endl;
@@ -176,11 +201,24 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             }
             if (line.compare(0, 5, "root ") == 0 && in_s == 0)
             {
+                if (this->serv.size() > 0)
+                {
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "root not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return ;
+                }
                 this->set_root(line);
                 continue;
             }
             if (line.compare(0, 5, "root ") == 0 && in_s == 1)
             {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_root.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error write in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 this->serv[this->serv.size() - 1].set_root(line, loc);
                 continue;
             }
@@ -196,6 +234,13 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             }
             if (line.compare(0, 10, "autoindex ") == 0 && in_s == 0)
             {
+                if (this->serv.size() > 0)
+                {
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "autoindex not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return ;
+                }
                 if (this->set_autoindex(line) == 1)
                 {
                     std::cerr << "\e[0;31m" << "autoindex not well configured exemple: autoindex off;" << "\e[0m" << std::endl;
@@ -206,6 +251,12 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             }
             if (line.compare(0, 10, "autoindex ") == 0 && in_s == 1)
             {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_autoindex.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error write in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 if (this->serv[this->serv.size() - 1].set_autoindex(line, loc) == 1)
                 {
                     std::cerr << "\e[0;31m" << "autoindex not well configured exemple: autoindex off;" << "\e[0m" << std::endl;
@@ -216,15 +267,28 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
             }
             if (line.compare(0, 6, "index ") == 0 && in_s == 0)
             {
+                if (this->serv.size() > 0)
+                {
+                    std::cerr << "\e[0;31m" << line << "\e[0m" << std::endl;
+                    std::cerr << "\e[0;31m" << "index not well configured: the info has to be before the context serv;" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return ;
+                }
                 this->set_index(line);
                 continue;
             }
             if (line.compare(0, 6, "index ") == 0 && in_s == 1)
             {
+                if (loc == "" && this->serv[this->serv.size() - 1].map_index.size() > 1)
+                {
+                    std::cerr << "\e[0;31m" << "error write in server after a location" << "\e[0m" << std::endl;
+                    this->error = 1;
+                    return;
+                }
                 this->serv[this->serv.size() - 1].set_index(line, loc);
                 continue;
             }
-            if (line.compare(0, 8, "cgi_ext ") == 0 && in_s == 1)
+            if (line.compare(0, 8, "cgi_ext ") == 0 && in_s == 1 && in_l == 0)
             {
                 if (this->serv[this->serv.size() - 1].set_cgi_ext(line) == 1)
                 {
@@ -233,9 +297,13 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                 }
                 continue;
             }
-            if (line.compare(0, 8, "cgi_dir ") == 0 && in_s == 1)
+            if (line.compare(0, 8, "cgi_dir ") == 0 && in_s == 1 && in_l == 0)
             {
-                this->serv[this->serv.size() - 1].set_cgi_dir(line);
+                if (this->serv[this->serv.size() - 1].set_cgi_dir(line) == 1)
+                {
+                    this->error = 1;
+                    return ;
+                }
                 continue;
             }
             if (line.compare(0, 8, "rewrite ") == 0 && in_s == 1)
@@ -274,7 +342,8 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
         if (this->serv[nb].map_root[""] == "")
         {
             this->error = 1;
-            std::cerr << "\e[0;31m" << "root empty in one server" << "\e[0m" << std::endl;
+            std::cerr << "\e[0;31m" << "root empty the file .conf have to receive a root as argument" << "\e[0m" << std::endl;
+            std::cerr << "\e[0;31m" << "exemple:root files_test;" << std::endl;
             return ;
         }
         if (this->serv[nb].tab_addr_port.size() == 0)
@@ -334,11 +403,13 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
         // std::cout << ":\"\":" << this->serv[nb].get_redirect("", "index.html") << ":" << std::endl;
         // std::cout << ":/:" << this->serv[nb].get_redirect("/", "index.html") << ":" << std::endl;
         // std::cout << ":/batman/:" << this->serv[nb].get_redirect("/batman/", "index.html") << ":" << std::endl;
-        std::cout << "extention";
-        for (_VEC_CGI_EXT::iterator it = this->serv[nb].tab_cgi_ext.begin(); it != this->serv[nb].tab_cgi_ext.end(); it++)
-            std::cout << " " << *it;
-        std::cout << std::endl;
-        std::cout << "l'extention .php est elle autorise? " << this->serv[nb].ext_cgi_a(".py") << std::endl;
+        // std::cout << "autoindex:" << this->serv[nb].get_autoindex("/") << std::endl;
+        // std::cout << "s_name:" << this->serv[nb].s_name << std::endl;
+        // std::cout << "extention";
+        // for (_VEC_CGI_EXT::iterator it = this->serv[nb].tab_cgi_ext.begin(); it != this->serv[nb].tab_cgi_ext.end(); it++)
+        //     std::cout << " " << *it;
+        // std::cout << std::endl;
+        // std::cout << "l'extention .php est elle autorise? " << this->serv[nb].ext_cgi_a(".py") << std::endl;
     }   
    /* this->tab_ap = get_all_addr_port();
     std::cout << this->tab_ap.size() << std::endl;*/
@@ -400,9 +471,19 @@ bool    Parser::set_error_page(std::string &line)
                 return (1);
         }
         int err = atoi(buff.c_str());
-        //int last = line.find_last_of (" ");
-        //std::string buff2 = line.substr(last + 1, line.size() - last);
+        if (err < 200 || (err > 200 && err < 301) || (err > 301 && err < 400) || (err > 418 && err < 421) || err == 430 || (err > 431 && err < 451) || (err > 451 && err < 500) || (err > 511))
+        {
+            std::cerr << err << " has not a good value to set an error" << std::endl;
+            return (1);
+        }
         std::string buff2 = line.substr(found + 1);
+        std::ifstream file(buff2.c_str());
+        if (!file)
+        {
+            std::cerr << "\e[0;31m" << "Error open file. The file doesn't exist." << "\e[0m" << std::endl;
+            return (1);
+        }
+        file.close();
         this->error_p[err] = buff2;
         return (0);
     }
@@ -432,7 +513,7 @@ bool    Parser::set_client_max_body(std::string &line)
     if (line.length() > 13) {return (1);}
     std::stringstream sstream(line);
     sstream >> size;
-    if (size > 8796093022207) {return (1);}
+    if (size > 8796093022207 || 1 > size) {return (1);}
     this->size_cmb = size;
     return (0);
 }
@@ -464,7 +545,8 @@ void    Parser::set_index(std::string &line)
     while (found!=std::string::npos)
     {
         std::string buff = line.substr(0, found);
-        this->index.push_back(buff);
+        if (buff.size() != 0)
+            this->index.push_back(buff);
         line = line.substr(found + 1);
         found = line.find(" ");
     }
@@ -513,21 +595,5 @@ std::set<std::pair<std::string, int> > Parser::get_all_addr_port(void)
             }
         }
     }
-    //this->serv[0].tab_ap = lala;
-    // imprimer tout ce qui se trouve dans lala pour etre sur de ce que je renvoie;
-    /*
-    for (std::set<std::pair<std::string, int> >::iterator it = lala.begin(); it != lala.end(); it++)
-        std::cout << "addresse: " << it->first << "  port: " << it->second << std::endl;
-    std::cout << "////////////////////////////////////////////////////////" << std::endl;
-    for (std::map<std::pair<std::string, int>, std::vector<P_server> >::iterator it = this->tab_tab_ap.begin(); it != this->tab_tab_ap.end(); it++)
-    {
-        std::cout << "adresse: " << it->first.first << " port: " << it->first.second << std::endl;
-        for (std::vector<P_server>::iterator it2 = it->second.begin(); it2 != it->second.end(); it2++)
-            std::cout << "root "  << it2->get_root("/") << std::endl;
-    } */
-    /*
-    for (std::set<std::pair<std::pair<std::string, int>, int> >::iterator it = lalab.begin(); it != lalab.end(); it++)
-        std::cout << "address: "  << it->first.first << " port: " << it->first.second << " nb_serv: " << it->second << std::endl;
-    */
     return (lala);
 }

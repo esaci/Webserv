@@ -97,7 +97,19 @@ bool    P_server::set_error_page(std::string &line, std::string &loc)
                 return (1);
         }
         int err = atoi(buff.c_str());
+        if (err < 200 || (err > 200 && err < 301) || (err > 301 && err < 400) || (err > 418 && err < 421) || err == 430 || (err > 431 && err < 451) || (err > 451 && err < 500) || (err > 511))
+        {
+            std::cerr << err << " has not a good value to set an error" << std::endl;
+            return (1);
+        }
         std::string buff2 = line.substr(found + 1);
+        std::ifstream file(buff2.c_str());
+        if (!file)
+        {
+            std::cerr << "\e[0;31m" << "Error open file. The file doesn't exist." << "\e[0m" << std::endl;
+            return (1);
+        }
+        file.close();
         this->map_error_p[loc][err] = buff2;
         return (0);
     }
@@ -172,7 +184,8 @@ void    P_server::set_index(std::string &line, std::string &loc)
     while (found!=std::string::npos)
     {
         std::string buff = line.substr(0, found);
-        lala.push_back(buff);
+        if (buff.size() != 0)
+            lala.push_back(buff);
         line = line.substr(found + 1);
         found = line.find(" ");
     }
@@ -209,11 +222,42 @@ bool    P_server::set_cgi_ext(std::string &line)
     return (0);
 }
 
-void    P_server::set_cgi_dir(std::string &line)
+bool    P_server::set_cgi_dir(std::string &line)
 {
     line = line.substr(8);
     line = line.substr(0, line.length() - 1);
-    this->cgi_dir = line;
+    std::ifstream file(line.c_str());
+    if (!file)
+    {
+        std::cerr << "\e[0;31m" << "Error open file. The file doesn't exist." << "\e[0m" << std::endl;
+        return (1);
+    }
+    file.close();
+    std::size_t pos = line.find_last_of("py-cgi");
+    std::size_t pos2 = line.find_last_of("php-cgi");
+    if (pos != std::string::npos || pos2 != std::string::npos)
+    {
+        std::string buff;
+        if (pos != std::string::npos)
+        {
+            pos -= 6;
+            buff = line.substr(pos);
+        }
+        else
+        {
+            buff = line.substr(pos2);
+            pos -= 7;
+        }
+        if (buff != "py-cgi" && buff != "php-cgi")
+        {
+            std::cerr << "\e[0;31m" << "the file is not correct" << "\e[0m" << std::endl;
+            return (1);
+        }
+        this->cgi_dir = line;
+        return (0);
+    }
+    std::cerr << "\e[0;31m" << "extention file no correct" << "\e[0m" << std::endl;
+    return (1);
 }
 
 bool    P_server::set_redirect(std::string &line, std::string &loc)
