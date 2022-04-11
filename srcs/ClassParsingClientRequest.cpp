@@ -68,7 +68,7 @@ void	RP15::clear_ressource( void ){
 		{
 			ressource.erase(ressource.begin() + pos_method, it + 1);
 			if (!pos_ressource && !return_error)
-				return_error = 400;
+				return_error = 403;
 			return (clear_ressource());
 		}
 	}
@@ -80,7 +80,6 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg)
 	size_t pos_ressource;
 	size_t pos_protocol;
 
-	// std::cout << "ll\n" << arg << "\nlol\n";
 	arg.push_back('\0');
 
 	pos_method = until_space(arg.begin());
@@ -100,12 +99,13 @@ void	ClassParsingClientRequest::parse_request_line(DATA &arg)
 }
 int ClassParsingClientRequest::request_ready(void)
 {
-	std::cout << parse_data << "\n";
+	// std::cout << parse_data;
 	size_t line = 0, i = 0, p = 0;
 	std::vector<DATA> tab;
 
 	if (parse_data[0] == 'P')
 		p = extract_body_check();
+	tab.reserve(20);
 	tab.push_back(_data_init("Host: "));
 	tab.push_back(_data_init("Connection: "));
 	tab.push_back(_data_init("Cache-Control: "));
@@ -117,12 +117,11 @@ int ClassParsingClientRequest::request_ready(void)
 	tab.push_back(_data_init("Accept: "));
 	tab.push_back(_data_init("Sec-Fetch-Site: "));
 	tab.push_back(_data_init("Sec-Fetch-Mode: "));
-	// tab.push_back(_data_init("Sec-Fetch-User: "));
 	tab.push_back(_data_init("Sec-Fetch-Dest: "));
 	tab.push_back(_data_init("Accept-Encoding: "));
 	tab.push_back(_data_init("Accept-Language: "));
 	tab.push_back(_data_init("Content-Length: "));
-	tab.push_back(_data_init("Transfer_Encoding: "));
+	tab.push_back(_data_init("Transfer-Encoding: "));
 	tab.push_back(_data_init("Content-Type: "));
 	for (DATA::iterator it = parse_data.begin(); it < parse_data.end(); it++, line++)
 	{
@@ -139,24 +138,13 @@ int ClassParsingClientRequest::request_ready(void)
 		{
 			parse_request_line(tmp_data);
 			u_ressource.reserve(ressource.size() + 2);
+			retire_doublon_slash(ressource);
 			u_ressource = ressource;
 			u_ressource.push_back('\0');
 			continue;
 		}
 		if (p && p <= line)
-		{
-			for (; it < parse_data.end() && (*it == '\n' || *it == '\r'); it++)
-				;
-			r_body_buffer.assign(it, parse_data.end());
-			parse_data.clear();
-			if (compare_size_cl(r_body_buffer.size(), content_length))
-			{
-				responding = 1;
-				display_cpcr();
-				return (0);
-			}
-			return (1);
-		}
+			return(_post_first_body(it));
 		for (i = 0; i < tab.size(); i++)
 		{
 			if (tmp_data.size() >= tab[i].size())
@@ -242,6 +230,7 @@ RP15::ClassParsingClientRequest(const RP15 &arg)
 	r_body_buffer = arg.r_body_buffer;
 	parse_data = arg.parse_data;
 	method = arg.method;
+	u_ressource = arg.u_ressource;
 	ressource = arg.ressource;
 	protocol = arg.protocol;
 	host = arg.host;
@@ -276,6 +265,7 @@ RP15 RP15::operator=(const RP15 &arg)
 	r_body_buffer = arg.r_body_buffer;
 	parse_data = arg.parse_data;
 	method = arg.method;
+	u_ressource = arg.u_ressource;
 	ressource = arg.ressource;
 	protocol = arg.protocol;
 	host = arg.host;

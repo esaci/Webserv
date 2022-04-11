@@ -57,6 +57,8 @@ size_t	hexa_to_dec(DATA &buff){
 
 	buff.push_back('\0');
 	decimal_value = std::strtol((char*)buff.begin().base(), NULL, 16);
+	if (std::strtol((char*)buff.begin().base(), NULL, 16) < 0)
+		decimal_value = 0;
 	buff.pop_back();
 	return (decimal_value);
 }
@@ -111,3 +113,14 @@ void	_erase_location(DATA &ressource, _MAP_ROOT &map_root, std::string &root)
 		ressource.erase(ressource.begin(), ressource.begin() + it->first.size() - 1);
 	_link_root_init(root, ressource);
 }
+
+void			retire_doublon_slash(DATA &ressource){
+	for(size_t i = 0; i < (ressource.size() - 1);)
+	{
+		if (*(ressource.begin() + i) == '/' && *(ressource.begin() + i + 1) == '/')
+			ressource.erase(ressource.begin() + i + 1);
+		else
+			i++;
+	}
+}
+

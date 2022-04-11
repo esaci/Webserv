@@ -15,8 +15,9 @@ class RP15
 	public:
 		int			responding;
 		int			return_error;
-		int			serverfd;
 		bool		r_l_v;
+		int			serverfd;
+		size_t		last_size, last_step, last_remove;
 		std::time_t	time_client;
 		DATA		redirection;
 		DATA		r_buffer;
@@ -63,6 +64,8 @@ class RP15
 		int	set_cgi_env(server_data *s, int fd);
 		int		_set_folder(DIR	*folder, std::string &root, bool index);
 		void	_set_info(size_t len, std::string &tmp_s, struct dirent *tmp_f, std::string &root);
+		int		_post_first_body(DATA::iterator it);
+		int		_delete_number( void );
 		int		_post_cgi(server_data *d_s, int clientfd);
 		int		_time_init( void );
 		int		delete_request(server_data *d_s, int clientfd);

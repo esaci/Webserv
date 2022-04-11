@@ -41,7 +41,7 @@ int	RP15::_set_folder(DIR	*folder, std::string &root, bool autoindex)
 {
 	if (!autoindex)
 	{
-		return_error = 400;
+		return_error = 404;
 		return (0);
 	}
 	if (*(u_ressource.end() - 2) != '/')
@@ -98,9 +98,9 @@ int	server_data::_set_file(int clientfd){
 	std::string root;
 
 	tab_request[clientfd].ressource.push_back('\0');
-	root = tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_root((char*)tab_request[clientfd].u_ressource.begin().base());
+	root = serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).get_root((char*)tab_request[clientfd].u_ressource.begin().base());
 	if ((folder = opendir((char*)tab_request[clientfd].ressource.begin().base())))
-		return (tab_request[clientfd]._set_folder(folder, root, tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]][0].get_autoindex((char*)tab_request[clientfd].u_ressource.begin().base())));
+		return (tab_request[clientfd]._set_folder(folder, root, serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).get_autoindex((char*)tab_request[clientfd].u_ressource.begin().base())));
 	else
 		filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 	fcntl(filefd, F_SETFL, O_NONBLOCK);
