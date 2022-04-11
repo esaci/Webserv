@@ -475,7 +475,10 @@ std::vector<std::string>    P_server::get_limit_exept(std::string loc)
 
 std::string                 P_server::get_redirect(const DATA &arg)
 {
-    std::string loc(arg.begin(), arg.end());
+    int i = 0;
+    for (DATA::const_reverse_iterator rit = arg.rbegin();rit < arg.rend() && *rit == '\0'; rit++, i++)
+        ;
+    std::string loc(arg.begin(), arg.end() - i);
     _MAP_REDIRECT::iterator                         it;
     std::map<std::string, std::string>::iterator    ot;
     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
