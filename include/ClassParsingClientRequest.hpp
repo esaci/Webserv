@@ -17,7 +17,7 @@ class RP15
 		int			return_error;
 		bool		r_l_v;
 		int			serverfd;
-		size_t		last_size, last_step;
+		size_t		last_size, last_step, last_remove;
 		std::time_t	time_client;
 		DATA		redirection;
 		DATA		r_buffer;
