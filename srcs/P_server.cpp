@@ -1,4 +1,4 @@
-#include "../include/Parser.hpp"
+#include "../include/w_library.hpp"
 
 P_server::P_server():tab_addr_port(){}
 P_server::P_server(const P_server &arg):tab_addr_port(){
@@ -290,11 +290,17 @@ std::string P_server::get_root(std::string loc)
     _MAP_ROOT::iterator it;
     std::string::iterator b;
 
-    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+    for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
         ;
     loc.erase(++b, loc.end());
     //std::cout << "LOC VAUT : |" << loc << "|" << std::endl; 
     it = this->map_root.find(loc);
+    if (it == this->map_root.end() && loc.size() > 0)
+    {
+        for (b -= 2; b > loc.begin() && *b != '/'; b--)
+            ;
+        return (get_root(loc.assign(loc.begin(), ++b)));
+    }
     if (it == this->map_root.end())
     {
         it = this->map_root.find("/");
@@ -314,11 +320,17 @@ std::string P_server::get_error_page(std::string loc, int err)
     _MAP_ERRORP::iterator it;
     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
     std::string::iterator b;
-    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+    for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
         ;
     loc.erase(++b, loc.end());
     ///////////////////////////////////////////////////////////////////////
     it = this->map_error_p.find(loc);
+    if (it == this->map_error_p.end() && loc.size() > 0)
+    {
+        for (b -= 2; b > loc.begin() && *b != '/'; b--)
+            ;
+        return (get_error_page(loc.assign(loc.begin(), ++b), err));
+    }
     if (it == this->map_error_p.end())
     {
         it = this->map_error_p.find("/");
@@ -337,11 +349,16 @@ bool    P_server::get_autoindex(std::string loc)
     _MAP_AUTO_I::iterator it;
     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
     std::string::iterator b;
-    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+    for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
         ;
     loc.erase(++b, loc.end());
-    ///////////////////////////////////////////////////////////////////////
     it = this->map_autoindex.find(loc);
+    if (it == this->map_autoindex.end() && loc.size() > 1)
+    {
+        for (b -= 2; b > loc.begin() && *b != '/'; b--)
+            ;
+        return (get_autoindex(loc.assign(loc.begin(), ++b)));
+    }
     if (it == this->map_autoindex.end())
     {
         it = this->map_autoindex.find("/");
@@ -360,11 +377,17 @@ size_t  P_server::get_client_max_body(std::string loc)
     _CMBS::iterator it;
     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
     std::string::iterator b;
-    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+    for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
         ;
     loc.erase(++b, loc.end());
     ///////////////////////////////////////////////////////////////////////
     it = this->map_size_cmb.find(loc);
+    if (it == this->map_size_cmb.end() && loc.size() > 0)
+    {
+        for (b -= 2; b > loc.begin() && *b != '/'; b--)
+            ;
+        return (get_client_max_body(loc.assign(loc.begin(), ++b)));
+    }
     if (it == this->map_size_cmb.end())
     {
         it = this->map_size_cmb.find("/");
@@ -383,11 +406,17 @@ std::vector<std::string>    P_server::get_all_index(std::string loc)
     _MAP_INDEX::iterator it;
     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
     std::string::iterator b;
-    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+    for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
         ;
     loc.erase(++b, loc.end());
     ///////////////////////////////////////////////////////////////////////
     it = this->map_index.find(loc);
+    if (it == this->map_index.end() && loc.size() > 0)
+    {
+        for (b -= 2; b > loc.begin() && *b != '/'; b--)
+            ;
+        return (get_all_index(loc.assign(loc.begin(), ++b)));
+    }
     if (it == this->map_index.end())
     {
         it = this->map_index.find("/");
@@ -420,11 +449,17 @@ std::vector<std::string>    P_server::get_limit_exept(std::string loc)
     _MAP_L_EXEPT::iterator it;
     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
     std::string::iterator b;
-    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+    for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
         ;
     loc.erase(++b, loc.end());
     ///////////////////////////////////////////////////////////////////////
     it = this->map_limit_exept.find(loc);
+    if (it == this->map_limit_exept.end() && loc.size() > 0)
+    {
+        for (b -= 2; b > loc.begin() && *b != '/'; b--)
+            ;
+        return (get_limit_exept(loc.assign(loc.begin(), ++b)));
+    }
     if (it == this->map_limit_exept.end())
     {
         it = this->map_limit_exept.find("/");
@@ -438,17 +473,25 @@ std::vector<std::string>    P_server::get_limit_exept(std::string loc)
     return (it->second);
 }
 
-std::string                 P_server::get_redirect(std::string loc, std::string page)
+std::string                 P_server::get_redirect(const DATA &arg)
 {
+    std::string loc(arg.begin(), arg.end());
     _MAP_REDIRECT::iterator                         it;
     std::map<std::string, std::string>::iterator    ot;
     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
     std::string::iterator b;
-    for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+    for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
         ;
-    loc.erase(++b, loc.end());
+    std::string page(++b, loc.end());
+    loc.erase(b, loc.end());
     ///////////////////////////////////////////////////////////////////////
     it = this->map_redirect.find(loc);
+    if (it == this->map_redirect.end() && loc.size() > 0)
+    {
+        for (b -= 2; b > loc.begin() && *b != '/'; b--)
+            ;
+        return (get_redirect(_data_init(loc.assign(loc.begin(), ++b))));
+    }
     if (it == this->map_redirect.end())
     {
         it = this->map_redirect.find("/");
@@ -456,20 +499,20 @@ std::string                 P_server::get_redirect(std::string loc, std::string 
         {
             it = this->map_redirect.find("");
             if (it == this->map_redirect.end())
-                return (page);
+                return ("");
             ot = it->second.find(page);
             if (ot == it->second.end())
-                return (page);
+                return ("");
             return (ot->second);
         }
         ot = it->second.find(page);
         if (ot == it->second.end())
-            return (page);
+            return ("");
         return (ot->second);
     }
     ot = it->second.find(page);
     if (ot == it->second.end())
-        return (page);
+        return ("");
     return (ot->second);
 }
 
@@ -482,7 +525,7 @@ std::string                 P_server::get_redirect(std::string loc, std::string 
 //     // _MAP_CGI_EXT::iterator it;
 //     // ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
 //     // std::string::iterator b;
-//     // for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+//     // for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
 //     //     ;
 //     // loc.erase(++b, loc.end());
 //     // ///////////////////////////////////////////////////////////////////////
@@ -502,7 +545,7 @@ std::string                 P_server::get_redirect(std::string loc, std::string 
 //     _MAP_CGI_DIR::iterator it;
 //     ////////////////////////////////////// dans tous les getters, mettre loc dans un nouveau string et retirer tout apres le dernier ‘\’
 //     std::string::iterator b;
-//     for (b = --loc.end(); b >= loc.begin() && *b != '/'; b--)
+//     for (b = --loc.end(); b > loc.begin() && *b != '/'; b--)
 //         ;
 //     loc.erase(++b, loc.end());
 //     ///////////////////////////////////////////////////////////////////////
@@ -548,4 +591,19 @@ std::string get_root(std::vector<P_server> tab, std::string name, std::pair<std:
     }
     std::vector<P_server>::iterator it = tab.begin();
     return it->get_root(loc);
+}
+
+// FAIT EN BINOME RP15+ESACI
+// RENVOYER LE BON SERVER SELON LE HOST
+
+P_server    &serv_host(std::vector<P_server> &tab_serv, DATA &host)
+{
+    std::string tmp(host.begin(), host.end());
+
+    for (std::vector<P_server>::iterator it = tab_serv.begin(); it < tab_serv.end(); it++)
+    {
+        if (it->s_name == tmp)
+            return (*it);
+    }
+    return (*tab_serv.begin());
 }
