@@ -199,22 +199,9 @@ bool    P_server::set_cgi_ext(std::string &line)
     std::vector<std::string>    lala;
     line = line.substr(8);
     line = line.substr(0, line.length() - 1);
-    std::size_t found = line.find(" ");
-    while (found!=std::string::npos)
+    if (line != ".php")
     {
-        std::string buff = line.substr(0, found);
-        if (buff != ".py" && buff != ".php")
-        {
-            std::cerr << "\e[0;31m" << "cgi not well configured only .php and .py accept" << "\e[0m" << std::endl;
-            return (1);
-        }
-        lala.push_back(buff);
-        line = line.substr(found + 1);
-        found = line.find(" ");
-    }
-    if (line != ".py" && line != ".php")
-    {
-        std::cerr << "\e[0;31m" << "cgi not well configured only .php and .py accept" << "\e[0m" << std::endl;
+        std::cerr << "\e[0;31m" << "cgi not well configured only .php accept" << "\e[0m" << std::endl;
         return (1);
     }
     lala.push_back(line);
@@ -233,22 +220,12 @@ bool    P_server::set_cgi_dir(std::string &line)
         return (1);
     }
     file.close();
-    std::size_t pos = line.find_last_of("py-cgi");
-    std::size_t pos2 = line.find_last_of("php-cgi");
-    if (pos != std::string::npos || pos2 != std::string::npos)
+    std::size_t pos = line.find_last_of("php-cgi");
+    if (pos != std::string::npos)
     {
-        std::string buff;
-        if (pos != std::string::npos)
-        {
-            pos -= 6;
-            buff = line.substr(pos);
-        }
-        else
-        {
-            buff = line.substr(pos2);
-            pos -= 7;
-        }
-        if (buff != "py-cgi" && buff != "php-cgi")
+        pos -= 6;
+        std::string buff = line.substr(pos);
+        if (buff != "php-cgi")
         {
             std::cerr << "\e[0;31m" << "the file is not correct" << "\e[0m" << std::endl;
             return (1);
