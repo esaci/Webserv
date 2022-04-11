@@ -57,6 +57,8 @@ size_t	hexa_to_dec(DATA &buff){
 
 	buff.push_back('\0');
 	decimal_value = std::strtol((char*)buff.begin().base(), NULL, 16);
+	if (std::strtol((char*)buff.begin().base(), NULL, 16) < 0)
+		decimal_value = 0;
 	buff.pop_back();
 	return (decimal_value);
 }
