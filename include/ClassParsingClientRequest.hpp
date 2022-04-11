@@ -68,7 +68,6 @@ class RP15
 		int		delete_request(server_data *d_s, int clientfd);
 		bool	_cgi_extensions( void );
 
-		void test(void);
 	private:
 		RP15	(const DATA &arg);
 		char 	**ev;
