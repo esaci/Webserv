@@ -60,9 +60,9 @@ int RP15::set_cgi_env(server_data *s, int fd){
     env.push_back(const_cast<char*>(path_infov.c_str()));
     std::string path_translatedv("PATH_TRANSLATED=");
     // path_translatedv += cgipath; //all path
-    std::string path("/sgoinfre/goinfre/Perso/ogenser/webservfinish/files_test/vfirst_test_phppost.php"); // reaplce
-    path_translatedv += path;
-    // path_translatedv += ressourceenv;
+    // std::string path("/sgoinfre/goinfre/Perso/ogenser/webservfinish/files_test/vfirst_test_phppost.php"); // reaplce
+    // path_translatedv += path;
+    path_translatedv += ressourceenv;
     env.push_back(const_cast<char*>(path_translatedv.c_str()));
     std::string script_namev("SCRIPT_NAME=");
     script_namev += ressourceenv;
@@ -117,16 +117,17 @@ int RP15::set_cgi_env(server_data *s, int fd){
             std::cout << args[i] << "\n";
         }
 		dup2(fd, STDOUT_FILENO);
-        if(methodenv == "POST")
+        if(methodenv == "POST"){
             dup2(fdbody, STDIN_FILENO);
+            // close(fdbody);
+        }
 		close(fd);
-        // close(fdbody);
 		ret = execve(CGI, args, ev);
 
-          for (size_t i = 0; i < 15; i++){
-            // ev[i][1] = '\0'; 
-            std::cout << "ok"<< ev[i] << "\n";
-        }
+        //   for (size_t i = 0; i < 15; i++){
+        //     // ev[i][1] = '\0'; 
+        //     std::cout << "ok"<< ev[i] << "\n";
+        // }
 
 		delete s;
         if(args[0])
@@ -175,6 +176,7 @@ int RP15::basic_cgi(server_data *s, int fd){
    
    set_cgi_env(s, fd);
    std::cout << "hello\n" << "\n";
+   std::cout << ressourceenv << "jshgd\n";
 
 	return 0;
 }
