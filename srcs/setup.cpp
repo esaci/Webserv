@@ -47,6 +47,7 @@ int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 			it->events = 0;
 			it->revents = 0;
 			tab_request[it->fd].responding = 2;
+			tab_request[fdbody].time_client = tab_request[it->fd].time_client;
 			client_poll.fd = fdbody;
 			client_poll.events = POLLOUT;
 			client_poll.revents = 0;
