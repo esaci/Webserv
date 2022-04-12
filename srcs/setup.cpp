@@ -16,6 +16,8 @@ int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 	if ((listen(sockets_to_hosts.find(it->fd)->first, NBRCLIENTMAX)) < 0)
 			return (print_return("Error: Listen", 1));
 	tab_ap.erase(sockets_to_hosts.find(it->fd)->second);
+	it->revents = 0;
+	it->events = POLLIN;
 	return (0);
 }
 
