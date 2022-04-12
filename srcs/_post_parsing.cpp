@@ -22,6 +22,8 @@ int			server_data::_post_read_cl(std::vector<pollfd>::iterator it){
 	recvline.clear();
 	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
 		tab_request[it->fd].r_body_buffer.insert(tab_request[it->fd].r_body_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
+	if (tab_request[it->fd].r_body_buffer.size() > serv_host(tab_tab_ap[sockets_to_hosts[tab_request[it->fd].serverfd]], tab_request[it->fd].host).get_client_max_body((char*)tab_request[it->fd].u_ressource.begin().base()))
+			tab_request[it->fd].fill_request(413, it);
 	if (compare_size_cl(tab_request[it->fd].r_body_buffer.size(), tab_request[it->fd].content_length))
 	{
 		tab_request[it->fd].responding = 1;
@@ -74,6 +76,8 @@ int			server_data::_post_read_ch(std::vector<pollfd>::iterator it){
 	recvline.clear();
 	if ((n = recv(it->fd, recvline.begin().base(), MAXLINE, 0)) > 0)
 		tab_request[it->fd].r_body_buffer.insert(tab_request[it->fd].r_body_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
+	if (tab_request[it->fd].r_body_buffer.size() > serv_host(tab_tab_ap[sockets_to_hosts[tab_request[it->fd].serverfd]], tab_request[it->fd].host).get_client_max_body((char*)tab_request[it->fd].u_ressource.begin().base()))
+		tab_request[it->fd].fill_request(413, it);
 	if (tab_request[it->fd]._delete_number())
 		{
 			if (*(--tab_request[it->fd].r_body_buffer.end()) == '\n')
