@@ -100,10 +100,7 @@ int RP15::set_cgi_env(server_data *s, int fd){
 
         int fdbody = 0;
         if(methodenv == "POST"){
-            fdbody = open("./files_system/cgi-in", O_RDWR | O_CREAT | O_TRUNC, 0666);
-            if(ret < 0)
-                return (print_return("error: cgi open input", 1));
-            write(fdbody, r_body_bufferenv.c_str(), r_body_bufferenv.size());
+            fdbody = open("./files_system/cgi-in", O_RDWR, 0666);
             lseek(fdbody, 0, SEEK_SET);
         }
 

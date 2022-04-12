@@ -43,7 +43,6 @@ int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 				return (0);
 			}
 			files_to_clients[fdbody] = it->fd;
-			std::cout << "la taille de " << tab_request[it->fd].r_body_buffer.size() << std::endl;
 			tab_request[it->fd].parse_data = tab_request[it->fd].r_body_buffer;
 			it->events = 0;
 			it->revents = 0;
