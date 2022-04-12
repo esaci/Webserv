@@ -29,8 +29,6 @@
 //	sudo apt-get install -y php-cgi
 #	define CGI "/usr/bin/php-cgi" 
 
-
-
 # define _ERRORP        std::map<int, std::string>
 # define _MAP_ERRORP    std::map<std::string, _ERRORP>
 # define _INDEX         std::vector<std::string>

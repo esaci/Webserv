@@ -48,8 +48,9 @@ int	server_data::_response(int clientfd)
 	{
 		if (serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).get_redirect(tab_request[clientfd].u_ressource).size())
 		{
-			// tab_request[clientfd].redirection.reserve(tab_request[clientfd].ressource.size() + 2);
 			tab_request[clientfd].redirection = _data_init(serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).get_redirect(tab_request[clientfd].u_ressource));
+			tab_request[clientfd].redirection.insert(tab_request[clientfd].redirection.begin(), '/');
+			tab_request[clientfd].return_error = 301;
 			tab_request[clientfd].fill_request(301, _return_it_poll(clientfd, tab_poll));
 			return (0);
 		}
