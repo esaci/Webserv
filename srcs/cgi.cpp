@@ -19,7 +19,7 @@ int RP15::set_cgi_env(server_data *s, int fd){
     int     status;
     
     std::vector<char *> env;
-    std::string cgipath(CGI);                // mettre a jour avec parsing raph
+    std::string cgipath(CGI);
     std::string content_lengthenv(this->content_length.begin(), this->content_length.end());
     std::string hostenv(this->host.begin(), this->host.end());
     std::string acceptenv(this->accept.begin(), this->accept.end());
@@ -55,13 +55,9 @@ int RP15::set_cgi_env(server_data *s, int fd){
 
     std::string ressourceenv(ressource.begin(), ressource.end());
     std::string path_infov("PATH_INFO=");
-    // path_infov += cgipath; //est ce le bout de l url apres ?
     path_infov += ressourceenv;
     env.push_back(const_cast<char*>(path_infov.c_str()));
     std::string path_translatedv("PATH_TRANSLATED=");
-    // path_translatedv += cgipath; //all path
-    // std::string path("/sgoinfre/goinfre/Perso/ogenser/webservfinish/files_test/vfirst_test_phppost.php"); // reaplce
-    // path_translatedv += path;
     path_translatedv += ressourceenv;
     env.push_back(const_cast<char*>(path_translatedv.c_str()));
     std::string script_namev("SCRIPT_NAME=");
@@ -91,13 +87,6 @@ int RP15::set_cgi_env(server_data *s, int fd){
 
 	if (!pid)
 	{
-             for (size_t i = 0; i < 17; i++){
-            // ev[i][1] = '\0'; 
-            std::cout << i << " "<< ev[i] << "\n";
-            if(ev[i] == NULL)
-                std::cout << "C NULLLL\n";
-            }
-
         int fdbody = 0;
         if(methodenv == "POST"){
             fdbody = open("./files_system/cgi-in", O_RDWR, 0666);
@@ -109,10 +98,10 @@ int RP15::set_cgi_env(server_data *s, int fd){
 	    args[0] = strdup(CGI);
 	    args[1] = (char *)ressourceenv.c_str();
         args[2] = NULL;
-        std::cout << "C NULLLL\n";
-        for (size_t i = 0; i < 3; i++){
-            std::cout << args[i] << "\n";
-        }
+        // std::cout << "C NULLLL\n";
+        // for (size_t i = 0; i < 3; i++){
+        //     std::cout << args[i] << "\n";
+        // }
 		dup2(fd, STDOUT_FILENO);
         if(methodenv == "POST"){
             dup2(fdbody, STDIN_FILENO);
@@ -120,60 +109,34 @@ int RP15::set_cgi_env(server_data *s, int fd){
         }
 		close(fd);
 		ret = execve(CGI, args, ev);
-
-        //   for (size_t i = 0; i < 15; i++){
-        //     // ev[i][1] = '\0'; 
-        //     std::cout << "ok"<< ev[i] << "\n";
-        // }
-
 		delete s;
         if(args[0])
 		    free(args[0]);
 		if(args)
 			free(args);
-        //return an error 500 caus execve is crashed
 		exit(ret);
 	}
     else{
         waitpid(pid, &status, 0);
+        //return an error 500 caus execve is crashed
     }
 	if(fd != -1)
 		close(fd);
 
-    return 0;
-    /* optionnal:
-    // "SERVER_PORT=" // a remplir parse port from host          : TCP port (decimal).
-    // "REMOTE_HOST="               
-    // "REMOTE_ADDR="
-    // "AUTH_TYPE="              
-    // "REMOTE_USER=" 
-    // "REMOTE_IDENT="                             
-    // "HTTP_COOKIE="
-    request uri
-    */               
+    return 0;           
 }
 
 
 int RP15::basic_cgi(server_data *s, int fd){
 	ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)u_ressource.begin().base()), ressource);
-	std::cout << "\n" << ressource << std::endl;
-	std::cout << "BODY " << r_body_buffer << "|\n";
+	// std::cout << "\n" << ressource << std::endl;
+	// std::cout << "BODY " << r_body_buffer << "|\n";
     
-	/*
-	if (FICHIER PAS OUVERT)
-	{
-		tab_request[clientfd].return_error = 404;
-		_get_error_404(clientfd);
-	} 
-	 */
-	// POUR GET CA SERA r_body_get, linput apres le ?
-    // std::cout << "caca" << r_body_buffer << "lol" << CGI;
-
     std::string ressourceenv(ressource.begin(), ressource.end());
    
    set_cgi_env(s, fd);
-   std::cout << "hello\n" << "\n";
-   std::cout << ressourceenv << "jshgd\n";
+//    std::cout << "hello\n" << "\n";
+//    std::cout << ressourceenv << "jshgd\n";
 
 	return 0;
 }
