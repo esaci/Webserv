@@ -14,21 +14,23 @@ void	server_data::check_method(int clientfd)
 	tab_request[clientfd].return_error = 405;
 }
 
-bool	RP15::_cgi_extensions( void ){
-	DATA::iterator temp = ressource.end();
+bool	server_data::_cgi_extensions(int clientfd){
+	DATA::iterator temp = tab_request[clientfd].ressource.end();
 	DATA	tmp_b;
 
-	for (DATA::iterator it = ressource.begin(); it < ressource.end() && *it != '?'; it++)
+	if(!serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).tab_cgi_ext.size())
+		return (0);
+	for (DATA::iterator it = tab_request[clientfd].ressource.begin(); it < tab_request[clientfd].ressource.end() && *it != '?'; it++)
 	{
 		if (*it == '.')
 			temp = it;
 	}
-	if (temp == ressource.end())
+	if (temp == tab_request[clientfd].ressource.end())
 		return (0);
-	if ((size_t)(ressource.end() - temp) < std::strlen(CGI_TYPES))
+	if ((size_t)(tab_request[clientfd].ressource.end() - temp) < serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).tab_cgi_ext[0].size())
 		return (0);
-	tmp_b.assign(temp, temp + std::strlen(CGI_TYPES));
-	if (tmp_b == _data_init(CGI_TYPES))
+	tmp_b.assign(temp, temp + serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).tab_cgi_ext[0].size());
+	if (tmp_b == _data_init(serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).tab_cgi_ext[0]))
 		return (1);
 	return (0);
 }
@@ -51,7 +53,7 @@ int	server_data::_response(int clientfd)
 			tab_request[clientfd].fill_request(301, _return_it_poll(clientfd, tab_poll));
 			return (0);
 		}
-		if (tab_request[clientfd]._cgi_extensions())
+		if (_cgi_extensions(clientfd))
 			return (tab_request[clientfd]._post_cgi(this, clientfd));
 		buff = _data_init("/");
 		buff.push_back('\0');
@@ -61,7 +63,7 @@ int	server_data::_response(int clientfd)
 	}
 	else if (tab_request[clientfd].method == _data_init("POST")){
 		// 
-		if (tab_request[clientfd]._cgi_extensions())
+		if (_cgi_extensions(clientfd))
 			return (tab_request[clientfd]._post_cgi(this, clientfd));
 		return (_post_upload(clientfd));
 	}
