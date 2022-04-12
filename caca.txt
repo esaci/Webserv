@@ -1,69 +1,15 @@
-==533579== Memcheck, a memory error detector
-==533579== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==533579== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==533579== Command: ./webserv
-==533579== Parent PID: 511157
-==533579== 
-==533579== Conditional jump or move depends on uninitialised value(s)
-==533579==    at 0x43B2BA: server_data::_time_maj() (time.cpp:46)
-==533579==    by 0x4058E7: server_data::_server() (server.cpp:41)
-==533579==    by 0x40537C: main (main.cpp:18)
-==533579== 
-==533579== Conditional jump or move depends on uninitialised value(s)
-==533579==    at 0x43B2FC: server_data::_time_maj() (time.cpp:48)
-==533579==    by 0x4058E7: server_data::_server() (server.cpp:41)
-==533579==    by 0x40537C: main (main.cpp:18)
-==533579== 
-==533579== Invalid read of size 1
-==533579==    at 0x415089: ClassParsingClientRequest::request_ready() (ClassParsingClientRequest.cpp:107)
-==533579==    by 0x40EC30: ClassParsingClientRequest::fill_request(int, __gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (fill_request.cpp:9)
-==533579==    by 0x43AFC4: server_data::_time_stop_client(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (time.cpp:29)
-==533579==    by 0x43B376: server_data::_time_maj() (time.cpp:50)
-==533579==    by 0x4058E7: server_data::_server() (server.cpp:41)
-==533579==    by 0x40537C: main (main.cpp:18)
-==533579==  Address 0x4e27e52 is 0 bytes after a block of size 18 alloc'd
-==533579==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==533579==    by 0x40C386: __gnu_cxx::new_allocator<unsigned char>::allocate(unsigned long, void const*) (new_allocator.h:115)
-==533579==    by 0x40C330: __gnu_cxx::__alloc_traits<std::allocator<unsigned char>, unsigned char>::allocate(std::allocator<unsigned char>&, unsigned long) (alloc_traits.h:133)
-==533579==    by 0x40BD6F: std::_Vector_base<unsigned char, std::allocator<unsigned char> >::_M_allocate(unsigned long) (stl_vector.h:346)
-==533579==    by 0x40EED8: unsigned char* std::vector<unsigned char, std::allocator<unsigned char> >::_M_allocate_and_copy<unsigned char*>(unsigned long, unsigned char*, unsigned char*) (stl_vector.h:1511)
-==533579==    by 0x40ED62: void std::vector<unsigned char, std::allocator<unsigned char> >::_M_assign_aux<unsigned char*>(unsigned char*, unsigned char*, std::forward_iterator_tag) (vector.tcc:309)
-==533579==    by 0x40ECD5: void std::vector<unsigned char, std::allocator<unsigned char> >::_M_assign_dispatch<unsigned char*>(unsigned char*, unsigned char*, std::__false_type) (stl_vector.h:1628)
-==533579==    by 0x40EC84: void std::vector<unsigned char, std::allocator<unsigned char> >::assign<unsigned char*>(unsigned char*, unsigned char*) (stl_vector.h:777)
-==533579==    by 0x40EC27: ClassParsingClientRequest::fill_request(int, __gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (fill_request.cpp:8)
-==533579==    by 0x43AFC4: server_data::_time_stop_client(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (time.cpp:29)
-==533579==    by 0x43B376: server_data::_time_maj() (time.cpp:50)
-==533579==    by 0x4058E7: server_data::_server() (server.cpp:41)
-==533579== 
-==533579== 
-==533579== Process terminating with default action of signal 6 (SIGABRT)
-==533579==    at 0x4BF303B: raise (raise.c:51)
-==533579==    by 0x4BD2858: abort (abort.c:79)
-==533579==    by 0x4902910: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28)
-==533579==    by 0x490E38B: ??? (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28)
-==533579==    by 0x490E3F6: std::terminate() (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28)
-==533579==    by 0x490E6A8: __cxa_throw (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28)
-==533579==    by 0x490521D: std::__throw_logic_error(char const*) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28)
-==533579==    by 0x49A9D6A: void std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >::_M_construct<char const*>(char const*, char const*, std::forward_iterator_tag) (in /usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.28)
-==533579==    by 0x40F0A4: server_data::check_method(int) (response.cpp:5)
-==533579==    by 0x40FDFE: server_data::_response(int) (response.cpp:44)
-==533579==    by 0x43E4C3: server_data::setup_response(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (setup.cpp:71)
-==533579==    by 0x405CD9: server_data::_server() (server.cpp:53)
-==533579== 
-==533579== HEAP SUMMARY:
-==533579==     in use at exit: 10,084,521 bytes in 1,208 blocks
-==533579==   total heap usage: 2,993 allocs, 1,785 frees, 10,319,508 bytes allocated
-==533579== 
-==533579== LEAK SUMMARY:
-==533579==    definitely lost: 0 bytes in 0 blocks
-==533579==    indirectly lost: 0 bytes in 0 blocks
-==533579==      possibly lost: 144 bytes in 1 blocks
-==533579==    still reachable: 10,084,377 bytes in 1,207 blocks
-==533579==                       of which reachable via heuristic:
-==533579==                         stdstring          : 66 bytes in 1 blocks
-==533579==         suppressed: 0 bytes in 0 blocks
-==533579== Rerun with --leak-check=full to see details of leaked memory
-==533579== 
-==533579== Use --track-origins=yes to see where uninitialised values come from
-==533579== For lists of detected and suppressed errors, rerun with: -s
-==533579== ERROR SUMMARY: 3 errors from 3 contexts (suppressed: 0 from 0)
+==541886== Memcheck, a memory error detector
+==541886== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==541886== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==541886== Command: ./webserv
+==541886== Parent PID: 511157
+==541886== 
+==541886== 
+==541886== HEAP SUMMARY:
+==541886==     in use at exit: 0 bytes in 0 blocks
+==541886==   total heap usage: 2,938 allocs, 2,938 frees, 10,316,348 bytes allocated
+==541886== 
+==541886== All heap blocks were freed -- no leaks are possible
+==541886== 
+==541886== For lists of detected and suppressed errors, rerun with: -s
+==541886== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
