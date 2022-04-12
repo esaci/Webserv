@@ -1,15 +1,26 @@
-==515852== Memcheck, a memory error detector
-==515852== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==515852== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==515852== Command: ./webserv
-==515852== Parent PID: 511157
-==515852== 
-==515852== 
-==515852== HEAP SUMMARY:
-==515852==     in use at exit: 0 bytes in 0 blocks
-==515852==   total heap usage: 2,990 allocs, 2,990 frees, 10,286,458 bytes allocated
-==515852== 
-==515852== All heap blocks were freed -- no leaks are possible
-==515852== 
-==515852== For lists of detected and suppressed errors, rerun with: -s
-==515852== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==556634== Memcheck, a memory error detector
+==556634== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==556634== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==556634== Command: ./webserv
+==556634== Parent PID: 511157
+==556634== 
+==556634== 
+==556634== Process terminating with default action of signal 2 (SIGINT)
+==556634==    at 0x4CC2997: poll (poll.c:29)
+==556634==    by 0x40592A: server_data::_server() (server.cpp:45)
+==556634==    by 0x40534C: main (main.cpp:18)
+==556634== 
+==556634== HEAP SUMMARY:
+==556634==     in use at exit: 10,082,773 bytes in 1,205 blocks
+==556634==   total heap usage: 3,255 allocs, 2,050 frees, 10,335,089 bytes allocated
+==556634== 
+==556634== LEAK SUMMARY:
+==556634==    definitely lost: 0 bytes in 0 blocks
+==556634==    indirectly lost: 0 bytes in 0 blocks
+==556634==      possibly lost: 0 bytes in 0 blocks
+==556634==    still reachable: 10,082,773 bytes in 1,205 blocks
+==556634==         suppressed: 0 bytes in 0 blocks
+==556634== Rerun with --leak-check=full to see details of leaked memory
+==556634== 
+==556634== For lists of detected and suppressed errors, rerun with: -s
+==556634== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
