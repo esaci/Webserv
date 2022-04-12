@@ -14,7 +14,7 @@ int server_data::delete_request(int clientfd){
 	root = serv_host(tab_tab_ap[sockets_to_hosts[tab_request[clientfd].serverfd]], tab_request[clientfd].host).get_root((char*)tab_request[clientfd].u_ressource.begin().base());
 	tab_request[clientfd].ressource = _link_root_init(root, tab_request[clientfd].ressource);
 	tab_request[clientfd].ressource.push_back('\0');
-	std::cout << "ON SUPPRIME " << tab_request[clientfd].ressource << std::endl;
+	// std::cout << "ON SUPPRIME " << tab_request[clientfd].ressource << std::endl;
 	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 
 	tab_request[clientfd].ressource.pop_back();

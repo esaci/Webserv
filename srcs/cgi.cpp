@@ -101,10 +101,7 @@ int RP15::set_cgi_env(server_data *s, int fd){
 
         int fdbody = 0;
         if(methodenv == "POST"){
-            fdbody = open("./files_system/cgi-in", O_RDWR | O_CREAT | O_TRUNC, 0666);
-            if(ret < 0)
-                return (print_return("error: cgi open input", 1));
-            write(fdbody, r_body_bufferenv.c_str(), r_body_bufferenv.size());
+            fdbody = open("./files_system/cgi-in", O_RDWR, 0666);
             lseek(fdbody, 0, SEEK_SET);
         }
 
@@ -180,7 +177,8 @@ int RP15::set_cgi_env(server_data *s, int fd){
 
 
 int RP15::basic_cgi(server_data *s, int fd){
-	ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)u_ressource.begin().base()), ressource);
+	exit(0);
+    ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)u_ressource.begin().base()), ressource);
 	std::cout << "\n" << ressource << std::endl;
 	std::cout << "BODY " << r_body_buffer << "|\n";
     
@@ -199,7 +197,6 @@ int RP15::basic_cgi(server_data *s, int fd){
    set_cgi_env(s, fd);
    std::cout << "hello\n" << "\n";
    std::cout << ressourceenv << "jshgd\n";
-
 	return 0;
 }
 

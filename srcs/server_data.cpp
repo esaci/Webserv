@@ -20,8 +20,9 @@ server_data::server_data(std::fstream &file): error_conf(0){
 	//std::cout << get_root(this->servs_conf, "_", std::make_pair("127.0.0.1", 18000), "/image/") << std::endl;
 	_code_init();
 	_content_type();
-	recvline.resize(MAXLINE + 10);
+	recvline.reserve(MAXLINE + 10);
 	listening = false;
+	tab_poll.reserve(NBRCLIENTMAX);
 }
 server_data::~server_data( void ){
 	for (S_A_P::iterator it = sockets_to_hosts.begin(); it != sockets_to_hosts.end(); it++)
