@@ -62,7 +62,7 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
     this->error_p[511] = "./files_system/Network_authentication_required.html";
 
     // autoindex by default //
-    this->autoindex = 1;
+    this->autoindex = 0;
     /////////////////////////
 
     //////////////////////////////////////////////////////////////////
@@ -362,6 +362,25 @@ Parser::Parser(std::fstream &file)  // constructeur de la classe Parser avec un 
                 it->second.push_back("POST");
             }
         }
+        for (_MAP_INDEX::iterator it = this->serv[nb].map_index.begin(); it != this->serv[nb].map_index.end(); it++)
+        {
+            for (std::vector<std::string>::iterator ot = it->second.begin(); ot != it->second.end();)
+            {
+                std::ifstream file(this->serv[nb].get_root(it->first).append("/").append(*ot).c_str());
+                if (!file)
+                {
+                    this->serv[nb].map_index[it->first].erase(ot);
+                    ot = it->second.begin();
+                }
+                else
+                {
+                    file.close();
+                    ot++;
+                }
+            }
+            if (it->second.size() == 0)
+                it->second.push_back("");
+        }
         ////////////////////////////////////////////////////////////////////////////////////////////
         ///////////////////////////////////  REVOIR CETTE PARTIE PLUS TARD ////////////////////////
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -540,6 +559,7 @@ bool    Parser::set_autoindex(std::string &line)
 
 void    Parser::set_index(std::string &line)
 {
+    _INDEX  index;
     line = line.substr(6);
     line = line.substr(0, line.length() - 1);
     std::size_t found = line.find(" ");
@@ -547,11 +567,14 @@ void    Parser::set_index(std::string &line)
     {
         std::string buff = line.substr(0, found);
         if (buff.size() != 0)
-            this->index.push_back(buff);
+            index.push_back(buff);
         line = line.substr(found + 1);
         found = line.find(" ");
     }
-    this->index.push_back(line);
+    index.push_back(line);
+    if (index.size() == 0)
+        index.push_back("");
+    this->index = index;
 }
 
 bool    Parser::check_if_error_parsing(std::vector<P_server> &servs)
@@ -598,3 +621,10 @@ std::set<std::pair<std::string, int> > Parser::get_all_addr_port(void)
     }
     return (lala);
 }
+
+        //    std::ifstream file(buff.c_str());
+        //     if (file)
+        //     {
+        //         index.push_back(buff);
+        //         file.close();
+        //     }
