@@ -14,6 +14,7 @@ class RP15
 {
 	public:
 		int			responding;
+		int			cgi;
 		int			return_error;
 		bool		r_l_v;
 		int			serverfd;
