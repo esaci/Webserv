@@ -18,17 +18,25 @@ int server_data::delete_request(int clientfd){
 	filefd = open((char*)tab_request[clientfd].ressource.begin().base(), O_RDONLY);
 
 	tab_request[clientfd].ressource.pop_back();
-	if (1)
+	if (filefd < 0)
 	{
+		tab_request[clientfd].return_error = 403;
+		_get_error_403(clientfd);
+		// tab_request[clientfd].return_error = 404;
+		// _get_error_404(clientfd);
+	}
+	else if (1)
+	{
+		std::remove((char *)tab_request[clientfd].ressource.begin().base());
 		tab_request[clientfd].r_buffer.clear();
 		tab_request[clientfd].responding = 3;
 		return (_send(clientfd, 200));
 	}
-	if (1)
-	{
-		tab_request[clientfd].return_error = 403;
-		_get_error_403(clientfd);
-	}
+	// if (1)
+	// {
+	// 	tab_request[clientfd].return_error = 403;
+	// 	_get_error_403(clientfd);
+	// }
     // char *pathtodelete = "./todelete"
     // //if exists
     // std::remove(path)

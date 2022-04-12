@@ -7,10 +7,12 @@
   <body>
   <?php
   echo '<strong>LE CGI FONCTIONNE  !</strong>';
-  $rp15 = htmlspecialchars($_POST['rp15']);
-  $brp15  = htmlspecialchars($_POST['brp15']);
-
+  $rp15 = htmlspecialchars($_GET['first_name']);
+  $brp15  = htmlspecialchars($_GET['last_name']);
+  
   echo  'Tu penses donc que Raphifou15 est forcement ', $rp15, ' , Ah bon ??? ', $brp15;
+$gui = "BONJUOUR";
+echo $gui;
 ?>
   </body>
 </html>
