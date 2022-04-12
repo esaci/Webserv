@@ -4,6 +4,7 @@
 #include <sys/wait.h>
 #include <map>
 #include<string>
+// #include <fstream>
 
 /*
 	php-cgi testcgi1.php //working test
@@ -139,6 +140,27 @@ int RP15::set_cgi_env(server_data *s, int fd){
 	}
     else{
         waitpid(pid, &status, 0);
+        // if(WIFEXITED(status))
+        //     return (print_return("error: cgi execve return value", 1));
+         
+        std::ifstream retfile("./files_system/file_cgi.html");
+        std::string firstline;
+        if (retfile.good()){
+        //   std::string firstline;
+          getline(retfile, firstline);
+            // firstline.replace(firstline.find(firstline), firstline.length(), "");
+          std::cout << firstline << std::endl;
+        }
+        std::size_t pos = 0;
+        // while ((pos = firstline.find(firstline, pos)) != std::string::npos) {
+            pos = firstline.find(firstline, pos);
+            std::cout << "caca" << pos << std::endl;
+		    firstline.erase(pos, firstline.length());
+		    firstline.insert(pos, "");
+        //     pos += s2.length();
+        // }
+        retfile.close();
+        
     }
 	if(fd != -1)
 		close(fd);
