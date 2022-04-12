@@ -28,6 +28,7 @@ bool    P_server::set_new_port(std::string &line)
 {
     line = line.substr(7);
     line = line.substr(0, line.length() - 1);
+    int num [4];
     std::string buff = line;
     std::size_t found = buff.find(":");
     if (found!=std::string::npos)
@@ -45,8 +46,8 @@ bool    P_server::set_new_port(std::string &line)
                 if (!(std::isdigit(*it)))
                     return (1);
             }
-            int num = atoi(buff3.c_str());
-            if (num < 0 || num > 255)
+            num[size] = atoi(buff3.c_str());
+            if (num[size] < 0 || num[size] > 255)
                 return (1);
             buff = buff.substr(found + 1, buff.size());
             found = buff.find(".");
@@ -60,13 +61,15 @@ bool    P_server::set_new_port(std::string &line)
             if (!(std::isdigit(*it)))
                 return (1);
         }
-        int num = atoi(buff3.c_str());
-        if (num < 0 || num > 255)
+        num[3] = atoi(buff3.c_str());
+        if (num[3] < 0 || num[3] > 255)
             return (1);
         for (int i = 0; buff2[i] != '\0'; i++)
             if (!(std::isdigit(buff2[i])))
                 return (1);
         if (buff2.size() > 10)
+            return (1);
+        if ((num[0] != 127) || (num[1] == 255 && num[2] == 255 && num[3] == 255) || (num[1] == 0 && num[2] == 0 && num[3] == 0))
             return (1);
         int port = atoi(buff2.c_str());
         this->tab_addr_port[port].push_back(fin);
@@ -177,7 +180,7 @@ bool    P_server::set_autoindex(std::string &line, std::string &loc)
 
 void    P_server::set_index(std::string &line, std::string &loc)
 {
-    _INDEX  lala;
+    _INDEX  index;
     line = line.substr(6);
     line = line.substr(0, line.length() - 1);
     std::size_t found = line.find(" ");
@@ -185,12 +188,14 @@ void    P_server::set_index(std::string &line, std::string &loc)
     {
         std::string buff = line.substr(0, found);
         if (buff.size() != 0)
-            lala.push_back(buff);
+            index.push_back(buff);
         line = line.substr(found + 1);
         found = line.find(" ");
     }
-    lala.push_back(line);
-    this->map_index[loc] = lala;
+    index.push_back(line);
+    if (index.size() == 0)
+        index.push_back("");
+    this->map_index[loc] = index;
 }
 
 bool    P_server::set_cgi_ext(std::string &line)
@@ -199,22 +204,9 @@ bool    P_server::set_cgi_ext(std::string &line)
     std::vector<std::string>    lala;
     line = line.substr(8);
     line = line.substr(0, line.length() - 1);
-    std::size_t found = line.find(" ");
-    while (found!=std::string::npos)
+    if (line != ".php")
     {
-        std::string buff = line.substr(0, found);
-        if (buff != ".py" && buff != ".php")
-        {
-            std::cerr << "\e[0;31m" << "cgi not well configured only .php and .py accept" << "\e[0m" << std::endl;
-            return (1);
-        }
-        lala.push_back(buff);
-        line = line.substr(found + 1);
-        found = line.find(" ");
-    }
-    if (line != ".py" && line != ".php")
-    {
-        std::cerr << "\e[0;31m" << "cgi not well configured only .php and .py accept" << "\e[0m" << std::endl;
+        std::cerr << "\e[0;31m" << "cgi not well configured only .php accept" << "\e[0m" << std::endl;
         return (1);
     }
     lala.push_back(line);
@@ -233,22 +225,12 @@ bool    P_server::set_cgi_dir(std::string &line)
         return (1);
     }
     file.close();
-    std::size_t pos = line.find_last_of("py-cgi");
-    std::size_t pos2 = line.find_last_of("php-cgi");
-    if (pos != std::string::npos || pos2 != std::string::npos)
+    std::size_t pos = line.find_last_of("php-cgi");
+    if (pos != std::string::npos)
     {
-        std::string buff;
-        if (pos != std::string::npos)
-        {
-            pos -= 6;
-            buff = line.substr(pos);
-        }
-        else
-        {
-            buff = line.substr(pos2);
-            pos -= 7;
-        }
-        if (buff != "py-cgi" && buff != "php-cgi")
+        pos -= 6;
+        std::string buff = line.substr(pos);
+        if (buff != "php-cgi")
         {
             std::cerr << "\e[0;31m" << "the file is not correct" << "\e[0m" << std::endl;
             return (1);
