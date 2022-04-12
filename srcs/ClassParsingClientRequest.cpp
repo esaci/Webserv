@@ -1,6 +1,7 @@
 #include "../include/w_library.hpp"
 
 RP15::ClassParsingClientRequest(void) : responding(0), return_error(0), r_l_v(false) {
+	cgi = 0;
 	// for (size_t i = 0; i < 16; i++)
 	// {
 	// 	ev[i] = NULL;
@@ -221,6 +222,7 @@ int ClassParsingClientRequest::request_ready(void)
 
 RP15::ClassParsingClientRequest(const RP15 &arg)
 {
+	cgi = arg.cgi;
 	redirection = arg.redirection;
 	responding = arg.responding;
 	time_client = arg.time_client;
@@ -256,6 +258,7 @@ RP15::ClassParsingClientRequest(const RP15 &arg)
 }
 RP15 RP15::operator=(const RP15 &arg)
 {
+	cgi = arg.cgi;
 	redirection = arg.redirection;
 	responding = arg.responding;
 	time_client = arg.time_client;

@@ -32,6 +32,28 @@ int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 		n = _server_read(it);
 	if (n == -10)
 	{
+		if (tab_request[it->fd].method == _data_init("POST") && _cgi_extensions(it->fd) && tab_request[it->fd].r_body_buffer.size())
+		{
+			int fdbody;
+
+			fdbody = open("./files_system/cgi-in", O_RDWR | O_CREAT | O_TRUNC, 0666);
+			if(fdbody < 0)
+			{
+                tab_request[it->fd].fill_request(404, it);
+				return (0);
+			}
+			files_to_clients[fdbody] = it->fd;
+			std::cout << "la taille de " << tab_request[it->fd].r_body_buffer.size() << std::endl;
+			tab_request[it->fd].parse_data = tab_request[it->fd].r_body_buffer;
+			it->events = 0;
+			it->revents = 0;
+			tab_request[it->fd].responding = 2;
+			client_poll.fd = fdbody;
+			client_poll.events = POLLOUT;
+			client_poll.revents = 0;
+			tab_poll.push_back(client_poll);
+			return (0);
+		}
 		it->events = POLLOUT;
 		if (!tab_request[it->fd].host.size() && tab_request[it->fd].protocol == _data_init("HTTP/1.1"))
 			tab_request[it->fd].fill_request(400, it);
@@ -104,9 +126,20 @@ int		server_data::setup_write_files(std::vector<struct pollfd>::iterator it){
 		return (0);
 	if (n)
 		tab_request[files_to_clients[it->fd]].r_body_buffer.erase(tab_request[files_to_clients[it->fd]].r_body_buffer.begin(), tab_request[files_to_clients[it->fd]].r_body_buffer.begin() + n);
-	if (!tab_request[files_to_clients[it->fd]].r_body_buffer.size())
+	if (!tab_request[files_to_clients[it->fd]].r_body_buffer.size() && _return_it_poll(files_to_clients[it->events], tab_poll)->events)
 	{
 		tab_request[files_to_clients[it->fd]].responding = 3;
+		files_to_clients[it->fd] = 0;
+		close(it->fd);
+		tab_request.erase(it->fd);
+		tab_poll.erase(it);
+		pos--;
+	}
+	else if (!tab_request[files_to_clients[it->fd]].r_body_buffer.size())
+	{
+		tab_request[files_to_clients[it->fd]].r_body_buffer = tab_request[files_to_clients[it->fd]].parse_data;
+		_return_it_poll(files_to_clients[it->fd], tab_poll)->events = POLLOUT;
+		tab_request[files_to_clients[it->fd]].responding = 1;
 		files_to_clients[it->fd] = 0;
 		close(it->fd);
 		tab_request.erase(it->fd);

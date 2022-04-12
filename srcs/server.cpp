@@ -41,9 +41,9 @@ int	server_data::_server( void ){
 		_time_maj();
 		len = tab_poll.size();
 		pos = 0;
-		// std::cout << "On a " << len << " Clients connectes !\n";
 		if ( !(n = poll(tab_poll.begin().base(), tab_poll.size(), TIMEOUT)) )
 			return (print_return("TIMEOUT: poll", 1));
+		// std::cout << "On a " << len << " Clients connectes !\n";
 		if (n < 0)
 			return (print_return("ERROR: poll", 1));
 		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos)
