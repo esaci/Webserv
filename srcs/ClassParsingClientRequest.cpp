@@ -1,6 +1,11 @@
 #include "../include/w_library.hpp"
 
 RP15::ClassParsingClientRequest(void) : responding(0), return_error(0), r_l_v(false) {
+	// for (size_t i = 0; i < 16; i++)
+	// {
+	// 	ev[i] = NULL;
+	// }
+	
 	_time_init();
 }
 
@@ -8,6 +13,7 @@ RP15::~RP15(void) {}
 
 bool RP15::is_ready(void)
 {
+	std::cout << parse_data << "\n";
 	if (parse_data.size() < 4)
 		return (0);
 	if (parse_data[0] == 'P')

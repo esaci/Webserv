@@ -36,8 +36,6 @@ int	server_data::handle_line_request(std::vector<struct pollfd>::iterator it, si
 		{
 			tab_request[it->fd].ressource.assign(tab_request[it->fd].parse_data.begin() + i, tab_request[it->fd].parse_data.end());
 			tab_request[it->fd].clear_ressource();
-			if (tab_request[it->fd].ressource.size() > (MAX_SIZE_URL + 11))
-				tab_request[it->fd].fill_request(414, it);
 			tab_request[it->fd].ressource.clear();
 			if (tab_request[it->fd].parse_data[i] != '/' || tab_request[it->fd].return_error)
 				return (tab_request[it->fd].fill_request(400, it));
@@ -82,11 +80,14 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 		{
 			if (tab_request[it->fd].r_body_buffer.size() > serv_host(tab_tab_ap[sockets_to_hosts[tab_request[it->fd].serverfd]], tab_request[it->fd].host).get_client_max_body((char*)tab_request[it->fd].u_ressource.begin().base()))
 				tab_request[it->fd].fill_request(413, it);
+			if (tab_request[it->fd].u_ressource.size() > MAX_SIZE_URL)
+				tab_request[it->fd].fill_request(414, it);
 			return (-10);
 		}
 		if (tab_request[it->fd].r_body_buffer.size() > serv_host(tab_tab_ap[sockets_to_hosts[tab_request[it->fd].serverfd]], tab_request[it->fd].host).get_client_max_body((char*)tab_request[it->fd].u_ressource.begin().base()))
 			tab_request[it->fd].fill_request(413, it);
-
+		if (tab_request[it->fd].u_ressource.size() > MAX_SIZE_URL)
+			tab_request[it->fd].fill_request(414, it);
 		return (0);
 
 	}

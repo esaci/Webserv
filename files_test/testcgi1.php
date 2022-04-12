@@ -5,8 +5,8 @@
   </head>
   <body>
     <?php
-      echo '<strong>LE CGI FONCTIONNE  !</strong>';
+      $mabite = "lol";
+      echo $mabite;
     ?>
-    DELETE /file.html HTTP/1.1
   </body>
 </html>
