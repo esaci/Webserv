@@ -5,7 +5,8 @@
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
 #	define TIMEOUT_CLIENT	50000
-
+#	define MAX_SIZE_ENTITY 10000
+#	define MAX_SIZE_URL 2048
 // #	define ROOT "./files_test"
 // #	define TMPINDEX "/index.html"
 // #	define TMPFAVICO "./files_test/favicon.ico"
