@@ -60,7 +60,7 @@ int RP15::set_cgi_env(server_data *s, int fd){
     env.push_back(const_cast<char*>(path_infov.c_str()));
     std::string path_translatedv("PATH_TRANSLATED=");
     // path_translatedv += cgipath; //all path
-    std::string path("/goinfre/ogenser/Webserv/files_test/vfirst_test_php.php"); // reaplce
+    std::string path("/sgoinfre/goinfre/Perso/ogenser/webservfinish/files_test/vfirst_test_phppost.php"); // reaplce
     path_translatedv += path;
     // path_translatedv += ressourceenv;
     env.push_back(const_cast<char*>(path_translatedv.c_str()));
@@ -117,7 +117,8 @@ int RP15::set_cgi_env(server_data *s, int fd){
             std::cout << args[i] << "\n";
         }
 		dup2(fd, STDOUT_FILENO);
-        dup2(fdbody, STDIN_FILENO);
+        if(methodenv == "POST")
+            dup2(fdbody, STDIN_FILENO);
 		close(fd);
         // close(fdbody);
 		ret = execve(CGI, args, ev);
