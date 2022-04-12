@@ -15,8 +15,7 @@
 // #	define ERRORFILE_403 "./files_system/Forbidden.html"
 // #	define ERRORFILE_408 "./files_system/Request_Timeout.html"
 #	define FILE_CGI	"./files_system/file_cgi.html"
-#	define METHOD	"GET"
-#	define TARGET	"/"
+
 // #	define AUTOINDEX	1
 #	define SA		struct sockaddr
 #	define SA_IN	struct sockaddr_in
@@ -29,9 +28,7 @@
 #	define S_A_P	std::map<int, A_P>
 //	sudo apt-get install -y php-cgi
 #	define CGI "/usr/bin/php-cgi" 
-#	define CGI_TYPES ".php"
-#	define MAX_SIZE_ENTITY 10000
-#	define MAX_SIZE_URL 50
+
 # define _ERRORP        std::map<int, std::string>
 # define _MAP_ERRORP    std::map<std::string, _ERRORP>
 # define _INDEX         std::vector<std::string>

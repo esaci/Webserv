@@ -133,6 +133,7 @@ bool    P_server::set_client_max_body(std::string &line, std::string &loc)
     std::stringstream sstream(line);
     sstream >> size;
     if (size > 8796093022207) {return (1);}
+    size *= 1000000;
     this->map_size_cmb[loc] = size;
     return (0);
 }
@@ -251,6 +252,11 @@ bool    P_server::set_redirect(std::string &line, std::string &loc)
     {
         std::string buff = line.substr(0, found);
         line = line.substr(found + 1);
+        if (buff == line) {return (1);}
+        if (line.size() > 0 && line[0] != '/')
+            line = "/" + line;
+        if (buff == line) {return (1);}
+        if ("/" + buff == line) {return (1);}
         this->map_redirect[loc][buff] = line;
         return (0);
     }

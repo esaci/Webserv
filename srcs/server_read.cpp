@@ -79,8 +79,16 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 	if (tab_request[it->fd].is_ready())
 	{
 		if (!tab_request[it->fd].request_ready())
+		{
+			if (tab_request[it->fd].r_body_buffer.size() > serv_host(tab_tab_ap[sockets_to_hosts[tab_request[it->fd].serverfd]], tab_request[it->fd].host).get_client_max_body((char*)tab_request[it->fd].u_ressource.begin().base()))
+				tab_request[it->fd].fill_request(413, it);
 			return (-10);
+		}
+		if (tab_request[it->fd].r_body_buffer.size() > serv_host(tab_tab_ap[sockets_to_hosts[tab_request[it->fd].serverfd]], tab_request[it->fd].host).get_client_max_body((char*)tab_request[it->fd].u_ressource.begin().base()))
+			tab_request[it->fd].fill_request(413, it);
+
 		return (0);
+
 	}
 	else if (tab_request[it->fd].parse_data.size() > MAX_SIZE_ENTITY)
 		tab_request[it->fd].fill_request(431, it);
