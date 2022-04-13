@@ -80,8 +80,10 @@ int			server_data::_post_read_ch(std::vector<pollfd>::iterator it){
 		tab_request[it->fd].fill_request(413, it);
 	if (tab_request[it->fd]._delete_number())
 		{
-			if (*(--tab_request[it->fd].r_body_buffer.end()) == '\n')
+			for (DATA::iterator it2 = --tab_request[it->fd].r_body_buffer.end(); it2 > tab_request[it->fd].r_body_buffer.begin() && (*it2 == '\n' || *it2 == '\r');it2 = --tab_request[it->fd].r_body_buffer.end())
 				tab_request[it->fd].r_body_buffer.pop_back();
+			// if (*(--tab_request[it->fd].r_body_buffer.end()) == '\n')
+			return_data_size(tab_request[it->fd].r_body_buffer.size(), tab_request[it->fd].content_length);
 			tab_request[it->fd].responding = 1;
 			tab_request[it->fd].display_cpcr();
 			return (-10);

@@ -125,7 +125,7 @@ int		server_data::setup_write_files(std::vector<struct pollfd>::iterator it){
 		return (0);
 	if (n)
 		tab_request[files_to_clients[it->fd]].r_body_buffer.erase(tab_request[files_to_clients[it->fd]].r_body_buffer.begin(), tab_request[files_to_clients[it->fd]].r_body_buffer.begin() + n);
-	if (!tab_request[files_to_clients[it->fd]].r_body_buffer.size() && _return_it_poll(files_to_clients[it->events], tab_poll)->events)
+	if (!tab_request[files_to_clients[it->fd]].r_body_buffer.size() && _return_it_poll(files_to_clients[it->fd], tab_poll)->events)
 	{
 		tab_request[files_to_clients[it->fd]].responding = 3;
 		files_to_clients[it->fd] = 0;

@@ -52,4 +52,5 @@ std::vector<struct pollfd>::iterator    _return_it_poll(int clientfd, std::vecto
 void			_erase_location(DATA &ressource, _MAP_ROOT &map_root, std::string &root);
 void			retire_doublon_slash(DATA &ressource);
 P_server		&serv_host(std::vector<P_server> &tab_serv, DATA &host);
+void	        return_data_size(size_t len, DATA &buff);
 # endif
