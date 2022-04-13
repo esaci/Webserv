@@ -70,6 +70,14 @@ bool	compare_size_cl(size_t len, DATA &buff){
 	return (len == buff_len);
 }
 
+void	return_data_size(size_t len, DATA &buff){
+	std::stringstream ss;
+
+	ss << len; // int decimal_value
+	std::string res ( ss.str() );
+	buff.assign(res.begin(), res.end());
+}
+
 bool indexcomp::operator()(const std::string& lhs, const std::string& rhs) const{
 	bool l = false, r = false;
 

@@ -1,43 +1,26 @@
-==567003== Memcheck, a memory error detector
-==567003== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
-==567003== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
-==567003== Command: ./webserv
-==567003== Parent PID: 511157
-==567003== 
-==567003== Invalid read of size 2
-==567003==    at 0x43F67A: server_data::setup_write_files(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (setup.cpp:128)
-==567003==    by 0x405F38: server_data::_server() (server.cpp:59)
-==567003==    by 0x40534C: main (main.cpp:18)
-==567003==  Address 0x4e27b34 is 4 bytes after a block of size 32 alloc'd
-==567003==    at 0x483BE63: operator new(unsigned long) (in /usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so)
-==567003==    by 0x40B1B6: __gnu_cxx::new_allocator<pollfd>::allocate(unsigned long, void const*) (new_allocator.h:115)
-==567003==    by 0x40B160: __gnu_cxx::__alloc_traits<std::allocator<pollfd>, pollfd>::allocate(std::allocator<pollfd>&, unsigned long) (alloc_traits.h:133)
-==567003==    by 0x40AECF: std::_Vector_base<pollfd, std::allocator<pollfd> >::_M_allocate(unsigned long) (stl_vector.h:346)
-==567003==    by 0x40AA8B: std::vector<pollfd, std::allocator<pollfd> >::_M_realloc_insert(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >, pollfd const&) (vector.tcc:440)
-==567003==    by 0x40930C: std::vector<pollfd, std::allocator<pollfd> >::push_back(pollfd const&) (stl_vector.h:1198)
-==567003==    by 0x40783D: server_data::_new_client(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (server_read.cpp:14)
-==567003==    by 0x40907D: server_data::_server_read(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (server_read.cpp:102)
-==567003==    by 0x43E260: server_data::setup_read(__gnu_cxx::__normal_iterator<pollfd*, std::vector<pollfd, std::allocator<pollfd> > >) (setup.cpp:32)
-==567003==    by 0x405DC1: server_data::_server() (server.cpp:55)
-==567003==    by 0x40534C: main (main.cpp:18)
-==567003== 
-==567003== 
-==567003== Process terminating with default action of signal 2 (SIGINT)
-==567003==    at 0x4CC2997: poll (poll.c:29)
-==567003==    by 0x40592A: server_data::_server() (server.cpp:44)
-==567003==    by 0x40534C: main (main.cpp:18)
-==567003== 
-==567003== HEAP SUMMARY:
-==567003==     in use at exit: 10,082,821 bytes in 1,206 blocks
-==567003==   total heap usage: 3,108 allocs, 1,902 frees, 10,326,841 bytes allocated
-==567003== 
-==567003== LEAK SUMMARY:
-==567003==    definitely lost: 0 bytes in 0 blocks
-==567003==    indirectly lost: 0 bytes in 0 blocks
-==567003==      possibly lost: 0 bytes in 0 blocks
-==567003==    still reachable: 10,082,821 bytes in 1,206 blocks
-==567003==         suppressed: 0 bytes in 0 blocks
-==567003== Rerun with --leak-check=full to see details of leaked memory
-==567003== 
-==567003== For lists of detected and suppressed errors, rerun with: -s
-==567003== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==55732== Memcheck, a memory error detector
+==55732== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==55732== Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info
+==55732== Command: ./webserv
+==55732== Parent PID: 32834
+==55732== 
+==55732== 
+==55732== Process terminating with default action of signal 2 (SIGINT)
+==55732==    at 0x4CC2997: poll (poll.c:29)
+==55732==    by 0x40592A: server_data::_server() (server.cpp:44)
+==55732==    by 0x40534C: main (main.cpp:18)
+==55732== 
+==55732== HEAP SUMMARY:
+==55732==     in use at exit: 10,081,845 bytes in 1,201 blocks
+==55732==   total heap usage: 2,939 allocs, 1,738 frees, 10,315,572 bytes allocated
+==55732== 
+==55732== LEAK SUMMARY:
+==55732==    definitely lost: 0 bytes in 0 blocks
+==55732==    indirectly lost: 0 bytes in 0 blocks
+==55732==      possibly lost: 0 bytes in 0 blocks
+==55732==    still reachable: 10,081,845 bytes in 1,201 blocks
+==55732==         suppressed: 0 bytes in 0 blocks
+==55732== Rerun with --leak-check=full to see details of leaked memory
+==55732== 
+==55732== For lists of detected and suppressed errors, rerun with: -s
+==55732== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

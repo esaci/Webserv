@@ -5,6 +5,7 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 	{
 		DATA	temp;
 		int fd;
+		int flag;
 		ressource = u_ressource;
 		if (method == _data_init("GET"))
         {
@@ -20,13 +21,16 @@ int		RP15::_post_cgi(server_data *d_s, int clientfd){
 		if (fd < 0)
 			return (print_return("FILE_CGI pas dispo !", -10));
 		fcntl(fd, F_SETFL, O_NONBLOCK);
-		basic_cgi(d_s, fd);
+		flag = basic_cgi(d_s, fd);
+			
 		method = _data_init("GET");
 		u_ressource = _data_init(FILE_CGI);
 		u_ressource.push_back('\0');
 		ressource = u_ressource;
 		return_error = 0;
-		if (d_s->_set_file(clientfd))
+		if (flag)
+			fill_request(404, _return_it_poll(clientfd, d_s->tab_poll));
+		else if (d_s->_set_file(clientfd))
 			return (d_s->_get_error_404(clientfd));
 		return (0);
 	}
