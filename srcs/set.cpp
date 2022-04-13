@@ -39,11 +39,6 @@ void	RP15::_set_info(size_t len, std::string &tmp_i, struct dirent *tmp_f, std::
 
 int	RP15::_set_folder(DIR	*folder, std::string &root, bool autoindex)
 {
-	if (!autoindex)
-	{
-		return_error = 404;
-		return (0);
-	}
 	if (*(u_ressource.end() - 2) != '/')
 	{
 		return_error = 301;
@@ -51,6 +46,11 @@ int	RP15::_set_folder(DIR	*folder, std::string &root, bool autoindex)
 		redirection = retire_root(u_ressource, root);
 		redirection.pop_back();
 		redirection.push_back('/');
+		return (0);
+	}
+	if (!autoindex)
+	{
+		return_error = 403;
 		return (0);
 	}
 	std::set<std::string, indexcomp> ordering;

@@ -93,7 +93,7 @@ int		server_data::setup_read_files(std::vector<struct pollfd>::iterator it){
 		tab_request[files_to_clients[it->fd]].r_buffer.insert(tab_request[files_to_clients[it->fd]].r_buffer.end(), recvline.begin().base(), recvline.begin().base() + n);
 	if (n < 0)
 		return (print_return("ERROR: READ_FILE", 1));
-	if (n <= (MAXLINE - 1))
+	if (!n || n <= (MAXLINE - 1))
 	{
 		recvline.clear();
 		if (read(it->fd, recvline.begin().base(), 1))
