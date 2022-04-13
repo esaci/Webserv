@@ -131,4 +131,3 @@ void			retire_doublon_slash(DATA &ressource){
 			i++;
 	}
 }
-

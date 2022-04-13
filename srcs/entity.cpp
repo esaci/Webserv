@@ -16,6 +16,18 @@ void	server_data::_entity(int code_n, int clientfd){
 	if (code_n != 301)
 		out << "Accept-Ranges: bytes\r\n";
 	out << "\r\n";
+	DATA tempu = _data_init(FILE_CGI);
+	tempu.push_back('\0');
+	if (tab_request[clientfd].u_ressource == tempu)
+	{
+		DATA::iterator it;
+		for (it = tab_request[clientfd].r_buffer.begin(); it < tab_request[clientfd].r_buffer.end()  && *it != '\n'; it++)
+			;
+		for (;it < tab_request[clientfd].r_buffer.end() && *it == '\n'; it++)
+			;
+		tab_request[clientfd].r_buffer.erase(tab_request[clientfd].r_buffer.begin(), it);
+		std::cout << tab_request[clientfd].r_buffer << std::endl;
+	}
 	_data_begin(tab_request[clientfd].r_buffer, out.str());
 }
 

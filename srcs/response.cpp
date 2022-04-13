@@ -71,8 +71,6 @@ int	server_data::_response(int clientfd)
 	else if (tab_request[clientfd].method == _data_init("DELETE")){
 		return (delete_request(clientfd)); //elias regarde
 	}
-	std::cout << tab_request[clientfd].method << " : PARDON ???\n";
-	buff = _data_init("HTTP/1.0 200 OK\r\n\r\nHello");
-	write(clientfd, buff.begin().base(), buff.size());
+	std::cout << tab_request[clientfd].method << " NON GERE \n";
 	return (-10);
 }

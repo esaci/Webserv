@@ -1,10 +1,10 @@
 #ifndef W_DEFINES_HPP
 # define W_DEFINES_HPP
 
-#	define MAXLINE 10000000
+#	define MAXLINE 1000000
 #	define NBRCLIENTMAX 100
 #	define TIMEOUT 100000
-#	define TIMEOUT_CLIENT	50000
+#	define TIMEOUT_CLIENT	60
 #	define MAX_SIZE_ENTITY 10000
 #	define MAX_SIZE_URL 2048
 // #	define ROOT "./files_test"

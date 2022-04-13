@@ -69,6 +69,7 @@
 			bool							open_file_upload(int clientfd, std::string &file);
 			void							check_method(int);
 			bool							_cgi_extensions(int clientfd);
+			void							erase_client(std::vector<struct pollfd>::iterator it);
 		private:
 			server_data( void );
 			server_data(const server_data&);

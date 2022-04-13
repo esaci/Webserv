@@ -18,7 +18,7 @@ int	server_data::_send(int clientfd, int code){
 		if (value > 0)
 			tab_request[clientfd].r_buffer.erase(tab_request[clientfd].r_buffer.begin(), tab_request[clientfd].r_buffer.begin() + value);
 		else
-			return (-10);
+			return (print_return("Client disconnected before the end !",-10));
 		return (0);
 	}
 	return (0);

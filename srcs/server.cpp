@@ -1,5 +1,11 @@
 #include "../include/w_library.hpp"
 
+void	server_data::erase_client(std::vector<struct pollfd>::iterator it){
+	tab_request.erase(it->fd);
+	close(it->fd);
+	tab_poll.erase(it);
+	pos--;
+}
 
 int	init_socket(std::set<A_P > &tab_ap, std::map<int, A_P> &sockets_to_hosts){
 	SA_IN		servaddr;
@@ -49,15 +55,15 @@ int	server_data::_server( void ){
 		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos)
 		{
 			if (setup_listen(tab_poll.begin() + pos))
-				return (print_return("SOUCIS VIENT DE setup_listen ",1));
+				erase_client(tab_poll.begin() + pos);
 			if (setup_response(tab_poll.begin() + pos))
-				return (print_return("SOUCIS VIENT DE setup_response ",1));
+				erase_client(tab_poll.begin() + pos);
 			if (setup_read(tab_poll.begin() + pos))
-				break ;
+				erase_client(tab_poll.begin() + pos);
 			if (setup_read_files(tab_poll.begin() + pos))
-				return (print_return("SOUCIS VIENT DE read_files ",1));			
+				erase_client(tab_poll.begin() + pos);		
 			if (setup_write_files(tab_poll.begin() + pos))
-				return (print_return("SOUCIS VIENT DE write_files", 1));
+				erase_client(tab_poll.begin() + pos);
 		}
 	}
 	return (0);
