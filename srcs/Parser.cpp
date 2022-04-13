@@ -533,7 +533,7 @@ bool    Parser::set_client_max_body(std::string &line)
     if (line.length() > 13) {return (1);}
     std::stringstream sstream(line);
     sstream >> size;
-    if (size > 8796093022207 || 1 > size) {return (1);}
+    if (size > 8796093022207 || 0 > size) {return (1);}
     this->size_cmb = size;
     return (0);
 }
