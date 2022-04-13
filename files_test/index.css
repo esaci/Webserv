@@ -1,0 +1,32 @@
+body{
+    text-align: center;
+}
+
+
+img{
+    margin: auto;
+    display: block;
+}
+
+form{
+    margin-top: 2em;
+}
+
+#lala1{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.color{
+    background-color: cadetblue;
+}
+
+#lala2{
+    display: flex;
+    justify-content: center;
+}
+#lala2 p{
+    margin-right: 1em;
+    margin-left: 1em;
+}
