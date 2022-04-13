@@ -7,7 +7,7 @@ int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 		return (0);
 	if (!tab_ap.size() && it->revents && !(it->revents & POLLIN) && !(it->revents & POLLOUT))
 		return (print_return("Revents chelou\n\n\n", 1));
-	if (!tab_ap.size())
+	if (!tab_ap.size() || !(it->revents & POLLOUT))
 		return (0);
 	if (sockets_to_hosts.find(it->fd) == sockets_to_hosts.end())
 		return (0);
