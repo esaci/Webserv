@@ -2,14 +2,15 @@
 
 // Je peux en accept plusieurs potentiellement, mais ca me sonne complique
 int	server_data::_new_client(std::vector<struct pollfd>::iterator it){
+	fcntl(it->fd, F_SETFL, O_NONBLOCK);
 	int	clientfd = accept(it->fd, (SA*) NULL, NULL);
 	// std::cout << "Connection Cree pour le fd " << clientfd << " !\n";
 	if (clientfd < 0)
-		return (print_return("Error: accept", 1));	
+		return (1);
 	fcntl(clientfd, F_SETFL, O_NONBLOCK);
 	client_poll.fd = clientfd;
 	tab_request[clientfd].serverfd = it->fd;
-	client_poll.events = POLLIN;
+	client_poll.events = POLLIN | POLLERR | POLLHUP;
 	client_poll.revents = 0;
 	tab_poll.push_back(client_poll);
 	return (0);
@@ -78,6 +79,8 @@ int	server_data::_read_client(std::vector<struct pollfd>::iterator it)
 	{
 		if (!tab_request[it->fd].request_ready())
 		{
+			// if(tab_request[it->fd].connection == _data_init("close"))
+			// 	return 1;
 			if (tab_request[it->fd].r_body_buffer.size() > serv_host(tab_tab_ap[sockets_to_hosts[tab_request[it->fd].serverfd]], tab_request[it->fd].host).get_client_max_body((char*)tab_request[it->fd].u_ressource.begin().base()))
 				tab_request[it->fd].fill_request(413, it);
 			if (tab_request[it->fd].u_ressource.size() > MAX_SIZE_URL)

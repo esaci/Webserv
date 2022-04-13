@@ -115,7 +115,7 @@ int	server_data::_set_file(int clientfd){
 	tab_request[clientfd].r_buffer.clear();
 	files_to_clients[filefd] = clientfd;
 	client_poll.fd = filefd;
-	client_poll.events = POLLIN;
+	client_poll.events = POLLIN | POLLERR | POLLHUP;
 	client_poll.revents = 0;
 	tab_poll.push_back(client_poll);
 	tab_request[clientfd].responding = 2;

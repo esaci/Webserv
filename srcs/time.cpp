@@ -28,7 +28,7 @@ int			server_data::_time_stop_client(std::vector<struct pollfd>::iterator it)
 		// tab_request[fd].responding = 1;
 		tab_request[fd].fill_request(408, it);
 	}
-	return (print_return("TIMEOUT D'UN CLIENT, Il va recevoir 408", i));
+	return (i);
 }
 
 int		server_data::_time_maj( void )

@@ -87,16 +87,6 @@ int RP15::set_cgi_env(server_data *s, int fd){
 
 	if (!pid)
 	{
-
-        for (size_t i = 0; i < 17; i++){
-            // ev[i][1] = '\0'; 
-            std::cout << i << " "<< ev[i] << "\n";
-            if(ev[i] == NULL)
-                std::cout << "C NULLLL\n";
-            }
-
-
-
         int fdbody = 0;
         if(methodenv == "POST"){
             fdbody = open("./files_system/cgi-in", O_RDWR, 0666);
@@ -108,14 +98,9 @@ int RP15::set_cgi_env(server_data *s, int fd){
 	    args[0] = strdup(CGI);
 	    args[1] = (char *)ressourceenv.c_str();
         args[2] = NULL;
-        // std::cout << "C NULLLL\n";
-        // for (size_t i = 0; i < 3; i++){
-        //     std::cout << args[i] << "\n";
-        // }
 		dup2(fd, STDOUT_FILENO);
         if(methodenv == "POST"){
             dup2(fdbody, STDIN_FILENO);
-            // close(fdbody);
         }
 		close(fd);
 		ret = execve(CGI, args, ev);
@@ -131,7 +116,6 @@ int RP15::set_cgi_env(server_data *s, int fd){
 	}
     else{
         waitpid(pid, &status, 0);
-        //return an error 500 caus execve is crashed
     }
 	if(fd != -1)
 		close(fd);
@@ -141,26 +125,14 @@ int RP15::set_cgi_env(server_data *s, int fd){
 
 
 int RP15::basic_cgi(server_data *s, int fd){
-    // if(!(open("./files_system/cgi-in", O_RDWR, 0666)))
-    // return(s->_get_error_404(fd));
-    // exit(0);
+
     ressource = _link_root_init(s->tab_tab_ap[s->sockets_to_hosts[serverfd]][0].get_root((char*)u_ressource.begin().base()), ressource);
 
-	// std::cout << "BODY " << r_body_buffer << "|\n";
     std::string ressourceenv(ressource.begin(), ressource.end());
-    // std::cout << "raphiphou\n" << ressource << std::endl;
-    // std::cout << "BONJOUR\n" << (open(ressourceenv.c_str(), O_RDWR, 0666)) << fd << std::endl;
     if( (open(ressourceenv.c_str(), O_RDWR, 0666) < 0)){
-        std::cout << "BONJOURhello\n" << std::endl;
-        // s->tab_request[fd].return_error = 404;
         return(1);
     }
-    // std::cout << "BONJOUR\n" << (open(ressourceenv.c_str(), O_RDWR, 0666)) << fd << std::endl;
-    // exit(0);
-    // s->_get_error_404(fd);
    set_cgi_env(s, fd);
-//    std::cout << "hello\n" << "\n";
-//    std::cout << ressourceenv << "jshgd\n";
 
 	return 0;
 }

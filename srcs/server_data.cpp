@@ -34,7 +34,7 @@ void	server_data::_table_poll_init( void ){
 	for (S_A_P::iterator it = sockets_to_hosts.begin(); it != sockets_to_hosts.end(); it++)
 	{
 		client_poll.fd = it->first;
-		client_poll.events = POLLOUT;
+		client_poll.events = POLLOUT | POLLERR | POLLHUP;
 		client_poll.revents = 0;
 		tab_poll.push_back(client_poll);
 	}

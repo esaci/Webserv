@@ -7,7 +7,7 @@ int		RP15::fill_request(int code, std::vector<struct pollfd>::iterator it){
 		return_error = code;
 	parse_data.assign(tab, tab + std::strlen((char*)tab));
 	request_ready();
-	it->events = POLLOUT;
+	it->events = POLLOUT | POLLERR | POLLHUP;
 	responding = 1;
 	return (-10);
 }

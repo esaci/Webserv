@@ -53,8 +53,8 @@ $(NAME): ${OBJS} ${HEADER}
 		$(CXX) $(CFLAGSXXX) $(OBJS) -o $(NAME)
 		@echo "\n\033[0;32mDONE\033[0m"
 
-install: sudo apt-get install php-cgi siege
-
+install:
+	sudo apt-get install php-cgi siege
 test: re && ./${NAME}
 
 clean:

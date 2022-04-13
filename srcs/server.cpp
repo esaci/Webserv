@@ -1,6 +1,8 @@
 #include "../include/w_library.hpp"
 
 void	server_data::erase_client(std::vector<struct pollfd>::iterator it){
+	if (sockets_to_hosts.find(it->fd) != sockets_to_hosts.end())
+		return ;
 	tab_request.erase(it->fd);
 	close(it->fd);
 	tab_poll.erase(it);
@@ -46,10 +48,10 @@ int	server_data::_server( void ){
 	while (1){
 		_time_maj();
 		len = tab_poll.size();
+		// std::cout << "On a " << len << " Clients connectes !\n";
 		pos = 0;
 		if ( !(n = poll(tab_poll.begin().base(), tab_poll.size(), TIMEOUT)) )
 			return (print_return("TIMEOUT: poll", 1));
-		// std::cout << "On a " << len << " Clients connectes !\n";
 		if (n < 0)
 			return (print_return("ERROR: poll", 1));
 		for (std::vector<struct pollfd>::iterator it = tab_poll.begin(); it < tab_poll.end() && pos < len; ++pos, it = tab_poll.begin() + pos)

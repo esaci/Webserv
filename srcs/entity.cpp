@@ -26,7 +26,7 @@ void	server_data::_entity(int code_n, int clientfd){
 		for (;it < tab_request[clientfd].r_buffer.end() && *it == '\n'; it++)
 			;
 		tab_request[clientfd].r_buffer.erase(tab_request[clientfd].r_buffer.begin(), it);
-		std::cout << tab_request[clientfd].r_buffer << std::endl;
+		// std::cout << tab_request[clientfd].r_buffer << std::endl;
 	}
 	_data_begin(tab_request[clientfd].r_buffer, out.str());
 }

@@ -17,7 +17,7 @@ int		server_data::setup_listen(std::vector<struct pollfd>::iterator it){
 			return (print_return("Error: Listen", 1));
 	tab_ap.erase(sockets_to_hosts.find(it->fd)->second);
 	it->revents = 0;
-	it->events = POLLIN;
+	it->events = POLLIN | POLLERR | POLLHUP;
 	return (0);
 }
 
@@ -48,12 +48,13 @@ int		server_data::setup_read(std::vector<struct pollfd>::iterator it){
 			it->revents = 0;
 			tab_request[it->fd].responding = 2;
 			client_poll.fd = fdbody;
-			client_poll.events = POLLOUT;
+			client_poll.events = POLLOUT | POLLERR | POLLHUP;
 			client_poll.revents = 0;
 			tab_poll.push_back(client_poll);
 			return (0);
 		}
-		it->events = POLLOUT;
+		it->events = POLLOUT | POLLERR | POLLHUP;
+		it->revents = 0;
 		if (!tab_request[it->fd].host.size() && tab_request[it->fd].protocol == _data_init("HTTP/1.1"))
 			tab_request[it->fd].fill_request(400, it);
 	}
@@ -137,7 +138,7 @@ int		server_data::setup_write_files(std::vector<struct pollfd>::iterator it){
 	else if (!tab_request[files_to_clients[it->fd]].r_body_buffer.size())
 	{
 		tab_request[files_to_clients[it->fd]].r_body_buffer = tab_request[files_to_clients[it->fd]].parse_data;
-		_return_it_poll(files_to_clients[it->fd], tab_poll)->events = POLLOUT;
+		_return_it_poll(files_to_clients[it->fd], tab_poll)->events = POLLOUT | POLLERR | POLLHUP;
 		tab_request[files_to_clients[it->fd]].responding = 1;
 		files_to_clients[it->fd] = 0;
 		close(it->fd);

@@ -2,9 +2,9 @@
 # define W_DEFINES_HPP
 
 #	define MAXLINE 1000000
-#	define NBRCLIENTMAX 100
+#	define NBRCLIENTMAX 100000
 #	define TIMEOUT 100000
-#	define TIMEOUT_CLIENT	60
+#	define TIMEOUT_CLIENT 60
 #	define MAX_SIZE_ENTITY 10000
 #	define MAX_SIZE_URL 2048
 // #	define ROOT "./files_test"

@@ -101,7 +101,7 @@ bool	server_data::open_file_upload(int clientfd, std::string &file)
 		return 1;
 	tab_request[clientfd].responding = 2;
 	client_poll.fd = fd;
-	client_poll.events = POLLOUT;
+	client_poll.events = POLLOUT | POLLERR | POLLHUP;
 	client_poll.revents = 0;
 	tab_poll.push_back(client_poll);
 	files_to_clients[fd] = clientfd;
