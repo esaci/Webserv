@@ -222,8 +222,8 @@ bool    P_server::set_cgi_dir(std::string &line)
     std::ifstream file(line.c_str());
     if (!file)
     {
-        std::cerr << "\e[0;31m" << "Error open file. The file doesn't exist." << "\e[0m" << std::endl;
-        return (1);
+        std::cerr << "\e[0;31m" << "Error open file cgi. The file doesn't exist." << "\e[0m" << std::endl;
+        // return (1);
     }
     file.close();
     std::size_t pos = line.find_last_of("php-cgi");
